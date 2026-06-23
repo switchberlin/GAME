@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>hole</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -35,11 +35,15 @@
         }
         body {
             color: var(--text-color);
+            height: 100vh;
+            height: 100svh;
             min-height: 100vh;
+            min-height: 100svh;
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
+            background-color: var(--bg-color);
         }
         
         /* Mobile Portrait Frame - iPhone 14 Aspect Ratio */
@@ -62,8 +66,10 @@
             .mobile-frame {
                 max-width: 100vw;
                 max-height: 100vh;
+                max-height: 100svh;
                 width: 100vw;
-                height: calc(100vw * 19.5 / 9);
+                height: 100vh;
+                height: 100svh;
                 border-radius: 0;
                 border: none;
                 box-shadow: none;
@@ -116,7 +122,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 100px 40px 60px 40px; /* Top padding to clear Dynamic Island */
+            padding: calc(env(safe-area-inset-top, 0px) + 50px) 40px calc(env(safe-area-inset-bottom, 0px) + 30px) 40px;
             align-items: center;
             transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
         }
@@ -492,7 +498,7 @@
         }
 
         .game-dashboard {
-            padding: 40px 24px 20px 24px; /* Added safe area top padding for Dynamic Island */
+            padding: calc(env(safe-area-inset-top, 0px) + 16px) 24px 20px 24px;
             display: flex;
             flex-direction: column;
             align-items: flex-start;
@@ -828,13 +834,14 @@
             }
         }
         .bottom-nav-bar {
-            height: 72px;
+            height: auto;
+            min-height: 72px;
             background: #faf6ee;
             border-top: 1px solid rgba(110, 73, 47, 0.15);
             display: flex;
             justify-content: space-around;
             align-items: center;
-            padding-bottom: 8px;
+            padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 8px);
             z-index: 1000;
         }
         .nav-item {
@@ -1349,6 +1356,11 @@
         window.AnatomyConfig = JSON.parse(JSON.stringify(DefaultAnatomy));
         window.CANVAS_BG = '#f4efe8';
         
+        window.activeCanvases = [];
+        window.updateActiveCanvases = function() {
+            window.activeCanvases = Array.from(document.querySelectorAll('.staff-canvas'));
+        };
+        
         // --- 2. GAME STATE ---
         const GameState = {
             money: 300,
@@ -1666,6 +1678,7 @@
                 // Pubic Hair
                 ctx.strokeStyle = cHair; ctx.lineWidth = 1.0;
                 let hairCount = 50 + (pm.hairDensity || 0.5) * 250; 
+                ctx.beginPath();
                 for(let h=0; h<hairCount; h++) { 
                     let rand1 = Math.sin(h * 12.9898) * 43758.5453 % 1;
                     let rand2 = Math.sin(h * 78.233) * 43758.5453 % 1;
@@ -1679,11 +1692,10 @@
                     let hrx = centerX - 45 + Math.abs(rand1) * 90;
                     let hry = baseHry - spreadY + Math.abs(rand2) * (spreadY*2); 
                     
-                    ctx.beginPath();
                     ctx.moveTo(hrx, hry);
                     ctx.quadraticCurveTo(hrx + (rand3 * 10), hry - (Math.abs(rand4) * 8), hrx + (rand1 * 15), hry + (rand2 * 10));
-                    ctx.stroke();
                 }
+                ctx.stroke();
                 
                 ctx.strokeStyle = cOutline; ctx.lineWidth = 3;
                 
@@ -1780,6 +1792,7 @@
                 headerVenueEl.textContent = GameState.venueName;
             }
             
+            window.updateActiveCanvases();
             switchTab('home');
         }
 
@@ -1872,6 +1885,7 @@
                 hireBtn.disabled = (firstEmptyIndex === -1);
             }
             
+            window.updateActiveCanvases();
             updateDashboard();
         }
 
@@ -1931,10 +1945,121 @@
             updateDashboard();
         }
 
-        document.addEventListener('click', () => {
-            window.selectedCustomerId = null;
-            document.querySelectorAll('.customer-card').forEach(c => c.style.borderColor = 'var(--border-color)');
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.customer-card') && !e.target.closest('.staff-slot')) {
+                window.selectedCustomerId = null;
+                document.querySelectorAll('.customer-card').forEach(c => c.style.borderColor = 'var(--border-color)');
+            }
         });
+
+        function initTouchDrag() {
+            let dragCard = null;
+            let dragClone = null;
+            let startX = 0;
+            let startY = 0;
+            let currentSlot = null;
+            let customerId = null;
+
+            const container = document.getElementById('customers-queue');
+            if (!container) return;
+
+            container.addEventListener('touchstart', (e) => {
+                const card = e.target.closest('.customer-card');
+                if (!card) return;
+                
+                dragCard = card;
+                customerId = card.getAttribute('data-id');
+                const touch = e.touches[0];
+                startX = touch.clientX;
+                startY = touch.clientY;
+
+                // Create clone
+                const rect = card.getBoundingClientRect();
+                dragClone = card.cloneNode(true);
+                
+                // Copy canvas contents to the clone
+                const origCanvas = card.querySelector('canvas');
+                const cloneCanvas = dragClone.querySelector('canvas');
+                if (origCanvas && cloneCanvas) {
+                    const ctx = cloneCanvas.getContext('2d');
+                    cloneCanvas.width = origCanvas.width;
+                    cloneCanvas.height = origCanvas.height;
+                    ctx.drawImage(origCanvas, 0, 0);
+                }
+
+                dragClone.style.position = 'fixed';
+                dragClone.style.left = rect.left + 'px';
+                dragClone.style.top = rect.top + 'px';
+                dragClone.style.width = rect.width + 'px';
+                dragClone.style.height = rect.height + 'px';
+                dragClone.style.zIndex = '9999';
+                dragClone.style.pointerEvents = 'none';
+                dragClone.style.opacity = '0.8';
+                dragClone.style.transform = 'scale(1.05)';
+                dragClone.style.boxShadow = '0 12px 24px rgba(0,0,0,0.2)';
+                
+                document.body.appendChild(dragClone);
+                card.style.opacity = '0.5';
+            }, { passive: false });
+
+            document.addEventListener('touchmove', (e) => {
+                if (!dragCard || !dragClone) return;
+                
+                // Prevent scrolling page/queue while dragging
+                e.preventDefault();
+
+                const touch = e.touches[0];
+                const dx = touch.clientX - startX;
+                const dy = touch.clientY - startY;
+
+                const rect = dragCard.getBoundingClientRect();
+                dragClone.style.left = (rect.left + dx) + 'px';
+                dragClone.style.top = (rect.top + dy) + 'px';
+
+                // Find element under touch
+                const elem = document.elementFromPoint(touch.clientX, touch.clientY);
+                if (elem) {
+                    const slot = elem.closest('.staff-slot');
+                    if (slot && slot.classList.contains('hired')) {
+                        const slotIndex = parseInt(slot.getAttribute('data-index'));
+                        const staff = GameState.staff[slotIndex];
+                        if (staff && !staff.isServing) {
+                            if (currentSlot && currentSlot !== slot) {
+                                currentSlot.classList.remove('drag-over');
+                            }
+                            currentSlot = slot;
+                            currentSlot.classList.add('drag-over');
+                        }
+                    } else {
+                        if (currentSlot) {
+                            currentSlot.classList.remove('drag-over');
+                            currentSlot = null;
+                        }
+                    }
+                }
+            }, { passive: false });
+
+            document.addEventListener('touchend', (e) => {
+                if (!dragCard) return;
+
+                if (dragClone) {
+                    dragClone.remove();
+                    dragClone = null;
+                }
+
+                dragCard.style.opacity = '1';
+
+                if (currentSlot) {
+                    currentSlot.classList.remove('drag-over');
+                    const slotIndex = parseInt(currentSlot.getAttribute('data-index'));
+                    assignCustomerToStaff(customerId, slotIndex);
+                    currentSlot = null;
+                }
+
+                dragCard = null;
+                customerId = null;
+            });
+        }
 
         function assignCustomerToStaff(customerId, slotIndex) {
             const staff = GameState.staff[slotIndex];
@@ -2101,6 +2226,7 @@
                 
                 shopContainer.appendChild(card);
             });
+            window.updateActiveCanvases();
         }
 
         window.hireShopCandidate = function(candidateId) {
@@ -2190,12 +2316,27 @@
 
         // --- 6. NAVIGATION & BUTTON BINDINGS ---
 
+        function requestFullscreenIfPossible(elem) {
+            try {
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                } else if (elem.webkitRequestFullscreen) {
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) {
+                    elem.msRequestFullscreen();
+                }
+            } catch (err) {
+                console.warn("Fullscreen request failed or not supported:", err);
+            }
+        }
+
         const btnStartGame = document.getElementById('btn-start-game');
         if (btnStartGame) {
             btnStartGame.addEventListener('click', () => {
                 document.getElementById('menu-screen').classList.add('hidden');
                 document.getElementById('game-screen').style.display = 'flex';
                 initGame();
+                requestFullscreenIfPossible(document.documentElement);
             });
         }
 
@@ -2229,11 +2370,11 @@
             // Unused in Tycoon, stubbed out to keep renderer safe
         }
         // --- 5. THE ORIGINAL CANVAS RENDERING ENGINE ---
-        // EXACT copy of the v3 rendering function from index.html (slightly modified to push telemetry data)
         function renderCanvases() {
             let isPaused = window.isGamePaused && window.isGamePaused();
-            const canvases = document.querySelectorAll('.staff-canvas');
+            const canvases = window.activeCanvases || [];
             canvases.forEach(canvas => {
+                if (canvas.offsetParent === null) return;
                 const ctx = canvas.getContext('2d');
                 const staffId = canvas.getAttribute('data-staff-id');
                 let staff = GameState.staff.find(s => s && s.id === staffId);
@@ -3060,6 +3201,7 @@
                         // --- PUBIC HAIR ---
                         ctx.strokeStyle = cHair; ctx.lineWidth = 1.0;
                         let hairCount = 50 + (pm.hairDensity || 0.5) * 250; 
+                        ctx.beginPath();
                         for(let h=0; h<hairCount; h++) { 
                             let rand1 = Math.sin(h * 12.9898) * 43758.5453 % 1;
                             let rand2 = Math.sin(h * 78.233) * 43758.5453 % 1;
@@ -3073,11 +3215,10 @@
                             let hrx = centerX - 45 + Math.abs(rand1) * 90;
                             let hry = baseHry - spreadY + Math.abs(rand2) * (spreadY*2); 
                             
-                            ctx.beginPath();
                             ctx.moveTo(hrx, hry);
                             ctx.quadraticCurveTo(hrx + (rand3 * 10), hry - (Math.abs(rand4) * 8), hrx + (rand1 * 15), hry + (rand2 * 10));
-                            ctx.stroke();
                         }
+                        ctx.stroke();
                         
                         ctx.strokeStyle = cOutline; ctx.lineWidth = 3;
                         
@@ -3163,7 +3304,9 @@
             // Loop render using requestAnimationFrame
             requestAnimationFrame(renderCanvases);
         }
-        // Start render loop initially
+        // Start render loop and init touch events initially
+        window.updateActiveCanvases();
+        initTouchDrag();
         renderCanvases();
     </script>
 </body>
