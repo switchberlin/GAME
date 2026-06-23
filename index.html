@@ -4,22 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>hole</title>
-    <!-- Google Fonts: Roboto -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --bg-color: #dfcca3; /* Rich warm paper background */
-            --panel-bg: #f3e9d4; /* Lighter warm parchment panel background */
-            --border-color: #000000; /* Bold cartoon borders */
-            --primary: #3c3630; /* Dark sepia/charcoal ink */
-            --primary-glow: rgba(60, 54, 48, 0.15);
-            --accent: #d37a6b; /* Muted terracotta/coral */
-            --accent-glow: rgba(211, 122, 107, 0.15);
-            --text-color: #000000; /* Solid black text */
-            --text-muted: #5e5449; /* Dark warm sepia text */
-            --active-bg: rgba(60, 54, 48, 0.15);
-            --neon-pink: #bd5a5a; /* Muted brick red */
+            --bg-color: #000000; /* OLED True Black */
+            --panel-bg: rgba(28, 28, 30, 0.75); /* iOS Secondary System Grouped Background */
+            --card-bg: rgba(44, 44, 46, 0.75); /* iOS Tertiary System Grouped Background */
+            --border-color: rgba(255, 255, 255, 0.12); /* Apple thin divider/border */
+            --primary: #0a84ff; /* iOS dark mode system blue */
+            --primary-glow: rgba(10, 132, 255, 0.15);
+            --accent: #ff375f; /* iOS dark mode system pink */
+            --accent-glow: rgba(255, 55, 95, 0.15);
+            --text-color: #ffffff; /* System white text */
+            --text-muted: #8e8e93; /* System gray text */
+            --active-bg: rgba(255, 255, 255, 0.08);
+            --neon-pink: #ff453a; /* iOS dark mode system red */
         }
         * {
             box-sizing: border-box;
@@ -28,12 +27,11 @@
             user-select: none;
             -webkit-user-select: none;
             outline: none;
-            font-family: 'Roboto', sans-serif !important;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro Icons", system-ui, -apple-system, sans-serif !important;
         }
         body {
-            background-color: #1b1b1e;
+            background-color: #000000;
             color: var(--text-color);
-            font-family: 'Outfit', sans-serif;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -49,10 +47,10 @@
             max-height: 100vh;
             max-width: calc(100vh * 9 / 16);
             position: relative;
-            background: var(--bg-color);
+            background: linear-gradient(180deg, #09090b 0%, #000000 100%);
             border-radius: 40px;
-            border: 8px solid #000000;
-            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.25);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -74,14 +72,13 @@
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
             z-index: 1000;
-            background: radial-gradient(circle, var(--primary-glow) 0%, var(--bg-color) 100%);
+            background: #000000;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             padding: 80px 40px 60px 40px;
             align-items: center;
             transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
-            border: 4px solid #000000;
         }
         .menu-screen.hidden {
             transform: translateY(-100%);
@@ -115,39 +112,35 @@
         }
         .menu-btn {
             width: 100%;
-            padding: 18px;
-            font-size: 1.1rem;
-            font-weight: 800;
-            letter-spacing: 2px;
-            border-radius: 20px;
-            border: 4px solid #000000;
-            background: var(--neon-pink);
-            color: #fff;
+            padding: 16px;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            border-radius: 14px;
+            border: none;
+            background: var(--accent);
+            color: #ffffff;
             cursor: pointer;
-            transition: all 0.2s ease;
-            font-family: 'Fredoka One', sans-serif;
-            text-transform: uppercase;
-            box-shadow: 5px 5px 0px #000000;
+            transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
         .menu-btn:hover {
-            transform: translate(-3px, -3px);
-            box-shadow: 8px 8px 0px #000000;
+            opacity: 0.9;
+            transform: scale(1.02);
         }
         .menu-btn:active {
-            transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0px #000000;
+            transform: scale(0.98);
         }
         .menu-btn.primary {
             background: var(--primary);
             color: #ffffff;
         }
         .menu-btn.primary:hover {
-            background: #739bbd;
+            opacity: 0.9;
         }
         .menu-footer {
             font-size: 0.65rem;
             color: var(--text-muted);
-            font-family: 'JetBrains Mono', monospace;
             letter-spacing: 1px;
             opacity: 0.7;
         }
@@ -167,7 +160,7 @@
             justify-content: space-between;
             align-items: center;
             background: var(--panel-bg);
-            border-bottom: 3.5px solid #000000;
+            border-bottom: 1px solid var(--border-color);
             z-index: 100;
         }
         .header-title-clean {
@@ -176,7 +169,6 @@
             letter-spacing: 3px;
             color: var(--text-color);
             text-transform: uppercase;
-            font-family: 'Fredoka One', sans-serif;
         }
         .header-actions-clean {
             display: flex;
@@ -456,48 +448,38 @@
             background: rgba(255, 255, 255, 0.1);
         }
 
-        /* Tycoon Dashboard & UI Styles (Rick and Morty Cartoon 2D Style) */
+        /* iOS 26 Dark Mode Dashboard & UI Styles */
         .game-dashboard {
             padding: 16px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #3c3630;
-            border-bottom: 3.5px solid #000000;
+            background: var(--panel-bg);
+            border-bottom: 1px solid var(--border-color);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
         .db-stat {
             font-size: 0.85rem;
-            font-weight: 900;
-            color: #f4eedb;
-            letter-spacing: 1px;
+            font-weight: 600;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
         }
         .db-stat span {
-            color: var(--accent);
+            color: #ffffff;
+            font-weight: 700;
             margin-left: 4px;
         }
         .game-dashboard-subrow {
-            display: flex;
-            justify-content: space-between;
-            background: #2b2723;
-            padding: 8px 24px;
-            border-bottom: 3.5px solid #000000;
-        }
-        .db-sub-stat {
-            font-size: 0.65rem;
-            color: rgba(244, 238, 219, 0.7);
-            letter-spacing: 0.5px;
-        }
-        .db-sub-stat span {
-            color: #ffffff;
-            margin-left: 4px;
+            display: none; /* Subrow hidden for visual simplicity */
         }
         .game-section-title {
-            padding: 12px 24px 6px 24px;
-            font-size: 0.75rem;
-            font-weight: 800;
-            color: var(--primary);
+            padding: 16px 24px 8px 24px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-muted);
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: 1px;
         }
         .staff-slots-grid {
             display: grid;
@@ -507,59 +489,57 @@
         }
         .staff-slot {
             background: var(--panel-bg);
-            border: 3px solid #000000;
+            border: 1px solid var(--border-color);
             border-radius: 16px;
-            box-shadow: 4px 4px 0px #000000;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
             position: relative;
             overflow: hidden;
-            transition: all 0.2s ease;
+            transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
         .staff-slot.hired {
             background: var(--panel-bg);
         }
         .staff-slot.drag-over {
             border-color: var(--primary);
-            background: var(--active-bg);
-            transform: scale(1.05);
+            box-shadow: 0 0 12px var(--primary-glow);
+            transform: scale(1.03);
         }
         .slot-hire-btn {
             width: 44px;
             height: 44px;
             border-radius: 50%;
-            border: 3px solid #000000;
-            background: var(--neon-pink);
+            border: none;
+            background: var(--primary);
             color: #ffffff;
             font-size: 1.8rem;
-            font-family: 'Fredoka One', sans-serif;
+            font-weight: 300;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 2px 2px 0px #000000;
             transition: all 0.15s ease;
+            box-shadow: 0 4px 8px rgba(10, 132, 255, 0.3);
         }
         .slot-hire-btn:hover {
             transform: scale(1.1);
-            background: #cd6969;
+            opacity: 0.9;
         }
         .slot-hire-label {
             font-size: 0.7rem;
-            color: var(--text-color);
+            color: var(--text-muted);
             margin-top: 8px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-family: 'Fredoka One', sans-serif;
+            letter-spacing: 0.5px;
         }
         .slot-canvas-container {
             width: 100%;
             aspect-ratio: 1 / 1;
             position: relative;
             overflow: hidden;
-            border-bottom: 3px solid #000000;
+            border-bottom: 1px solid var(--border-color);
         }
         .slot-canvas-container canvas {
             width: 100%;
@@ -569,14 +549,13 @@
         .slot-info {
             width: 100%;
             padding: 8px;
-            background: var(--panel-bg);
+            background: transparent;
             text-align: center;
             z-index: 10;
         }
         .slot-name {
             font-size: 0.75rem;
-            font-family: 'Fredoka One', sans-serif;
-            font-weight: 800;
+            font-weight: 600;
             color: var(--text-color);
             white-space: nowrap;
             overflow: hidden;
@@ -584,9 +563,8 @@
         }
         .slot-status {
             font-size: 0.65rem;
-            color: var(--primary); /* Portal green for progress/status */
+            color: var(--primary);
             margin-top: 2px;
-            font-family: 'Fredoka One', sans-serif;
         }
         .customers-queue-wrapper {
             flex: 1;
@@ -605,18 +583,18 @@
         }
         .customer-card {
             flex: 0 0 115px;
-            height: 165px;
+            height: 150px;
             background: var(--panel-bg);
-            border: 3px solid #000000;
+            border: 1px solid var(--border-color);
             border-radius: 16px;
-            box-shadow: 4px 4px 0px #000000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
             padding: 8px;
             cursor: grab;
-            transition: all 0.2s ease;
+            transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
             position: relative;
         }
         .customer-card:active {
@@ -630,8 +608,8 @@
         .customer-preview-canvas {
             width: 100%;
             aspect-ratio: 5 / 4;
-            background: var(--panel-bg);
-            border: 2px solid #000000;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
             border-radius: 10px;
             margin-bottom: 4px;
         }
@@ -641,23 +619,22 @@
         }
         .customer-name {
             font-size: 0.7rem;
-            font-family: 'Fredoka One', sans-serif;
-            font-weight: 800;
+            font-weight: 600;
             color: var(--text-color);
             margin-bottom: 2px;
         }
         .customer-detail {
             font-size: 0.6rem;
             color: var(--text-muted);
-            font-family: 'Fredoka One', sans-serif;
         }
 
         /* Modal Overlay & Candidates Styles */
         .modal-overlay {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(194, 172, 131, 0.8);
-            backdrop-filter: blur(5px);
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             z-index: 2000;
             display: flex;
             align-items: center;
@@ -672,11 +649,12 @@
         }
         .modal-content-card {
             width: 85%;
+            max-width: 320px;
             background: var(--panel-bg);
-            border: 4px solid #000000;
+            border: 1px solid var(--border-color);
             border-radius: 24px;
-            box-shadow: 8px 8px 0px #000000;
-            padding: 24px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+            padding: 20px;
             display: flex;
             flex-direction: column;
             gap: 16px;
@@ -685,19 +663,18 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 3px solid #000000;
-            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
         }
         .modal-title {
-            font-size: 1.1rem;
-            font-family: 'Fredoka One', sans-serif;
-            color: var(--primary);
-            text-transform: uppercase;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-color);
         }
         .close-btn {
-            font-size: 1.8rem;
-            font-family: 'Fredoka One', sans-serif;
-            color: var(--neon-pink);
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: var(--text-muted);
             cursor: pointer;
             transition: color 0.15s;
         }
@@ -706,34 +683,33 @@
         }
         .candidates-list {
             display: flex;
-            gap: 12px;
+            gap: 10px;
             overflow-x: auto;
             padding-bottom: 8px;
             width: 100%;
         }
         .candidate-card {
-            flex: 0 0 108px;
-            height: 200px;
-            background: var(--panel-bg);
-            border: 3px solid #000000;
+            flex: 0 0 100px;
+            height: 180px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
             border-radius: 16px;
-            box-shadow: 4px 4px 0px #000000;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
             padding: 8px;
-            transition: all 0.15s ease;
+            transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
             position: relative;
+            cursor: pointer;
         }
         .candidate-card:hover {
-            transform: translate(-1px, -1px);
-            box-shadow: 5px 5px 0px #000000;
+            transform: scale(1.02);
         }
         .candidate-canvas-container {
             width: 100%;
             aspect-ratio: 1 / 1;
-            border: 2px solid #000000;
+            border: 1px solid var(--border-color);
             border-radius: 10px;
             overflow: hidden;
             background: var(--panel-bg);
@@ -751,51 +727,43 @@
             gap: 2px;
         }
         .candidate-name {
-            font-size: 0.85rem;
-            font-family: 'Fredoka One', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
             color: var(--text-color);
         }
         .candidate-stat {
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             color: var(--text-muted);
-            font-family: 'Fredoka One', sans-serif;
         }
         .candidate-cost {
             color: var(--accent);
-            font-weight: 800;
+            font-weight: 700;
         }
         .candidate-hire-btn {
-            padding: 10px 18px;
-            border-radius: 30px;
-            border: 3px solid #000000;
+            padding: 8px 16px;
+            border-radius: 12px;
+            border: none;
             background: var(--primary);
             color: #ffffff;
             font-size: 0.75rem;
-            font-family: 'Fredoka One', sans-serif;
-            text-transform: uppercase;
+            font-weight: 600;
             cursor: pointer;
-            box-shadow: 3px 3px 0px #000000;
             transition: all 0.15s ease;
         }
         .candidate-hire-btn:hover {
-            background: #739bbd;
-            transform: translate(-2px, -2px);
-            box-shadow: 5px 5px 0px #000000;
+            opacity: 0.9;
         }
         .candidate-hire-btn:disabled {
-            background: #eaeaea;
-            color: #999999;
-            border-color: #bbbbbb;
+            background: var(--active-bg);
+            color: var(--text-muted);
             cursor: not-allowed;
-            box-shadow: none;
-            transform: none;
         }
 
         /* Floating Money Text */
         .floating-money {
             position: absolute;
             color: var(--primary);
-            font-weight: 800;
+            font-weight: 600;
             font-size: 1.2rem;
             pointer-events: none;
             z-index: 1500;
@@ -812,36 +780,28 @@
             }
         }
         .db-btn {
-            background: var(--accent);
-            color: #000000;
-            border: 3px solid #000000;
-            border-radius: 12px;
-            padding: 6px 12px;
-            font-size: 0.7rem;
-            font-family: 'Fredoka One', sans-serif;
-            font-weight: 800;
-            cursor: pointer;
-            box-shadow: 2px 2px 0px #000000;
-            transition: all 0.1s ease;
-            text-transform: uppercase;
-        }
-        .db-btn:hover {
-            transform: translate(-1px, -1px);
-            box-shadow: 3px 3px 0px #000000;
             background: var(--primary);
             color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            padding: 8px 14px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            box-shadow: 0 4px 8px rgba(10, 132, 255, 0.3);
+        }
+        .db-btn:hover {
+            opacity: 0.9;
         }
         .db-btn:active {
-            transform: translate(1px, 1px);
-            box-shadow: 1px 1px 0px #000000;
+            transform: scale(0.96);
         }
         .db-btn:disabled {
-            background: var(--bg-color);
+            background: var(--active-bg);
             color: var(--text-muted);
-            border-color: rgba(0, 0, 0, 0.15);
             cursor: not-allowed;
             box-shadow: none;
-            transform: none;
             opacity: 0.6;
         }
 
@@ -858,32 +818,29 @@
         }
         .setup-label {
             font-size: 0.75rem;
-            color: var(--text-color);
-            letter-spacing: 1px;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
         }
         .setup-input {
             width: 100%;
             padding: 12px 16px;
             background: var(--panel-bg);
-            border: 3px solid #000000;
+            border: 1px solid var(--border-color);
             border-radius: 12px;
             color: var(--text-color);
-            font-family: 'Outfit', sans-serif;
-            font-weight: 600;
+            font-weight: 500;
             font-size: 0.9rem;
-            box-shadow: 3px 3px 0px #000000;
             transition: all 0.2s ease;
         }
         .setup-input:focus {
             border-color: var(--primary);
-            box-shadow: 4px 4px 0px #000000;
+            box-shadow: 0 0 8px var(--primary-glow);
         }
         .setup-pref-container {
-            border: 3px solid #000000;
+            border: 1px solid var(--border-color);
             border-radius: 16px;
             background: var(--panel-bg);
             margin-top: 10px;
-            box-shadow: 3px 3px 0px #000000;
             overflow: hidden;
         }
         .setup-pref-header {
@@ -893,17 +850,17 @@
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
-            font-family: 'Fredoka One', sans-serif;
             font-size: 0.75rem;
+            font-weight: 600;
             color: var(--text-color);
-            border-bottom: 3px solid #000000;
+            border-bottom: 1px solid var(--border-color);
         }
         .setup-pref-content {
             padding: 16px;
             display: flex;
             flex-direction: column;
             gap: 12px;
-            background: var(--bg-color);
+            background: rgba(0, 0, 0, 0.3);
             max-height: 200px;
             overflow-y: auto;
         }
@@ -911,7 +868,7 @@
             display: none;
         }
         .pref-section {
-            border-bottom: 2px dashed rgba(0,0,0,0.1);
+            border-bottom: 1px solid var(--border-color);
             padding-bottom: 10px;
         }
         .pref-section:last-child {
@@ -920,7 +877,7 @@
         }
         .pref-title {
             font-size: 0.65rem;
-            font-family: 'Fredoka One', sans-serif;
+            font-weight: 600;
             color: var(--accent);
             margin-bottom: 6px;
             text-transform: uppercase;
@@ -935,7 +892,6 @@
             gap: 8px;
         }
         .pref-checkbox-label {
-            font-family: 'Fredoka One', sans-serif;
             font-size: 0.65rem;
             color: var(--text-color);
             display: flex;
@@ -964,11 +920,11 @@
                 <div class="setup-form">
                     <div class="input-group">
                         <label class="setup-label" for="player-name">Oyuncu İsmi</label>
-                        <input class="setup-input" type="text" id="player-name" placeholder="Rick" value="Rick">
+                        <input class="setup-input" type="text" id="player-name" placeholder="Süleyman" value="Süleyman">
                     </div>
                     <div class="input-group">
                         <label class="setup-label" for="venue-name">Mekan Adı</label>
-                        <input class="setup-input" type="text" id="venue-name" placeholder="Kozmik Kulüp" value="Kozmik Kulüp">
+                        <input class="setup-input" type="text" id="venue-name" placeholder="Gül Yuvası" value="Gül Yuvası">
                     </div>
                     
                     <!-- Collapsible Preferences Container -->
@@ -1029,10 +985,6 @@
                 
                 <button class="menu-btn primary" id="btn-start-game" style="margin-top: 10px;">Yeni Oyun</button>
             </div>
-            
-            <div class="menu-footer">
-                <span>v3.0 Procedural Physics Engine</span>
-            </div>
         </div>
 
         <!-- Game/Sandbox Screen -->
@@ -1043,18 +995,14 @@
                 <div class="db-stat">KASA <span id="db-money">$300</span></div>
                 <button class="db-btn" id="btn-next-day" title="Sonraki Gün">Sonraki Gün</button>
             </div>
-            <div class="game-dashboard-subrow">
-                <div class="db-sub-stat">YÖNETİCİ: <span id="db-player-name" style="color: var(--accent);">Rick</span></div>
-                <div class="db-sub-stat">MEKAN: <span id="db-venue-name" style="color: var(--primary);">Kozmik Kulüp</span></div>
-            </div>
 
-            <div class="game-section-title">Personel Slotları</div>
+            <div class="game-section-title">Personel</div>
             <!-- Staff Slots Grid -->
             <div class="staff-slots-grid" id="staff-slots-grid">
                 <!-- Dynamically filled with renderStaffSlots() -->
             </div>
 
-            <div class="game-section-title">Sıradaki Müşteriler (Sürükle veya Seç)</div>
+            <div class="game-section-title">Müşteriler</div>
             <!-- Customers Queue -->
             <div class="customers-queue-wrapper">
                 <div class="customers-queue-scroll" id="customers-queue">
@@ -1073,7 +1021,7 @@
                         <!-- Dynamically filled candidate cards -->
                     </div>
                     <div class="modal-footer" style="display: flex; justify-content: center; width: 100%; margin-top: 8px;">
-                        <button id="modal-hire-action-btn" class="menu-btn primary" onclick="hireSelectedCandidate()" style="margin: 0; width: 100%; padding: 12px; font-size: 0.95rem; border-radius: 16px; border: 3px solid #000000; box-shadow: 3px 3px 0px #000000;">İşe Al</button>
+                        <button id="modal-hire-action-btn" class="menu-btn primary" onclick="hireSelectedCandidate()" style="margin: 0; width: 100%; padding: 12px; font-size: 0.95rem; border-radius: 12px; border: none; box-shadow: 0 4px 12px rgba(10, 132, 255, 0.3);">İşe Al</button>
                     </div>
                 </div>
             </div>
@@ -1085,7 +1033,7 @@
         const DefaultAnatomy = {
             // Colors
             cSkin: '#eab29a', cSkinShadow: '#d49479', cHole: '#d45d5d', cHoleShadow: '#8f2f2f',
-            cVein: '#b87a8a', cCum: '#e2e7ec', cPee: '#f5e4b2', cOutline: '#000000', cHair: '#2c1d11',
+            cVein: '#b87a8a', cCum: '#e2e7ec', cPee: '#f5e4b2', cOutline: '#ffffff', cHair: '#2c1d11',
             
             // Physics & Animations
             impactMultiplierX: 2.0,
@@ -1164,7 +1112,7 @@
         };
         // Live config object bound to window
         window.AnatomyConfig = JSON.parse(JSON.stringify(DefaultAnatomy));
-        window.CANVAS_BG = '#90caf9';
+        window.CANVAS_BG = '#1c1c1e';
         
         // --- 2. GAME STATE ---
         const GameState = {
@@ -1343,7 +1291,7 @@
             }
             
             const pm = customer.traits.penisMorph;
-            const cOutline = '#1c1c1c';
+            const cOutline = '#ffffff';
             const cHair = '#2c1d11';
             const cSkinShadow = customer.type === 'black' ? '#4b3020' : '#d49479';
             
@@ -1558,8 +1506,8 @@
             // Extract player/venue name inputs
             const pNameEl = document.getElementById('player-name');
             const vNameEl = document.getElementById('venue-name');
-            GameState.playerName = pNameEl ? (pNameEl.value.trim() || "Rick") : "Rick";
-            GameState.venueName = vNameEl ? (vNameEl.value.trim() || "Kozmik Kulüp") : "Kozmik Kulüp";
+            GameState.playerName = pNameEl ? (pNameEl.value.trim() || "Süleyman") : "Süleyman";
+            GameState.venueName = vNameEl ? (vNameEl.value.trim() || "Gül Yuvası") : "Gül Yuvası";
             
             // Extract checkboxes
             let kadin = document.getElementById('pref-staff-kadin')?.checked ?? true;
@@ -1584,12 +1532,6 @@
                 customers: { beyaz, siyahi, hetero, trans: transCust, bi },
                 services: { anal, vajinal }
             };
-
-            // Update dashboard subrow text contents
-            const dbPlayerNameEl = document.getElementById('db-player-name');
-            const dbVenueNameEl = document.getElementById('db-venue-name');
-            if (dbPlayerNameEl) dbPlayerNameEl.textContent = GameState.playerName;
-            if (dbVenueNameEl) dbVenueNameEl.textContent = GameState.venueName;
 
             generateDailyCustomers(3);
             
@@ -1645,7 +1587,7 @@
                             <canvas class="staff-canvas" data-staff-id="${staff.id}"></canvas>
                         </div>
                         <div class="slot-info">
-                            <div class="slot-name">${staff.name} <span style="font-size: 0.55rem; color: ${genderColor}; font-family: 'Fredoka One', sans-serif;">(${staff.gender})</span></div>
+                            <div class="slot-name">${staff.name} <span style="font-size: 0.55rem; color: ${genderColor}; font-weight: 500;">(${staff.gender})</span></div>
                             <div class="slot-status">Boşta</div>
                         </div>
                     `;
@@ -1704,9 +1646,8 @@
                     <canvas class="customer-preview-canvas" id="preview-${customer.id}"></canvas>
                     <div class="customer-stats">
                         <div class="customer-name">${customer.name}</div>
-                        <div class="customer-detail" style="font-weight: bold; color: var(--accent); font-family: 'Fredoka One', sans-serif;">${raceLabel} (${customer.identity})</div>
+                        <div class="customer-detail" style="font-weight: 600; color: var(--accent);">${raceLabel} (${customer.identity})</div>
                         <div class="customer-detail">${customer.lengthCm} cm / ${customer.widthCm} cm</div>
-                        <div class="customer-detail" style="font-size: 0.5rem; opacity: 0.7;">${customer.isUncut ? 'Sünnetsiz' : 'Sünnetli'}</div>
                     </div>
                 `;
                 
@@ -1885,11 +1826,11 @@
                 if (candidate.id === selectedCandidateId) {
                     card.style.borderColor = 'var(--primary)';
                     card.style.transform = 'scale(1.03)';
-                    card.style.boxShadow = '5px 5px 0px var(--primary)';
+                    card.style.boxShadow = '0 0 12px rgba(10, 132, 255, 0.4)';
                 } else {
-                    card.style.borderColor = '#000000';
+                    card.style.borderColor = 'var(--border-color)';
                     card.style.transform = 'none';
-                    card.style.boxShadow = '4px 4px 0px #000000';
+                    card.style.boxShadow = 'none';
                 }
                 
                 const genderColor = candidate.gender === 'KADIN' ? '#ff69b4' : '#7c5c8c';
@@ -1899,11 +1840,11 @@
                         <canvas class="staff-canvas" data-staff-id="${candidate.id}" data-idle-only="true"></canvas>
                     </div>
                     <div class="candidate-info" style="text-align: center; width: 100%; flex: 1;">
-                        <div class="candidate-name" style="font-size: 0.75rem; font-weight: 800; color: var(--text-color); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${candidate.name}</div>
-                        <div class="candidate-stat" style="font-size: 0.6rem; color: ${genderColor}; font-weight: bold; margin-bottom: 1px;">${candidate.gender}</div>
+                        <div class="candidate-name" style="font-size: 0.75rem; font-weight: 600; color: var(--text-color); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${candidate.name}</div>
+                        <div class="candidate-stat" style="font-size: 0.6rem; color: ${genderColor}; font-weight: 600; margin-bottom: 1px;">${candidate.gender}</div>
                         <div class="candidate-stat" style="font-size: 0.55rem; color: var(--text-muted); margin-bottom: 1px;">Ten: ${candidate.toneLabel}</div>
                         <div class="candidate-stat" style="font-size: 0.55rem; color: var(--text-muted); margin-bottom: 1px;">Çap: ${candidate.baseHoleSize}px</div>
-                        <div class="candidate-stat candidate-cost" style="font-size: 0.65rem; color: var(--accent); font-weight: 800; margin-bottom: 4px;">$${candidate.hireCost}</div>
+                        <div class="candidate-stat candidate-cost" style="font-size: 0.65rem; color: var(--accent); font-weight: 700; margin-bottom: 4px;">$${candidate.hireCost}</div>
                     </div>
                 `;
                 
