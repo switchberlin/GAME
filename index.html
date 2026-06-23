@@ -1,0 +1,2027 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procedural Anatomy & Physics Sandbox</title>
+    <!-- Google Fonts: Outfit for sleek, modern typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #0b0c10;
+            --panel-bg: rgba(22, 26, 37, 0.6);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --primary: #d4af37; /* Gold accent */
+            --primary-glow: rgba(212, 175, 55, 0.3);
+            --accent: #ff4a85; /* Pink accent */
+            --accent-glow: rgba(255, 74, 133, 0.3);
+            --text-color: #e0e6ed;
+            --text-muted: #8892b0;
+            --active-bg: rgba(212, 175, 55, 0.15);
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Outfit', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(212, 175, 55, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(255, 74, 133, 0.05) 0%, transparent 40%);
+        }
+        header {
+            padding: 20px 40px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(11, 12, 16, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+        .header-title h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            background: linear-gradient(45deg, var(--primary), #fff, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .header-title p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+        .btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+        .btn.primary {
+            background: var(--primary);
+            color: #000;
+            border-color: var(--primary);
+            box-shadow: 0 4px 15px var(--primary-glow);
+        }
+        .btn.primary:hover {
+            background: #e5c158;
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
+        }
+        .btn.accent {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+            box-shadow: 0 4px 15px var(--accent-glow);
+        }
+        .btn.accent:hover {
+            background: #ff6699;
+            box-shadow: 0 6px 20px rgba(255, 74, 133, 0.5);
+        }
+        .main-container {
+            display: flex;
+            flex: 1;
+            padding: 30px;
+            gap: 30px;
+            max-width: 1600px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        /* Left side: Canvas display & Telemetry */
+        .preview-pane {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            min-width: 450px;
+        }
+        .canvas-container {
+            position: relative;
+            background: #000;
+            border-radius: 16px;
+            padding: 10px;
+            border: 2px solid rgba(212, 175, 55, 0.2);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(212, 175, 55, 0.05);
+            transition: border-color 0.3s ease;
+        }
+        .canvas-container::after {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            background: linear-gradient(45deg, var(--primary), transparent, var(--accent));
+            border-radius: 16px;
+            z-index: -1;
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        .staff-canvas {
+            display: block;
+            width: 400px;
+            height: 400px;
+            border-radius: 10px;
+            background: #b0bec5;
+        }
+        .telemetry-panel {
+            width: 100%;
+            background: var(--panel-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+        }
+        .telemetry-title {
+            font-size: 0.8rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 12px;
+            font-weight: 800;
+            font-family: 'JetBrains Mono', monospace;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 6px;
+        }
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+        }
+        .telemetry-item {
+            display: flex;
+            justify-content: space-between;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 6px 10px;
+            border-radius: 4px;
+            border-left: 2px solid var(--text-muted);
+        }
+        .telemetry-item.active {
+            border-left-color: var(--primary);
+        }
+        .telemetry-label {
+            color: var(--text-muted);
+        }
+        .telemetry-value {
+            color: #fff;
+            font-weight: bold;
+        }
+        /* Right side: Editor & Control tabs */
+        .control-pane {
+            flex: 1.2;
+            background: var(--panel-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        .tab-bar {
+            display: flex;
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid var(--border-color);
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 15px 10px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            border-bottom: 2px solid transparent;
+        }
+        .tab-btn:hover {
+            color: var(--text-color);
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            background: rgba(212, 175, 55, 0.04);
+        }
+        .tab-content {
+            padding: 25px;
+            overflow-y: auto;
+            flex: 1;
+            max-height: 550px;
+        }
+        .control-group {
+            display: none;
+        }
+        .control-group.active {
+            display: block;
+        }
+        .section-title {
+            color: var(--primary);
+            font-size: 1rem;
+            margin-bottom: 18px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .slider-row {
+            margin-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+        }
+        .slider-label {
+            color: var(--text-color);
+            font-weight: 500;
+        }
+        .slider-val {
+            color: var(--primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: bold;
+        }
+        .slider-input {
+            width: 100%;
+            -webkit-appearance: none;
+            background: rgba(255,255,255,0.1);
+            height: 6px;
+            border-radius: 3px;
+            outline: none;
+            transition: background 0.3s;
+        }
+        .slider-input::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            box-shadow: 0 0 8px var(--primary-glow);
+            transition: transform 0.1s;
+        }
+        .slider-input::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+        .toggle-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            background: rgba(255,255,255,0.02);
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.03);
+        }
+        .toggle-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        /* Modern Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 22px;
+        }
+        .switch input { 
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .switch-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(255,255,255,0.15);
+            transition: .3s;
+            border-radius: 34px;
+        }
+        .switch-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+        input:checked + .switch-slider {
+            background-color: var(--accent);
+        }
+        input:checked + .switch-slider:before {
+            transform: translateX(22px);
+        }
+        .btn-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .state-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .state-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-color);
+        }
+        .state-btn.active {
+            background: var(--active-bg);
+            border-color: var(--primary);
+            color: var(--primary);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.1);
+        }
+        .color-pickers {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .color-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0,0,0,0.15);
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        .color-label {
+            font-size: 0.8rem;
+            flex: 1;
+        }
+        .color-input {
+            -webkit-appearance: none;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            background: none;
+        }
+        .color-input::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+        .color-input::-webkit-color-swatch {
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+        }
+        .documentation {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 1600px;
+            margin: 0 auto 50px auto;
+            width: calc(100% - 60px);
+        }
+        .doc-title {
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        .doc-section {
+            margin-bottom: 20px;
+        }
+        .doc-section h4 {
+            color: var(--accent);
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+        }
+        .doc-section p {
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+        .code-block {
+            background: #050508;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            overflow-x: auto;
+            color: #c5c9db;
+            margin-top: 10px;
+        }
+        /* Scrollbar custom styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.1);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-title">
+            <h1>Anatomy & Physics Render Sandbox</h1>
+            <p>Canvas 2D Procedural Graphic Engine v3.0</p>
+        </div>
+        <div class="header-actions">
+            <button class="btn" id="btn-pause">Duraklat</button>
+            <button class="btn primary" id="btn-reset">Varsayılana Sıfırla</button>
+        </div>
+    </header>
+    <div class="main-container">
+        
+        <!-- Preview & Telemetry -->
+        <div class="preview-pane">
+            <div class="canvas-container">
+                <canvas class="staff-canvas" data-staff-id="char_01"></canvas>
+            </div>
+            
+            <div class="telemetry-panel">
+                <div class="telemetry-title">SİSTEMSİZ TELEMETRİ / MATEMATİKSEL ÇIKTILAR</div>
+                <div class="telemetry-grid">
+                    <div class="telemetry-item active">
+                        <span class="telemetry-label">Aktif Durum:</span>
+                        <span class="telemetry-value" id="t-state">IDLE</span>
+                    </div>
+                    <div class="telemetry-item active">
+                        <span class="telemetry-label">Hız Aşımı / Offset:</span>
+                        <span class="telemetry-value" id="t-offset">0.00 px</span>
+                    </div>
+                    <div class="telemetry-item">
+                        <span class="telemetry-label">Dinamik Delik Genişliği:</span>
+                        <span class="telemetry-value" id="t-holesize">0.00 px</span>
+                    </div>
+                    <div class="telemetry-item">
+                        <span class="telemetry-label">Gape (Açık Kalma) Esnemesi:</span>
+                        <span class="telemetry-value" id="t-gape">0.00</span>
+                    </div>
+                    <div class="telemetry-item">
+                        <span class="telemetry-label">Et Jiggle (Y sarsıntısı):</span>
+                        <span class="telemetry-value" id="t-jiggle-y">0.00 px</span>
+                    </div>
+                    <div class="telemetry-item">
+                        <span class="telemetry-label">Et Jiggle (X esnemesi):</span>
+                        <span class="telemetry-value" id="t-jiggle-x">0.00 px</span>
+                    </div>
+                    <div class="telemetry-item">
+                        <span class="telemetry-label">Basınç / Vakum (Suction):</span>
+                        <span class="telemetry-value" id="t-suction">0.00</span>
+                    </div>
+                    <div class="telemetry-item">
+                        <span class="telemetry-label">Sürtünme Yönü (Friction):</span>
+                        <span class="telemetry-value" id="t-friction">0.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Controls Panels -->
+        <div class="control-pane">
+            <div class="tab-bar">
+                <button class="tab-btn active" data-tab="tab-state">DURUM / FAZ</button>
+                <button class="tab-btn" data-tab="tab-anatomy">KADIN ANATOMİSİ</button>
+                <button class="tab-btn" data-tab="tab-morph">ERKEK (PENİS) MORPH</button>
+                <button class="tab-btn" data-tab="tab-physics">FİZİK / SIVILAR</button>
+            </div>
+            
+            <div class="tab-content">
+                
+                <!-- Tab: State and Phase -->
+                <div class="control-group active" id="tab-state">
+                    <div class="section-title">ETKİLEŞİM MODU</div>
+                    <div class="btn-grid">
+                        <button class="state-btn active" id="state-idle">Boşta (Idle)</button>
+                        <button class="state-btn" id="state-serving">Hizmette (Thrusting)</button>
+                        <button class="state-btn" id="state-cumming">Boşalma (Cumming)</button>
+                        <button class="state-btn" id="state-pissing">İşeme (Pissing)</button>
+                    </div>
+                    
+                    <div class="section-title">HIZ & AŞAMA (THRUST PHASES)</div>
+                    <div class="slider-row">
+                        <div class="slider-header">
+                            <span class="slider-label">Aktif Hız Aşaması (Phase)</span>
+                            <span class="slider-val" id="val-phase">3</span>
+                        </div>
+                        <input type="range" min="1" max="5" step="1" value="3" class="slider-input" id="input-phase">
+                    </div>
+                    
+                    <div class="slider-row">
+                        <div class="slider-header">
+                            <span class="slider-label">Hız Çarpanı (speedMultiplier)</span>
+                            <span class="slider-val" id="val-speed">1.00x</span>
+                        </div>
+                        <input type="range" min="0.5" max="2.5" step="0.05" value="1" class="slider-input" id="input-speed">
+                    </div>
+                    
+                    <div class="toggle-row">
+                        <span class="toggle-label">Gluteal Sallantı Engellensin mi? (Idle Only)</span>
+                        <label class="switch">
+                            <input type="checkbox" id="input-idle-only">
+                            <span class="switch-slider"></span>
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Tab: Female Anatomy Settings -->
+                <div class="control-group" id="tab-anatomy">
+                    <div class="section-title">RENK PALETİ (CHIAROSCURO SYSTEM)</div>
+                    <div class="color-pickers">
+                        <div class="color-row">
+                            <span class="color-label">Ten Rengi (Skin)</span>
+                            <input type="color" class="color-input" id="color-skin" value="#eab29a">
+                        </div>
+                        <div class="color-row">
+                            <span class="color-label">Ten Gölgesi (Shadow)</span>
+                            <input type="color" class="color-input" id="color-skin-shadow" value="#d49479">
+                        </div>
+                        <div class="color-row">
+                            <span class="color-label">Mukoza / Areola (Hole)</span>
+                            <input type="color" class="color-input" id="color-hole" value="#d45d5d">
+                        </div>
+                        <div class="color-row">
+                            <span class="color-label">Mukoza Gölgesi (HoleShadow)</span>
+                            <input type="color" class="color-input" id="color-hole-shadow" value="#8f2f2f">
+                        </div>
+                        <div class="color-row">
+                            <span class="color-label">Kıl Rengi (Hair)</span>
+                            <input type="color" class="color-input" id="color-hair" value="#2c1d11">
+                        </div>
+                        <div class="color-row">
+                            <span class="color-label">Dış Çizgi Rengi (Outline)</span>
+                            <input type="color" class="color-input" id="color-outline" value="#1c1c1c">
+                        </div>
+                    </div>
+                    
+                    <div class="section-title">BACAK & KALÇA PARAMETRELERİ</div>
+                    <div class="slider-row">
+                        <div class="slider-header">
+                            <span class="slider-label">Beden İnceliği (bodySlimness)</span>
+                            <span class="slider-val" id="val-slimness">0 px</span>
+                        </div>
+                        <input type="range" min="-20" max="50" step="1" value="0" class="slider-input" id="input-slimness">
+                    </div>
+                    
+                    <div class="slider-row">
+                        <div class="slider-header">
+                            <span class="slider-label">Taban Delik Çapı (baseHoleSize)</span>
+                            <span class="slider-val" id="val-basehole">6 px</span>
+                        </div>
+                        <input type="range" min="3" max="15" step="0.5" value="6" class="slider-input" id="input-basehole">
+                    </div>
+                </div>
+                
+                <!-- Tab: Male Anatomy (Penis Morph) -->
+                <div class="control-group" id="tab-morph">
+                    <div class="section-title">MÜŞTERİ VÜCUT TİPİ & DERİ TINT</div>
+                    <div class="slider-row">
+                        <div class="slider-header">
+                            <span class="slider-label">Müşteri Irkı (Race/Skin Tone)</span>
+                            <span class="slider-val" id="val-race">Beyaz (White)</span>
+                        </div>
+                        <input type="range" min="0" max="1" step="1" value="0" class="slider-input" id="input-race">
+                    </div>
+                    
+                    <div class="section-title">PENİS GEOMETRİSİ (PENIS MORPH)</div>
+                    <div class="slider-row">
+                        <div class="slider-header">
+                            <span class="slider-label">Uzunluk (shaftLength)</span>
+                            <span class="slider-val" id="val-length">0 px</span>
+                        </div>
+                        <input type="range" min="-40" max="60" step="1" value="0" class="slider-input" id="input-length">
+                    </div>
+                    
+                    <div class="slider-row">
+                        <div class="slider-header">
+                            <span class="slider-label">Kalınlık (shaftWidth)</span>
+                            <span class="slider-val" id="val-width">0 px</span>
+                        </div>
+                        <input type="range" min="-15" max="30" step="1" value="0" class="slider-input" id="input-width">
+                    </div>
+                    
+                    <div class="slider-row">
+                        <div class="slider-header">
+                            <span class="slider-label">Eğrilik (shaftCurve)</span>
+                            <span class="slider-val" id="val-curve">0 px</span>
+                        </div>
+                        <input type="range" min="-30" max="30" step="1" value="0" class="slider-input" id="input-curve">
+                    </div>
+                    <div class="slider-row">
+                        <div class="slider-header">
+                            <span class="slider-label">Penis Başı Genişliği (glansWidth)</span>
+                            <span class="slider-val" id="val-glans-w">0 px</span>
+                        </div>
+                        <input type="range" min="-10" max="20" step="1" value="0" class="slider-input" id="input-glans-w">
+                    </div>
+                    <div class="slider-row">
+                        <div class="slider-header">
+                            <span class="slider-label">Penis Başı Yüksekliği (glansHeight)</span>
+                            <span class="slider-val" id="val-glans-h">0 px</span>
+                        </div>
+                        <input type="range" min="-10" max="20" step="1" value="0" class="slider-input" id="input-glans-h">
+                    </div>
+                    <div class="slider-row">
+                        <div class="slider-header">
+                            <span class="slider-label">Testis Büyüklüğü (testicleSize)</span>
+                            <span class="slider-val" id="val-testicle">0 px</span>
+                        </div>
+                        <input type="range" min="-15" max="30" step="1" value="0" class="slider-input" id="input-testicle">
+                    </div>
+                    <div class="toggle-row">
+                        <span class="toggle-label">Sünnetsiz (Uncut Foreskin)</span>
+                        <label class="switch">
+                            <input type="checkbox" id="input-uncut">
+                            <span class="switch-slider"></span>
+                        </label>
+                    </div>
+                    <div class="section-title">DETAYLAR & KASIK KILLARI</div>
+                    <div class="slider-row">
+                        <div class="slider-header">
+                            <span class="slider-label">Damar Yoğunluğu (veinIntensity)</span>
+                            <span class="slider-val" id="val-vein">0.50</span>
+                        </div>
+                        <input type="range" min="0" max="1" step="0.05" value="0.5" class="slider-input" id="input-vein">
+                    </div>
+                    <div class="slider-row">
+                        <div class="slider-header">
+                            <span class="slider-label">Kasık Kılı Yoğunluğu (hairDensity)</span>
+                            <span class="slider-val" id="val-hair">0.50</span>
+                        </div>
+                        <input type="range" min="0" max="1" step="0.05" value="0.5" class="slider-input" id="input-hair">
+                    </div>
+                </div>
+                
+                <!-- Tab: Physics and Fluids -->
+                <div class="control-group" id="tab-physics">
+                    <div class="section-title">ET SALLANTISI (JIGGLE PHYSICS)</div>
+                    <div class="slider-row">
+                        <div class="slider-header">
+                            <span class="slider-label">Jiggle Çarpanı Y (impactMultiplierY)</span>
+                            <span class="slider-val" id="val-jiggle-y">4.00</span>
+                        </div>
+                        <input type="range" min="0" max="10" step="0.5" value="4" class="slider-input" id="input-jiggle-y">
+                    </div>
+                    <div class="slider-row">
+                        <div class="slider-header">
+                            <span class="slider-label">Jiggle Çarpanı X (impactMultiplierX)</span>
+                            <span class="slider-val" id="val-jiggle-x">2.00</span>
+                        </div>
+                        <input type="range" min="0" max="10" step="0.5" value="2" class="slider-input" id="input-jiggle-x">
+                    </div>
+                    
+                    <div class="slider-row">
+                        <div class="slider-header">
+                            <span class="slider-label">Göt Deliği Esneme Oranı (holeStretch)</span>
+                            <span class="slider-val" id="val-stretch">0.80</span>
+                        </div>
+                        <input type="range" min="0" max="2" step="0.05" value="0.8" class="slider-input" id="input-stretch">
+                    </div>
+                    
+                    <div class="section-title">AKIŞKAN FİZİĞİ (FLUID PHYSICS)</div>
+                    <div class="slider-row">
+                        <div class="slider-header">
+                            <span class="slider-label">Boşalma Damla Adedi</span>
+                            <span class="slider-val" id="val-cum-count">6</span>
+                        </div>
+                        <input type="range" min="1" max="15" step="1" value="6" class="slider-input" id="input-cum-count">
+                    </div>
+                    <div class="slider-row">
+                        <div class="slider-header">
+                            <span class="slider-label">İşeme Damla Adedi</span>
+                            <span class="slider-val" id="val-pee-count">25</span>
+                        </div>
+                        <input type="range" min="5" max="40" step="1" value="25" class="slider-input" id="input-pee-count">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <!-- Standalone Documentation and Developer Notes -->
+    <div class="documentation">
+        <h3 class="doc-title">Geliştirici & Entegrasyon Kılavuzu</h3>
+        
+        <div class="doc-section">
+            <h4>1. Matematik ve Fizik Altyapısı</h4>
+            <p>
+                <strong>Dampened Spring Wobble (Jello Effect):</strong> Penis tam içeri girdiğinde (animasyonun derinlik noktasında) 
+                bir eylemsizlik dalgası oluşur. Bedenin sallanması amortisörlü bir yay sönümleme formülü 
+                <code>decay = (1 - wt)^2</code> ve harmonic sinus dalgası <code>sin(wt * PI * freq)</code> ile hesaplanır.
+            </p>
+            <p>
+                <strong>Ballooning (Gape Koruması):</strong> Gape (açık kalma) anında deliğin penisin kalınlığından daha fazla esnemesini engellemek için 
+                <code>maxTargetStretch</code> formülü penisin anlık kalınlığına <code>(24 + shaftWidth*0.5)</code> kilitlenmiştir.
+            </p>
+            <p>
+                <strong>Sürtünme ve Vakum (Friction/Suction):</strong> Penis içeri girerken (Pushing In) sürtünme pozitif, 
+                çıkarken (Pulling Out) negatiftir. Bu yöne bağlı olarak tüm kadın pelvisi 
+                ve gövdesi Y ekseninde <code>staff.currentGlobalY</code> ile yukarı ve aşağı esneyerek dinamik olarak hareket eder.
+            </p>
+        </div>
+        <div class="doc-section">
+            <h4>2. Kendi Projenize Nasıl Entegre Edersiniz?</h4>
+            <p>
+                Bu çizim motoru tamamen bağımsızdır ve HTML5 Canvas 2D API'sine dayanır. Kodu kendi projenize aktarmak için:
+            </p>
+            <ol style="margin-left: 20px; font-size: 0.85rem; color: var(--text-muted); line-height: 1.8;">
+                <li><code>DefaultAnatomy</code> konfigürasyon nesnesini kopyalayıp oyun ayarlarınıza ekleyin.</li>
+                <li>Hizmet alan karakter verilerinizin içine <code>staff.currentHoleDamage</code>, <code>staff.holeRedness</code>, <code>staff.currentGapeStretch</code> gibi fizik durum değişkenlerini ekleyin.</li>
+                <li><code>renderCanvases()</code> çizim döngüsünü oyununuzun ana render döngüsüne (game loop) veya <code>requestAnimationFrame</code> zincirine yerleştirin.</li>
+                <li>Müşteri veya erkek karakterler için <code>traits.penisMorph</code> yapısını kurarak kalınlık, uzunluk ve kıvrım gibi değerleri canvasa aktarın.</li>
+            </ol>
+            
+            <div class="code-block">
+// Oyununuza entegre ederken karakterlerinizi şu şekilde tanımlayabilirsiniz:
+let staff = {
+    id: "char_01",
+    currentHoleDamage: 6,      // Deliğin hasar/genişlik seviyesi
+    holeRedness: 0,            // Kızarıklık oranı (0-1 arası)
+    currentGapeStretch: 0,     // Anlık açık kalma miktarı
+    currentGlobalY: 0,         // Sürtünme kaynaklı beden Y-esnemesi
+    lastRenderTime: Date.now()
+};
+let customer = {
+    traits: {
+        penisMorph: {
+            shaftWidth: 10,   // Kalınlık artışı/azalışı (-15 ile +30 arası)
+            shaftLength: 15,  // Uzunluk artışı/azalışı (-40 ile +60 arası)
+            isUncut: true      // Sünnetsiz/Sünnetli görsel modu
+        }
+    }
+};
+            </div>
+        </div>
+    </div>
+    <!-- Main JavaScript Logic -->
+    <script>
+        // --- 1. CONFIGURATION SYSTEM ---
+        const DefaultAnatomy = {
+            // Colors
+            cSkin: '#eab29a', cSkinShadow: '#d49479', cHole: '#d45d5d', cHoleShadow: '#8f2f2f',
+            cVein: '#7a96b3', cCum: '#ffffff', cPee: '#fcf3cf', cOutline: '#1c1c1c', cHair: '#2c1d11',
+            
+            // Physics & Animations
+            impactMultiplierX: 2.0,
+            impactMultiplierY: 4.0,
+            holeStretchMultiplier: 0.8,
+            bodyTwitchAmount: 0.5,
+            
+            // Fluids
+            cumDropCount: 6,
+            cumSpreadX: 5,
+            cumSpeedY: 200,
+            cumBaseSize: 2,
+            peeDropCount: 25,
+            peeSpreadX: 12,
+            peeSpeedY: 280,
+            peeBaseSize: 2,
+            // Upper Body & Waist
+            waistTopWidth: 50,
+            waistCurveCpX: 35, 
+            waistCurveCpY: 60,
+            
+            // Hips
+            upperHipCpX: 120, 
+            upperHipCpY: 80,
+            hipEndX: 110, 
+            hipEndY: 30,
+            
+            // Thighs
+            upperThighCpX: 100, 
+            upperThighCpY: 320,
+            lowerThighEndX: 80,
+            legBottomWidth: 65, 
+            
+            // Inner Thighs & Gap
+            innerThighGap: 15,
+            innerThighCpX: 5, 
+            innerThighCpY: 290,
+            
+            // Gluteal Folds (Bottom Cheeks)
+            foldStartX: 95, 
+            foldStartY: 50,
+            foldCpY: 140,
+            foldEndX: 30, 
+            foldEndY: 70,
+            
+            // Crack & Spine
+            crackDepthY: 150,
+            crackCurveX: 2,
+            spineTopWidth: 12, 
+            spineBottomWidth: 4, 
+            spineHeight: 60,
+            spineCurveCpY: 80,
+            // Dimples
+            dimpleSpread: 40, 
+            dimpleHeight: 85,
+            dimpleSizeX: 4,
+            dimpleSizeY: 8,
+            dimpleAngle: 0.2,
+            // Highlights
+            shineOffsetX: 60, 
+            shineOffsetY: -30, 
+            shineWidth: 20, 
+            shineHeight: 40, 
+            shineAngle: 0.523,
+            
+            // Vulva Geometry
+            vulvaYOffset: 80,
+            outerLabiaWidth: 25,
+            outerLabiaHeightTop: 30,
+            outerLabiaHeightBottom: 40,
+            innerLabiaWidth: 10,
+            innerLabiaHeightTop: 20,
+            innerLabiaHeightBottom: 30,
+            deepSlitHeightTop: 18,
+            deepSlitHeightBottom: 28
+        };
+        // Live config object bound to window
+        window.AnatomyConfig = JSON.parse(JSON.stringify(DefaultAnatomy));
+        
+        // --- 2. GAME STATE MOCK ---
+        // Mimicking the game structure perfectly so the renderCanvases script runs untouched!
+        const GameState = {
+            staff: [
+                {
+                    id: "char_01",
+                    currentHoleDamage: 6,
+                    holeRedness: 0,
+                    activeCustomerId: "cust_01",
+                    isServing: false,
+                    isCumming: false,
+                    isPissing: false,
+                    currentPhase: 3,
+                    currentGapeStretch: 0,
+                    currentGlobalY: 0,
+                    activeServiceTime: 0,
+                    winkTimer: 0,
+                    winkCooldown: 10000,
+                    timeWithoutPenis: 0
+                }
+            ],
+            characters: [], // Emtpy fallback
+            dailyCustomers: [
+                {
+                    id: "cust_01",
+                    type: "white", // white or black
+                    traits: {
+                        penisMorph: {
+                            shaftWidth: 0,
+                            shaftCurve: 0,
+                            shaftLength: 0,
+                            glansWidth: 0,
+                            glansHeight: 0,
+                            testicleSize: 0,
+                            bodySlimness: 0,
+                            veinIntensity: 0.5,
+                            vein1Offset: 0,
+                            vein2Offset: 0,
+                            vein3Offset: 0,
+                            hairDensity: 0.5,
+                            thrustStyle: 0,
+                            speedMultiplier: 1.0,
+                            isUncut: false
+                        }
+                    }
+                }
+            ]
+        };
+        // Pause state
+        let gamePausedState = false;
+        window.isGamePaused = function() {
+            return gamePausedState;
+        };
+        // --- 3. UI CONTROLLERS & DATA BINDING ---
+        
+        // Tab switching
+        const tabs = document.querySelectorAll('.tab-btn');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content .control-group').forEach(group => group.classList.remove('active'));
+                
+                tab.classList.add('active');
+                document.getElementById(tab.getAttribute('data-tab')).classList.add('active');
+            });
+        });
+        // Pause/Play Toggle
+        const btnPause = document.getElementById('btn-pause');
+        btnPause.addEventListener('click', () => {
+            gamePausedState = !gamePausedState;
+            btnPause.textContent = gamePausedState ? "Devam Et" : "Duraklat";
+            btnPause.classList.toggle('accent', gamePausedState);
+        });
+        // Reset to default
+        const btnReset = document.getElementById('btn-reset');
+        btnReset.addEventListener('click', () => {
+            window.AnatomyConfig = JSON.parse(JSON.stringify(DefaultAnatomy));
+            
+            // Reset character variables
+            const staff = GameState.staff[0];
+            staff.currentHoleDamage = 6;
+            staff.holeRedness = 0;
+            staff.currentGapeStretch = 0;
+            staff.currentGlobalY = 0;
+            staff.activeServiceTime = 0;
+            
+            // Reset customer morphs
+            const pm = GameState.dailyCustomers[0].traits.penisMorph;
+            pm.shaftWidth = 0;
+            pm.shaftCurve = 0;
+            pm.shaftLength = 0;
+            pm.glansWidth = 0;
+            pm.glansHeight = 0;
+            pm.testicleSize = 0;
+            pm.bodySlimness = 0;
+            pm.veinIntensity = 0.5;
+            pm.vein1Offset = 0;
+            pm.vein2Offset = 0;
+            pm.vein3Offset = 0;
+            pm.hairDensity = 0.5;
+            pm.speedMultiplier = 1.0;
+            pm.isUncut = false;
+            
+            syncUI();
+        });
+        // State button handlers
+        const stateBtns = {
+            'state-idle': { isServing: false, isCumming: false, isPissing: false, label: 'IDLE' },
+            'state-serving': { isServing: true, isCumming: false, isPissing: false, label: 'SERVING (THRUSTING)' },
+            'state-cumming': { isServing: true, isCumming: true, isPissing: false, label: 'CUMMING' },
+            'state-pissing': { isServing: true, isCumming: false, isPissing: true, label: 'PISSING' }
+        };
+        Object.keys(stateBtns).forEach(btnId => {
+            document.getElementById(btnId).addEventListener('click', (e) => {
+                document.querySelectorAll('.state-btn').forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active');
+                
+                const state = stateBtns[btnId];
+                const staff = GameState.staff[0];
+                staff.isServing = state.isServing;
+                staff.isCumming = state.isCumming;
+                staff.isPissing = state.isPissing;
+                
+                document.getElementById('t-state').textContent = state.label;
+            });
+        });
+        // Sliders & inputs bindings
+        function bindSlider(inputId, valId, updateFn, suffix = "") {
+            const input = document.getElementById(inputId);
+            const valDisplay = document.getElementById(valId);
+            
+            input.addEventListener('input', (e) => {
+                let val = parseFloat(e.target.value);
+                valDisplay.textContent = val + suffix;
+                updateFn(val);
+            });
+        }
+        const staff = GameState.staff[0];
+        const customer = GameState.dailyCustomers[0];
+        const pm = customer.traits.penisMorph;
+        // Phase Slider
+        bindSlider('input-phase', 'val-phase', (val) => {
+            staff.currentPhase = parseInt(val);
+        });
+        // Speed Slider
+        bindSlider('input-speed', 'val-speed', (val) => {
+            pm.speedMultiplier = val;
+        }, "x");
+        // Body Slimness
+        bindSlider('input-slimness', 'val-slimness', (val) => {
+            pm.bodySlimness = val;
+        }, " px");
+        // Base Hole Size
+        bindSlider('input-basehole', 'val-basehole', (val) => {
+            staff.baseHoleSize = val;
+        }, " px");
+        // Race Slider (White / Black)
+        const inputRace = document.getElementById('input-race');
+        const valRace = document.getElementById('val-race');
+        inputRace.addEventListener('input', (e) => {
+            const isBlack = parseInt(e.target.value) === 1;
+            customer.type = isBlack ? "black" : "white";
+            valRace.textContent = isBlack ? "Siyahi (Black)" : "Beyaz (White)";
+        });
+        // Penis Geometries
+        bindSlider('input-length', 'val-length', (val) => { pm.shaftLength = val; }, " px");
+        bindSlider('input-width', 'val-width', (val) => { pm.shaftWidth = val; }, " px");
+        bindSlider('input-curve', 'val-curve', (val) => { pm.shaftCurve = val; }, " px");
+        bindSlider('input-glans-w', 'val-glans-w', (val) => { pm.glansWidth = val; }, " px");
+        bindSlider('input-glans-h', 'val-glans-h', (val) => { pm.glansHeight = val; }, " px");
+        bindSlider('input-testicle', 'val-testicle', (val) => { pm.testicleSize = val; }, " px");
+        bindSlider('input-vein', 'val-vein', (val) => { pm.veinIntensity = val; });
+        bindSlider('input-hair', 'val-hair', (val) => { pm.hairDensity = val; });
+        // Physics Multipliers
+        bindSlider('input-jiggle-y', 'val-jiggle-y', (val) => { window.AnatomyConfig.impactMultiplierY = val; });
+        bindSlider('input-jiggle-x', 'val-jiggle-x', (val) => { window.AnatomyConfig.impactMultiplierX = val; });
+        bindSlider('input-stretch', 'val-stretch', (val) => { window.AnatomyConfig.holeStretchMultiplier = val; });
+        // Fluids count
+        bindSlider('input-cum-count', 'val-cum-count', (val) => { window.AnatomyConfig.cumDropCount = parseInt(val); });
+        bindSlider('input-pee-count', 'val-pee-count', (val) => { window.AnatomyConfig.peeDropCount = parseInt(val); });
+        // Toggles
+        document.getElementById('input-idle-only').addEventListener('change', (e) => {
+            document.querySelector('.staff-canvas').setAttribute('data-idle-only', e.target.checked ? 'true' : 'false');
+        });
+        document.getElementById('input-uncut').addEventListener('change', (e) => {
+            pm.isUncut = e.target.checked;
+        });
+        // Colors binding
+        function bindColor(colorId, configKey) {
+            const input = document.getElementById(colorId);
+            input.addEventListener('input', (e) => {
+                window.AnatomyConfig[configKey] = e.target.value;
+            });
+        }
+        bindColor('color-skin', 'cSkin');
+        bindColor('color-skin-shadow', 'cSkinShadow');
+        bindColor('color-hole', 'cHole');
+        bindColor('color-hole-shadow', 'cHoleShadow');
+        bindColor('color-hair', 'cHair');
+        bindColor('color-outline', 'cOutline');
+        // Sync UI inputs with current values (used during Reset)
+        function syncUI() {
+            document.getElementById('input-phase').value = staff.currentPhase || 3;
+            document.getElementById('val-phase').textContent = staff.currentPhase || 3;
+            
+            document.getElementById('input-speed').value = pm.speedMultiplier;
+            document.getElementById('val-speed').textContent = pm.speedMultiplier.toFixed(2) + "x";
+            
+            document.getElementById('input-slimness').value = pm.bodySlimness;
+            document.getElementById('val-slimness').textContent = pm.bodySlimness + " px";
+            
+            document.getElementById('input-basehole').value = staff.baseHoleSize || 6;
+            document.getElementById('val-basehole').textContent = (staff.baseHoleSize || 6) + " px";
+            document.getElementById('input-race').value = customer.type === "black" ? 1 : 0;
+            document.getElementById('val-race').textContent = customer.type === "black" ? "Siyahi (Black)" : "Beyaz (White)";
+            
+            document.getElementById('input-length').value = pm.shaftLength;
+            document.getElementById('val-length').textContent = pm.shaftLength + " px";
+            
+            document.getElementById('input-width').value = pm.shaftWidth;
+            document.getElementById('val-width').textContent = pm.shaftWidth + " px";
+            
+            document.getElementById('input-curve').value = pm.shaftCurve;
+            document.getElementById('val-curve').textContent = pm.shaftCurve + " px";
+            document.getElementById('input-glans-w').value = pm.glansWidth;
+            document.getElementById('val-glans-w').textContent = pm.glansWidth + " px";
+            document.getElementById('input-glans-h').value = pm.glansHeight;
+            document.getElementById('val-glans-h').textContent = pm.glansHeight + " px";
+            document.getElementById('input-testicle').value = pm.testicleSize;
+            document.getElementById('val-testicle').textContent = pm.testicleSize + " px";
+            document.getElementById('input-vein').value = pm.veinIntensity;
+            document.getElementById('val-vein').textContent = pm.veinIntensity.toFixed(2);
+            document.getElementById('input-hair').value = pm.hairDensity;
+            document.getElementById('val-hair').textContent = pm.hairDensity.toFixed(2);
+            
+            document.getElementById('input-jiggle-y').value = window.AnatomyConfig.impactMultiplierY;
+            document.getElementById('val-jiggle-y').textContent = window.AnatomyConfig.impactMultiplierY.toFixed(2);
+            document.getElementById('input-jiggle-x').value = window.AnatomyConfig.impactMultiplierX;
+            document.getElementById('val-jiggle-x').textContent = window.AnatomyConfig.impactMultiplierX.toFixed(2);
+            document.getElementById('input-stretch').value = window.AnatomyConfig.holeStretchMultiplier;
+            document.getElementById('val-stretch').textContent = window.AnatomyConfig.holeStretchMultiplier.toFixed(2);
+            document.getElementById('input-cum-count').value = window.AnatomyConfig.cumDropCount;
+            document.getElementById('val-cum-count').textContent = window.AnatomyConfig.cumDropCount;
+            document.getElementById('input-pee-count').value = window.AnatomyConfig.peeDropCount;
+            document.getElementById('val-pee-count').textContent = window.AnatomyConfig.peeDropCount;
+            document.getElementById('input-idle-only').checked = false;
+            document.querySelector('.staff-canvas').setAttribute('data-idle-only', 'false');
+            document.getElementById('input-uncut').checked = pm.isUncut;
+            // Colors
+            document.getElementById('color-skin').value = window.AnatomyConfig.cSkin;
+            document.getElementById('color-skin-shadow').value = window.AnatomyConfig.cSkinShadow;
+            document.getElementById('color-hole').value = window.AnatomyConfig.cHole;
+            document.getElementById('color-hole-shadow').value = window.AnatomyConfig.cHoleShadow;
+            document.getElementById('color-hair').value = window.AnatomyConfig.cHair;
+            document.getElementById('color-outline').value = window.AnatomyConfig.cOutline;
+            // State active trigger
+            document.querySelectorAll('.state-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('state-idle').classList.add('active');
+            document.getElementById('t-state').textContent = 'IDLE';
+        }
+        // Initialize UI values
+        syncUI();
+        // --- 4. RENDER TELEMETRY UPDATE ---
+        // Updates real-time telemetry variables shown below the canvas
+        function updateTelemetry(vals) {
+            document.getElementById('t-offset').textContent = vals.offset.toFixed(2) + " px";
+            document.getElementById('t-holesize').textContent = vals.holesize.toFixed(2) + " px";
+            document.getElementById('t-gape').textContent = vals.gape.toFixed(2);
+            document.getElementById('t-jiggle-y').textContent = vals.jiggleY.toFixed(2) + " px";
+            document.getElementById('t-jiggle-x').textContent = vals.jiggleX.toFixed(2) + " px";
+            document.getElementById('t-suction').textContent = vals.suction.toFixed(2);
+            document.getElementById('t-friction').textContent = vals.friction.toFixed(2);
+        }
+        // --- 5. THE ORIGINAL CANVAS RENDERING ENGINE ---
+        // EXACT copy of the v3 rendering function from index.html (slightly modified to push telemetry data)
+        function renderCanvases() {
+            let isPaused = window.isGamePaused && window.isGamePaused();
+            const canvases = document.querySelectorAll('.staff-canvas');
+            canvases.forEach(canvas => {
+                const ctx = canvas.getContext('2d');
+                const staffId = canvas.getAttribute('data-staff-id');
+                let staff = GameState.staff.find(s => s.id === staffId);
+                if (!staff) {
+                    staff = GameState.characters.find(s => s.id === staffId);
+                }
+                if (!staff) return;
+                // Yüksek Çözünürlük (High DPI / Retina) Desteği
+                if (!canvas.dataset.scaled) {
+                    const dpr = Math.max(window.devicePixelRatio || 1, 2); 
+                    canvas.width = 400 * dpr;
+                    canvas.height = 400 * dpr;
+                    ctx.scale(dpr, dpr);
+                    canvas.dataset.scaled = "true";
+                }
+                const isIdleOnly = canvas.getAttribute('data-idle-only') === 'true';
+                const w = 400; // Çizim matematiği için mantıksal genişlik
+                const h = 400; // Çizim matematiği için mantıksal yükseklik
+                const centerX = w / 2;
+                let centerY = h / 2;
+                const ac = window.AnatomyConfig;
+                ctx.clearRect(0, 0, w, h);
+                
+                ctx.lineJoin = 'round';
+                ctx.lineCap = 'round';
+                
+                const cSkin = ac.cSkin; 
+                const cSkinShadow = ac.cSkinShadow; 
+                const cHole = ac.cHole; 
+                const cHoleShadow = ac.cHoleShadow; 
+                const cVein = ac.cVein; 
+                const cCum = ac.cCum; 
+                const cPee = ac.cPee; 
+                const cOutline = ac.cOutline; 
+                const cHair = ac.cHair;
+                function drawWigglyLine(startX, startY, endX, endY, segments, wiggliness, seed) {
+                    ctx.beginPath();
+                    ctx.moveTo(startX, startY);
+                    for(let i=1; i<=segments; i++) {
+                        let t = i/segments;
+                        let r1 = Math.sin(seed * i * 12.3);
+                        let r2 = Math.cos(seed * i * 45.6);
+                        let nx = startX + (endX-startX)*t + r1 * wiggliness;
+                        let ny = startY + (endY-startY)*t + r2 * wiggliness;
+                        ctx.lineTo(nx, ny);
+                    }
+                    ctx.stroke();
+                }
+                let base = staff.baseHoleSize || 6;
+                if (typeof staff.currentHoleDamage === 'undefined') staff.currentHoleDamage = base;
+                const time = Date.now() / 150;
+                let offset = 0;
+                let currentStretch = 0;
+                let dynamicHoleSize = staff.currentHoleDamage;
+                let impact = 0;
+                let jX = 0;
+                let jY = 0;
+                let suction = 0;
+                let frictionDrag = 0; 
+                
+                let nowGlobal = Date.now();
+                if (typeof staff.lastRenderTime === 'undefined') staff.lastRenderTime = nowGlobal;
+                let dtGlobal = Math.min(100, nowGlobal - staff.lastRenderTime);
+                staff.lastRenderTime = nowGlobal;
+                if (isPaused) dtGlobal = 0;
+                
+                if (typeof staff.activeServiceTime === 'undefined') staff.activeServiceTime = 0;
+                if (typeof staff.currentGlobalY === 'undefined') staff.currentGlobalY = 0;
+                if (typeof staff.holeRedness === 'undefined') staff.holeRedness = 0; 
+                let wobble = 0;
+                let wobbleX = 0;
+                
+                let currentCustomer = null;
+                if (staff.activeCustomerId) {
+                    currentCustomer = GameState.dailyCustomers.find(c => c.id === staff.activeCustomerId);
+                }
+                
+                let pm = currentCustomer?.traits?.penisMorph || { 
+                    shaftWidth: 0, shaftCurve: 0, shaftLength: 0, glansWidth: 0, glansHeight: 0, testicleSize: 0, bodySlimness: 0,
+                    veinIntensity: 0.5, vein1Offset: 0, vein2Offset: 0, vein3Offset: 0, hairDensity: 0.5, thrustStyle: 0, speedMultiplier: 1.0, isUncut: false 
+                };
+                if (staff.isServing && !staff.isCumming && !staff.isPissing) {
+                    staff.activeServiceTime += dtGlobal;
+                    
+                    let phase = staff.currentPhase || 3; 
+                    
+                    let targetRedness = (phase - 1) / 4;
+                    if (targetRedness < 0) targetRedness = 0;
+                    if (targetRedness > 1) targetRedness = 1;
+                    staff.holeRedness += (targetRedness - staff.holeRedness) * 0.005;
+                    
+                    let targetDamage = base + (targetRedness * 20);
+                    if (staff.currentHoleDamage < targetDamage) {
+                        staff.currentHoleDamage += (targetDamage - staff.currentHoleDamage) * 0.005;
+                    }
+                    
+                    let targetCycleDuration = 2000;
+                    if (phase === 1) targetCycleDuration = 4000;
+                    if (phase === 2) targetCycleDuration = 1211;
+                    if (phase === 4) targetCycleDuration = 807; 
+                    if (phase === 5) targetCycleDuration = 1000;
+                    
+                    let targetMinOffset = -120;
+                    let targetMaxOffset = 100;
+                    if (phase === 1) {
+                        targetMinOffset = -50; 
+                        targetMaxOffset = 59; 
+                    } else if (phase === 2) {
+                        targetMinOffset = 45; 
+                        targetMaxOffset = 100; 
+                    } else if (phase === 4) {
+                        targetMinOffset = -10; 
+                        targetMaxOffset = 100; 
+                    }
+                    if (!staff.animState) {
+                        staff.animState = {
+                            minOffset: targetMinOffset,
+                            maxOffset: targetMaxOffset,
+                            cycleDuration: targetCycleDuration,
+                            phaseProgress: 0,
+                            lastTime: Date.now()
+                        };
+                    }
+                    
+                    let now = Date.now();
+                    let rawDt = now - staff.animState.lastTime;
+                    let dt = rawDt;
+                    staff.animState.lastTime = now;
+                    if (isPaused) dt = 0;
+                    
+                    if (typeof staff.animState.teaseSequence === 'undefined') {
+                        staff.animState.teaseSequence = { active: false, phase: 0, timer: 0, timesTriggered: 0 };
+                    }
+                    if (typeof staff.animState.lastCycle === 'undefined') staff.animState.lastCycle = 0;
+                    
+                    if (!staff.isServing) {
+                        staff.animState.teaseSequence.timesTriggered = 0;
+                        staff.animState.cumTeaseDone = false;
+                        staff.animState.pendingCumTease = false;
+                        staff.animState.cumTeaseActive = false;
+                        staff.animState.freezeServiceProgress = false;
+                    }
+                    
+                    let lerpSpeed = 0.08 * (Math.min(dt, 50) / 16); 
+                    staff.animState.minOffset += (targetMinOffset - staff.animState.minOffset) * lerpSpeed;
+                    staff.animState.maxOffset += (targetMaxOffset - staff.animState.maxOffset) * lerpSpeed;
+                    staff.animState.cycleDuration += (targetCycleDuration - staff.animState.cycleDuration) * lerpSpeed;
+                    
+                    let actualCycleDuration = (staff.animState.cycleDuration / (pm.speedMultiplier || 1.0)) / 1.05;
+                    
+                    if (!staff.animState.teaseSequence.active) {
+                        staff.animState.phaseProgress += dt / actualCycleDuration;
+                        if (staff.animState.phaseProgress >= 1) {
+                            staff.animState.phaseProgress %= 1;
+                        }
+                    }
+                    
+                    let cycle = staff.animState.phaseProgress; 
+                    let totalRange = staff.animState.maxOffset - staff.animState.minOffset;
+                    let inEnd = 0.30 + ((pm.thrustStyle || 0) * 0.10); 
+                    if (staff.isServing && phase !== 1 && cycle >= inEnd && staff.animState.lastCycle < inEnd && !staff.animState.teaseSequence.active) {
+                        if (Math.random() < 0.03 && staff.animState.teaseSequence.timesTriggered < 3) {
+                            staff.animState.teaseSequence.active = true;
+                            staff.animState.teaseSequence.phase = 0; 
+                            staff.animState.teaseSequence.timer = 0;
+                            staff.animState.teaseSequence.timesTriggered++;
+                        }
+                    }
+                    if (staff.animState.teaseSequence.active) {
+                        let ts = staff.animState.teaseSequence;
+                        ts.timer += rawDt; 
+                        if (ts.phase === 0) { 
+                            let progress = Math.min(1.0, ts.timer / 5000);
+                            let ease = Math.cos(progress * Math.PI / 2); 
+                            offset = staff.animState.minOffset + (ease * totalRange);
+                            if (progress >= 1.0) { ts.phase = 1; ts.timer = 0; }
+                        } else if (ts.phase === 1) { 
+                            offset = staff.animState.minOffset;
+                            if (ts.timer >= 2000) { ts.phase = 2; ts.timer = 0; }
+                        } else if (ts.phase === 2) { 
+                            let progress = Math.min(1.0, ts.timer / 3000);
+                            let ease = Math.sin(progress * Math.PI / 2); 
+                            offset = staff.animState.minOffset + (ease * totalRange);
+                            if (progress >= 1.0) {
+                                ts.active = false;
+                                staff.animState.phaseProgress = inEnd; 
+                            }
+                        }
+                    } else if (staff.animState.pendingCumTease && !staff.animState.cumTeaseActive) {
+                        if (cycle >= inEnd && staff.animState.lastCycle < inEnd) {
+                            staff.animState.cumTeaseActive = true;
+                            staff.animState.cumTeasePhase = 0;
+                            staff.animState.cumTeaseTimer = 0;
+                        }
+                        let t = cycle / inEnd;
+                        let ease = Math.sin(t * Math.PI / 2);
+                        offset = staff.animState.minOffset + (ease * totalRange);
+                    } else if (staff.animState.cumTeaseActive) {
+                        staff.animState.cumTeaseTimer += rawDt;
+                        dt = 0; 
+                        
+                        let progress = Math.min(1.0, staff.animState.cumTeaseTimer / 5000);
+                        let ease = Math.cos(progress * Math.PI / 2); 
+                        offset = staff.animState.minOffset + (ease * totalRange);
+                        
+                        if (progress >= 1.0) {
+                            staff.animState.cumTeaseActive = false;
+                            staff.animState.pendingCumTease = false;
+                            staff.animState.cumTeaseDone = true;
+                            staff.animState.freezeServiceProgress = false; 
+                            staff.animState.phaseProgress = 0; 
+                        }
+                    } else {
+                        if (phase === 1) {
+                            let ease = (1 - Math.cos(cycle * Math.PI * 2)) / 2;
+                            offset = staff.animState.minOffset + (ease * totalRange);
+                        } else {
+                            if (cycle < inEnd) {
+                                let t = cycle / inEnd;
+                                let ease = Math.sin(t * Math.PI / 2); 
+                                offset = staff.animState.minOffset + (ease * totalRange); 
+                            } else {
+                                let t = (cycle - inEnd) / (1.0 - inEnd);
+                                let ease = Math.cos(t * Math.PI / 2); 
+                                offset = staff.animState.minOffset + (ease * totalRange);
+                            }
+                        }
+                    }
+                    
+                    staff.animState.lastCycle = cycle;
+                    wobble = 0;
+                    wobbleX = 0;
+                    if (phase === 1) {
+                        // Phase 1 has no wobble
+                    } else if (cycle >= 0.3 && cycle < 0.8) {
+                        let wt = (cycle - 0.3) / 0.5; 
+                        let freq = 8 * (staff.animState.cycleDuration / 2000); 
+                        let dynamicIntensity = Math.max(0.1, totalRange / 220); 
+                        let decay = Math.pow(1 - wt, 2); 
+                        
+                        wobble = -Math.sin(wt * Math.PI * freq) * decay * (1.5 * dynamicIntensity) * ac.impactMultiplierY;
+                        let decayX = Math.pow(1 - wt, 3);
+                        wobbleX = Math.cos(wt * Math.PI * freq * 0.6) * decayX * (1.5 * dynamicIntensity) * ac.impactMultiplierX;
+                    }
+                    let targetStretch = (offset > 0) ? (offset / 35) : 0;
+                    let maxTargetStretch = (((24 + (pm.shaftWidth || 0) * 0.5) / 13) - 1) / 0.4;
+                    targetStretch = Math.min(targetStretch, Math.max(0, maxTargetStretch));
+                    
+                    if (typeof staff.currentGapeStretch === 'undefined') staff.currentGapeStretch = 0;
+                    if (targetStretch >= staff.currentGapeStretch) {
+                        staff.currentGapeStretch = targetStretch;
+                    } else {
+                        let widthFactor = ((pm.shaftWidth || 0) + 12) / 12; 
+                        widthFactor = Math.max(0, Math.min(1, widthFactor));
+                        let lengthFactor = (pm.shaftLength || 0) / 95; 
+                        lengthFactor = Math.max(0, Math.min(1, lengthFactor));
+                        
+                        let penisVolume = (widthFactor + lengthFactor) / 2; 
+                        let recoveryTimeMs = 500 + (penisVolume * 2500); 
+                        
+                        let maxPossibleStretch = 100 / 35; 
+                        let shrinkRate = maxPossibleStretch / recoveryTimeMs; 
+                        
+                        staff.currentGapeStretch -= shrinkRate * dtGlobal;
+                        if (staff.currentGapeStretch < targetStretch) {
+                            staff.currentGapeStretch = targetStretch;
+                        }
+                    }
+                    currentStretch = staff.currentGapeStretch;
+                    let twitch = 0; 
+                    
+                    dynamicHoleSize = staff.currentHoleDamage + (currentStretch * staff.currentHoleDamage * ac.holeStretchMultiplier) + twitch;
+                    impact = Math.max(0, offset / 35); 
+                    suction = Math.max(0, offset / 35); 
+                    if (suction > 0) {
+                        if (phase === 1) {
+                            if (cycle < 0.5) {
+                                let t = cycle / 0.5;
+                                frictionDrag = Math.sin(t * Math.PI); 
+                            } else {
+                                let t = (cycle - 0.5) / 0.5;
+                                frictionDrag = -Math.sin(t * Math.PI); 
+                            }
+                        } else {
+                            if (cycle < 0.3) {
+                                let t = cycle / 0.3; 
+                                frictionDrag = Math.sin(t * Math.PI); 
+                            } else if (cycle > 0.4) {
+                                let t = (cycle - 0.4) / 0.6; 
+                                frictionDrag = -Math.sin(t * Math.PI); 
+                            } else {
+                                frictionDrag = 0; 
+                            }
+                        }
+                        let dynamicIntensity = Math.max(0.1, totalRange / 220); 
+                        frictionDrag *= Math.min(1, suction * 1.5) * dynamicIntensity;
+                    } else {
+                        frictionDrag = 0;
+                    }
+                    let targetGlobalY = 0;
+                    if (suction > 0) {
+                        targetGlobalY -= (suction * 8); 
+                        targetGlobalY -= (frictionDrag * 18); 
+                        if (targetGlobalY > 0) targetGlobalY = 0;
+                    }
+                    staff.currentGlobalY += (targetGlobalY - staff.currentGlobalY) * 0.15;
+                    jX = wobbleX;
+                    jY = wobble;
+                } else if (staff.isCumming || staff.isPissing) {
+                    staff.currentGlobalY += (0 - staff.currentGlobalY) * 0.1; 
+                    dynamicHoleSize = staff.currentHoleDamage; 
+                    jX = 0; 
+                    jY = 0;
+                    offset += (0 - offset) * 0.1; 
+                }
+                if (isIdleOnly) {
+                    offset = 0;
+                    currentStretch = 0;
+                    dynamicHoleSize = staff.currentHoleDamage;
+                    impact = 0;
+                    jX = 0;
+                    jY = 0;
+                    suction = 0;
+                    frictionDrag = 0;
+                }
+                // Push Telemetry values to dashboard
+                updateTelemetry({
+                    offset: offset,
+                    holesize: dynamicHoleSize,
+                    gape: currentStretch,
+                    jiggleY: jY,
+                    jiggleX: jX,
+                    suction: suction,
+                    friction: frictionDrag
+                });
+                // --- 1. BACKGROUND ---
+                ctx.fillStyle = '#050302'; // Cinematic dark bg
+                ctx.fillRect(0, 0, w, h);
+                ctx.save();
+                if (!staff.isServing) {
+                    staff.currentGlobalY += (0 - staff.currentGlobalY) * 0.1;
+                    
+                    if (staff.activeServiceTime > 0) {
+                        if (staff.holeRedness > 0) {
+                            let decreaseRateR = staff.holeRedness / staff.activeServiceTime;
+                            staff.holeRedness -= decreaseRateR * dtGlobal;
+                        }
+                        if (staff.currentHoleDamage > base) {
+                            let decreaseRateD = (staff.currentHoleDamage - base) / staff.activeServiceTime;
+                            staff.currentHoleDamage -= decreaseRateD * dtGlobal;
+                        }
+                        
+                        staff.activeServiceTime -= dtGlobal;
+                        
+                        if (staff.holeRedness < 0) staff.holeRedness = 0;
+                        if (staff.currentHoleDamage < base) staff.currentHoleDamage = base;
+                        if (staff.activeServiceTime < 0) staff.activeServiceTime = 0;
+                    } else {
+                        staff.holeRedness = 0;
+                        staff.currentHoleDamage = base;
+                        staff.activeServiceTime = 0;
+                    }
+                }
+                ctx.translate(0, staff.currentGlobalY);
+                // Perfectly Proportioned Curvy Woman Body (Narrow top, thin waist, high oval hips, slightly narrower overall)
+                ctx.fillStyle = cSkin; ctx.lineWidth = 3; ctx.strokeStyle = cOutline;
+                ctx.beginPath();
+                ctx.moveTo(centerX - 90, 0); 
+                
+                // Left Hip 
+                ctx.bezierCurveTo(centerX - 40, 50, centerX - 160 - jX, 110, centerX - 150 - jX, centerY + 30); 
+                // Left Thigh Outer
+                ctx.bezierCurveTo(centerX - 140 - jX, 320, centerX - 130, h - 30, centerX - 120, h); 
+                // Left Leg Bottom
+                ctx.lineTo(centerX - 15, h); 
+                // Left Inner Thigh to Crack
+                ctx.bezierCurveTo(centerX - 15, 330, centerX - 5, 290, centerX, centerY + 100 + jY*0.5); 
+                
+                // Right Inner Thigh from Crack
+                ctx.bezierCurveTo(centerX + 5, 290, centerX + 15, 330, centerX + 15, h); 
+                // Right Leg Bottom
+                ctx.lineTo(centerX + 120, h); 
+                // Right Thigh Outer
+                ctx.bezierCurveTo(centerX + 130, h - 30, centerX + 140 + jX, 320, centerX + 150 + jX, centerY + 30);
+                // Right Hip
+                ctx.bezierCurveTo(centerX + 160 + jX, 110, centerX + 40, 50, centerX + 90, 0); 
+                
+                ctx.lineTo(centerX - 90, 0);
+                ctx.fill(); ctx.stroke();
+                // Partial Gluteal Folds
+                ctx.strokeStyle = cSkinShadow; ctx.lineWidth = 2.5;
+                ctx.beginPath();
+                ctx.moveTo(centerX - 130, centerY + 50); 
+                ctx.quadraticCurveTo(centerX - 80, centerY + 110, centerX - 30, centerY + 70); 
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(centerX + 130, centerY + 50);
+                ctx.quadraticCurveTo(centerX + 80, centerY + 110, centerX + 30, centerY + 70);
+                ctx.stroke();
+                // Spinal shading
+                let spineGrad = ctx.createLinearGradient(centerX, 0, centerX, centerY - 60);
+                spineGrad.addColorStop(0, cSkinShadow);
+                spineGrad.addColorStop(1, 'rgba(212, 148, 121, 0)');
+                ctx.fillStyle = spineGrad;
+                ctx.beginPath();
+                ctx.moveTo(centerX - 12, 0);
+                ctx.quadraticCurveTo(centerX, centerY - 80, centerX - 4, centerY - 60);
+                ctx.lineTo(centerX + 4, centerY - 60);
+                ctx.quadraticCurveTo(centerX, centerY - 80, centerX + 12, 0);
+                ctx.fill(); 
+                // --- 2.8 PHYSICS & WINK CALCULATION ---
+                let maxAllowedHoleSize = 28 + (pm.shaftWidth * 0.5); 
+                dynamicHoleSize = Math.min(dynamicHoleSize, maxAllowedHoleSize);
+                let innerStretch = 1 + currentStretch * 0.4 - (frictionDrag * 0.25); 
+                let outerStretch = 1 + currentStretch * 0.05 - (frictionDrag * 0.15);
+                let breath = Math.sin(time * 0.45) * 1.0; 
+                let numFolds = 16;
+                // --- WINK (KASILMA) EFEKTİ ---
+                if (typeof staff.winkTimer === 'undefined') staff.winkTimer = 0;
+                if (typeof staff.winkCooldown === 'undefined') staff.winkCooldown = 10000;
+                if (typeof staff.timeWithoutPenis === 'undefined') staff.timeWithoutPenis = 0;
+                
+                let isPenisOut = !currentCustomer || !staff.animState || !staff.animState.active || offset < 40;
+                
+                if (isPenisOut) {
+                    staff.timeWithoutPenis += dtGlobal || 16.66;
+                } else {
+                    staff.timeWithoutPenis = 0;
+                    staff.winkTimer = 0;
+                }
+                
+                if (staff.timeWithoutPenis >= 4000) {
+                    if (staff.winkCooldown > 0) {
+                        staff.winkCooldown -= dtGlobal || 16.66;
+                    } else {
+                        staff.winkTimer = 1000; 
+                        staff.winkCooldown = 10000; 
+                    }
+                }
+                
+                let winkPhase = 0; 
+                if (staff.winkTimer > 0) {
+                    staff.winkTimer -= dtGlobal || 16.66;
+                    winkPhase = Math.pow(Math.sin((Math.max(0, staff.winkTimer) / 1000) * Math.PI), 1.5); 
+                }
+                let horizontalTension = 1 + Math.max(0, suction * 0.4); 
+                let baseHoleX = Math.min((dynamicHoleSize * 0.5 + breath * 0.3) * innerStretch * horizontalTension, dynamicHoleSize * 0.55);
+                let baseHoleY = Math.min((dynamicHoleSize * 0.7 + breath * 0.3) * innerStretch, dynamicHoleSize * 0.77);
+                let currentBase = staff.baseHoleSize || 6;
+                let winkTargetX = currentBase * 0.5;
+                let winkTargetY = currentBase * 0.7;
+                let holeRadiusX = baseHoleX * (1 - winkPhase) + (winkTargetX * winkPhase);
+                let holeRadiusY = baseHoleY * (1 - winkPhase) + (winkTargetY * winkPhase);
+                let depth = 40 + (pm.glansHeight || 0) + offset; 
+                if (suction > 0 && depth > 0) {
+                    let effectiveSuction = Math.min(2.0, suction); 
+                    let baseRadius = 24 + ((pm.shaftWidth || 0) * 0.5); 
+                    
+                    let targetRadius = baseRadius;
+                    if (depth < 35) {
+                        targetRadius = baseRadius * Math.pow(depth / 35, 0.6);
+                    }
+                    
+                    let handoff = Math.max(0, 1 - (depth / 10));
+                    holeRadiusX = Math.max(holeRadiusX * handoff, targetRadius + 0.5);
+                    holeRadiusY = Math.max(holeRadiusY * handoff, (targetRadius * 0.5) + 0.5);
+                }
+                // --- 2.5 DELİK ETRAFI DAMARLAR ---
+                let veinOp = 0.35 * (staff.holeRedness || 0);
+                ctx.strokeStyle = `rgba(70, 90, 110, ${veinOp})`; 
+                ctx.lineWidth = 1.0;
+                
+                let normalVeinR1X = dynamicHoleSize * 0.5 * innerStretch + 1;
+                let normalVeinR1Y = dynamicHoleSize * 0.7 * innerStretch + 1;
+                let normalVeinLength = Math.max(5, dynamicHoleSize * 0.6); 
+                
+                for (let i = 0; i < 9; i++) {
+                    let angle = (i / 9) * Math.PI * 2 + 0.3;
+                    
+                    let r1X = holeRadiusX + 1; 
+                    let r1Y = holeRadiusY + 1;
+                    
+                    let r2X = normalVeinR1X + (normalVeinLength * 0.9);
+                    let r2Y = normalVeinR1Y + (normalVeinLength * 0.9);
+                    
+                    let vStartX = centerX + Math.cos(angle) * r1X;
+                    let vStartY = centerY + Math.sin(angle) * r1Y;
+                    let vEndX = centerX + Math.cos(angle) * r2X;
+                    let vEndY = centerY + Math.sin(angle) * r2Y;
+                    
+                    drawWigglyLine(vStartX, vStartY, vEndX, vEndY, 3, 2, i + 1.5);
+                    
+                    if (i % 2 === 0) {
+                        let midX = centerX + Math.cos(angle) * (r1X+r2X)*0.5;
+                        let midY = centerY + Math.sin(angle) * (r1Y+r2Y)*0.5;
+                        let branchRX = normalVeinR1X + normalVeinLength;
+                        let branchRY = normalVeinR1Y + normalVeinLength;
+                        let branchEndX = centerX + Math.cos(angle - 0.05) * branchRX;
+                        let branchEndY = centerY + Math.sin(angle - 0.05) * branchRY;
+                        drawWigglyLine(midX, midY, branchEndX, branchEndY, 2, 1.5, i + 7.2);
+                    }
+                }
+                // Dimples of Venus
+                ctx.fillStyle = cSkinShadow;
+                ctx.beginPath(); ctx.ellipse(centerX - 40, centerY - 85, 4, 8, 0.2, 0, Math.PI*2); ctx.fill();
+                ctx.beginPath(); ctx.ellipse(centerX + 40, centerY - 85, 4, 8, -0.2, 0, Math.PI*2); ctx.fill();
+                // Realistic Vulva Position
+                let vulvaY = centerY + 80 + dynamicHoleSize * 0.8;
+                // Elongated Vertical Crack Line
+                ctx.strokeStyle = cSkinShadow; ctx.lineWidth = 2.5;
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY - 150); 
+                ctx.quadraticCurveTo(centerX - 2, centerY - 10, centerX, vulvaY - 20);
+                ctx.stroke();
+                // Vulva
+                let vulvaGradOuter = ctx.createRadialGradient(centerX, vulvaY + 5, 5, centerX, vulvaY + 5, 30);
+                vulvaGradOuter.addColorStop(0, '#c77d5b'); 
+                vulvaGradOuter.addColorStop(0.6, '#d49b77'); 
+                vulvaGradOuter.addColorStop(1, 'rgba(238, 187, 153, 0)'); 
+                ctx.fillStyle = vulvaGradOuter; 
+                ctx.beginPath();
+                ctx.moveTo(centerX, vulvaY - 30);
+                ctx.bezierCurveTo(centerX - 25, vulvaY - 10, centerX - 18, vulvaY + 30, centerX, vulvaY + 40);
+                ctx.bezierCurveTo(centerX + 18, vulvaY + 30, centerX + 25, vulvaY - 10, centerX, vulvaY - 30);
+                ctx.fill(); 
+                ctx.fillStyle = cHole;
+                ctx.lineWidth = 2; ctx.strokeStyle = cOutline;
+                ctx.beginPath();
+                ctx.moveTo(centerX, vulvaY - 20);
+                ctx.bezierCurveTo(centerX - 10, vulvaY - 5, centerX - 8, vulvaY + 20, centerX, vulvaY + 30);
+                ctx.bezierCurveTo(centerX + 8, vulvaY + 20, centerX + 10, vulvaY - 5, centerX, vulvaY - 20);
+                ctx.fill(); ctx.stroke(); 
+                
+                ctx.beginPath(); ctx.moveTo(centerX, vulvaY - 18); ctx.lineTo(centerX, vulvaY + 28); ctx.stroke();
+                // --- 2. AREOLA ÇİZİMİ ---
+                let rMax = Math.max(45, dynamicHoleSize * 1.8) * outerStretch;
+                let innerGradR = Math.max(0.1, holeRadiusX * 0.8);
+                let holeGrad = ctx.createRadialGradient(centerX, centerY, innerGradR, centerX, centerY, rMax);
+                
+                let hr = staff.holeRedness;
+                let c0_r = Math.round(180 + (80 - 180) * hr);
+                let c0_g = Math.round(110 + (10 - 110) * hr);
+                let c0_b = Math.round(100 + (10 - 100) * hr);
+                
+                let c1_r = Math.round(212 + (165 - 212) * hr);
+                let c1_g = Math.round(148 + (82 - 148) * hr);
+                let c1_b = Math.round(121 + (82 - 121) * hr);
+                
+                let cs_r = Math.round(190 + (143 - 190) * hr); 
+                let cs_g = Math.round(120 + (47 - 120) * hr);  
+                let cs_b = Math.round(100 + (47 - 100) * hr);  
+                let currentHoleShadow = `rgb(${cs_r}, ${cs_g}, ${cs_b})`;
+                holeGrad.addColorStop(0, `rgb(${c0_r}, ${c0_g}, ${c0_b})`); 
+                holeGrad.addColorStop(0.2, `rgb(${c1_r}, ${c1_g}, ${c1_b})`); 
+                holeGrad.addColorStop(0.6, `rgba(${c1_r}, ${c1_g}, ${c1_b}, 0.6)`); 
+                holeGrad.addColorStop(1, 'rgba(238, 187, 153, 0)'); 
+                
+                ctx.fillStyle = holeGrad;
+                ctx.beginPath();
+                for (let i = 0; i <= numFolds; i++) {
+                    let angle = (i / numFolds) * Math.PI * 2;
+                    let r = dynamicHoleSize * 1.5 + Math.sin(i*4)*dynamicHoleSize*0.25 + breath;
+                    let x = centerX + Math.cos(angle) * r * outerStretch;
+                    let y = centerY + Math.sin(angle) * r * outerStretch;
+                    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+                }
+                ctx.fill(); 
+                // Wrinkles
+                let wOp = 0.1 + (staff.holeRedness * 0.9); 
+                ctx.strokeStyle = `rgba(44, 31, 26, ${wOp})`; 
+                ctx.lineWidth = 1.5;
+                for(let i=0; i<12; i++) {
+                    let angle = (i/12)*Math.PI*2 + 0.1;
+                    ctx.beginPath();
+                    let r1 = dynamicHoleSize*0.8 * innerStretch;
+                    let r2 = (dynamicHoleSize*1.5 + breath) * outerStretch; 
+                    
+                    ctx.moveTo(centerX + Math.cos(angle)*r1, centerY + Math.sin(angle)*r1);
+                    ctx.lineTo(centerX + Math.cos(angle)*r2, centerY + Math.sin(angle)*r2);
+                    ctx.stroke();
+                }
+                if (dynamicHoleSize > 12) {
+                    ctx.fillStyle = currentHoleShadow;
+                    ctx.beginPath();
+                    ctx.moveTo(centerX - dynamicHoleSize*0.6*outerStretch, centerY);
+                    ctx.quadraticCurveTo(centerX, centerY + dynamicHoleSize*1.8 + breath, centerX + dynamicHoleSize*0.6*outerStretch, centerY);
+                    ctx.fill(); 
+                }
+                // Inner Anus Hole (Draws outline/depth)
+                ctx.fillStyle = cOutline;
+                ctx.beginPath();
+                ctx.ellipse(centerX, centerY, holeRadiusX, holeRadiusY, 0, 0, Math.PI*2);
+                ctx.fill();
+                // --- 4. CUSTOMER (PENİS ÇİZİMİ) ---
+                if (staff.isServing && !isIdleOnly) {
+                    let custSkin = cSkin;
+                    let custPelvis = '#cf9f86';
+                    let custGlans = cHole;
+                    
+                    if (currentCustomer && currentCustomer.type) {
+                        let cType = currentCustomer.type.toLowerCase();
+                        if (cType.includes('black')) {
+                            custSkin = '#6d4332'; 
+                            custPelvis = '#593425'; 
+                            custGlans = '#5c2d2d'; 
+                        } else if (cType.includes('white')) {
+                            custSkin = '#eab29a';
+                            custPelvis = '#cf9f86';
+                            custGlans = '#d45d5d';
+                        }
+                    }
+                    ctx.save();
+                    ctx.translate(centerX, centerY);
+                    ctx.rotate(Math.PI);
+                    ctx.translate(-centerX, -centerY);
+                    const drawPelvis = (pY) => {
+                        let bodyY = pY - 30; 
+                        let thighX = 140 - (pm.bodySlimness || 0); 
+                        
+                        ctx.fillStyle = custPelvis; 
+                        ctx.strokeStyle = cOutline; ctx.lineWidth = 3;
+                        
+                        ctx.beginPath();
+                        ctx.moveTo(centerX - thighX - 20, bodyY - 150);
+                        let innerCurve = 45 - ((pm.bodySlimness || 0) / 4);
+                        ctx.quadraticCurveTo(centerX - thighX, bodyY, centerX - innerCurve, pY + 10);
+                        ctx.quadraticCurveTo(centerX, pY + 35, centerX + innerCurve, pY + 10);
+                        ctx.quadraticCurveTo(centerX + thighX, bodyY, centerX + thighX + 20, bodyY - 150);
+                        ctx.lineTo(centerX - thighX - 20, bodyY - 150);
+                        ctx.fill(); ctx.stroke();
+                        let cx1 = 80 - ((pm.bodySlimness || 0) / 2);
+                        let cx2 = 40 - ((pm.bodySlimness || 0) / 4);
+                        ctx.strokeStyle = 'rgba(100, 50, 30, 0.3)'; ctx.lineWidth = 2.5;
+                        ctx.beginPath(); ctx.moveTo(centerX - cx1, bodyY - 30); ctx.quadraticCurveTo(centerX - cx2, bodyY + 20, centerX - 10, pY - 10); ctx.stroke();
+                        ctx.beginPath(); ctx.moveTo(centerX + cx1, bodyY - 30); ctx.quadraticCurveTo(centerX + cx2, bodyY + 20, centerX + 10, pY - 10); ctx.stroke();
+                    };
+                    const drawPenis = (pX, pY, pWidth, pHeight, isInside) => {
+                        let neckY = pY + pHeight - 35;
+                        let tipY = pY + pHeight;
+                        
+                        pWidth += pm.shaftWidth;
+                        pX -= pm.shaftWidth / 2; 
+                        // --- THE TESTICLES ---
+                        ctx.fillStyle = cSkinShadow; ctx.lineWidth = 3; ctx.strokeStyle = cOutline;
+                        ctx.beginPath();
+                        ctx.moveTo(centerX - pWidth/2 - 10, pY);
+                        ctx.bezierCurveTo(centerX - 40, pY + 30, centerX - 30, pY + 70, centerX, pY + 60);
+                        ctx.bezierCurveTo(centerX + 30, pY + 70, centerX + 40, pY + 30, centerX + pWidth/2 + 10, pY);
+                        ctx.fill(); ctx.stroke();
+                        ctx.beginPath(); ctx.moveTo(centerX, pY + 20); ctx.quadraticCurveTo(centerX + 3, pY + 45, centerX, pY + 60); ctx.stroke();
+                        ctx.save();
+                        if (isInside) {
+                            ctx.beginPath(); ctx.rect(0, 0, w, centerY);
+                            ctx.ellipse(centerX, centerY, holeRadiusX + 1, holeRadiusY + 1, 0, Math.PI*2, Math.PI);
+                            ctx.clip();
+                        }
+                        let bulgeAmount = 0;
+                        let pinchAmount = 0;
+                        let bY = pY + (neckY - pY) * 0.4; 
+                        let piY = pY + (neckY - pY) * 0.95;
+                        let visualTipY = tipY + 10 + (pm.glansHeight || 0);
+                        if (isInside && visualTipY > centerY) {
+                            let effectiveSuction = Math.min(2.0, suction);
+                            bulgeAmount = Math.max(0, effectiveSuction * 5.0); 
+                            pinchAmount = Math.max(0, effectiveSuction * 6);
+                        }
+                        let cv = pm.shaftCurve || 0;
+                        // Shaft
+                        ctx.fillStyle = custSkin; ctx.lineWidth = 3;
+                        ctx.beginPath();
+                        ctx.moveTo(pX, pY); 
+                        
+                        ctx.bezierCurveTo(pX + cv, bY - 20, pX - bulgeAmount + cv, bY, pX + pinchAmount, piY);
+                        ctx.lineTo(pX + pinchAmount, neckY);
+                        
+                        if (pm.isUncut) {
+                            let gW = pm.glansWidth || 0;
+                            let gH = pm.glansHeight || 0;
+                            ctx.bezierCurveTo(pX - 2 - gW, neckY + 10 - gH, pX + 5, tipY + 10 + gH, centerX, tipY + 10 + gH);
+                            ctx.bezierCurveTo(pX + pWidth - 5, tipY + 10 + gH, pX + pWidth + 2 + gW, neckY + 10 - gH, pX + pWidth - pinchAmount, neckY);
+                        } else {
+                            ctx.lineTo(pX + pWidth - pinchAmount, neckY);
+                        }
+                        
+                        ctx.lineTo(pX + pWidth - pinchAmount, piY);
+                        ctx.bezierCurveTo(pX + pWidth + bulgeAmount + cv, bY, pX + pWidth + cv, bY - 20, pX + pWidth, pY);
+                        ctx.fill(); ctx.stroke();
+                        if (pm.isUncut) {
+                            ctx.strokeStyle = cOutline; ctx.lineWidth = 1.5;
+                            ctx.beginPath(); ctx.moveTo(centerX - 8, tipY + 2); ctx.quadraticCurveTo(centerX, tipY - 8, centerX + 8, tipY + 2); ctx.stroke();
+                            ctx.beginPath(); ctx.moveTo(centerX - 5, tipY - 5); ctx.quadraticCurveTo(centerX, tipY - 12, centerX + 5, tipY - 5); ctx.stroke();
+                            ctx.lineWidth = 3;
+                            
+                            ctx.beginPath();
+                            ctx.moveTo(centerX, tipY + 8);
+                            ctx.lineTo(centerX, tipY + 2);
+                            ctx.stroke();
+                        }
+                        if (!pm.isUncut) {
+                            ctx.fillStyle = custGlans; 
+                            ctx.beginPath();
+                            let gW = pm.glansWidth || 0;
+                            let gH = pm.glansHeight || 0;
+                            ctx.moveTo(pX, neckY);
+                            ctx.bezierCurveTo(pX - 2 - gW, neckY + 10 - gH, pX + 5, tipY + 10 + gH, centerX, tipY + 10 + gH);
+                            ctx.bezierCurveTo(pX + pWidth - 5, tipY + 10 + gH, pX + pWidth + 2 + gW, neckY + 10 - gH, pX + pWidth, neckY);
+                            ctx.lineTo(pX, neckY);
+                            ctx.fill(); ctx.stroke();
+                            
+                            ctx.beginPath();
+                            ctx.moveTo(centerX, tipY + 8 + gH);
+                            ctx.lineTo(centerX, tipY - 10);
+                            ctx.stroke();
+                        }
+                        // Pulsating Veins
+                        let veinPulse = Math.min(0.5, suction * 0.2); 
+                        let vInt = 0.5 + (pm.veinIntensity * 0.5); 
+                        let baseOpacity = 0.4 * (staff.holeRedness || 0) * vInt;
+                        
+                        let veinR = 70, veinG = 90, veinB = 110;
+                        if (currentCustomer?.type === 'black') {
+                            veinR = 40; veinG = 25; veinB = 25; 
+                        }
+                        
+                        ctx.strokeStyle = `rgba(${veinR}, ${veinG}, ${veinB}, ${baseOpacity + veinPulse})`; 
+                        ctx.lineWidth = 1.0 + veinPulse; 
+                        
+                        drawWigglyLine(centerX - 5 + pm.vein1Offset, pY, centerX + 8 + pm.vein1Offset, neckY - 15, 6, 6, 1);
+                        drawWigglyLine(centerX + 10 + pm.vein2Offset, pY + 20, centerX - 10 + pm.vein2Offset, neckY - 10, 5, 4, 2);
+                        
+                        if (veinPulse > 0.3) {
+                            ctx.save();
+                            ctx.globalAlpha = Math.min(1, (veinPulse - 0.3) * 3) * (staff.holeRedness || 0);
+                            drawWigglyLine(centerX + pm.vein3Offset, pY + 30, centerX + 5 + pm.vein3Offset, neckY - 20, 4, 5, 3);
+                            ctx.restore();
+                        }
+                        
+                        // --- PUBIC HAIR SHADOW ---
+                        let bYOffset = (pY - 10) + (frictionDrag * -4) + (wobble * 4);
+                        let fupaY = pY - 20;
+                        let shadowGrad = ctx.createRadialGradient(centerX, fupaY, 10, centerX, fupaY, 60);
+                        shadowGrad.addColorStop(0, 'rgba(0, 0, 0, 0.35)');
+                        shadowGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                        ctx.fillStyle = shadowGrad;
+                        ctx.beginPath();
+                        ctx.ellipse(centerX, fupaY, 70, 45, 0, 0, Math.PI*2);
+                        ctx.fill();
+                        // --- PUBIC HAIR ---
+                        ctx.strokeStyle = cHair; ctx.lineWidth = 1.0;
+                        let hairCount = 50 + (pm.hairDensity || 0.5) * 250; 
+                        for(let h=0; h<hairCount; h++) { 
+                            let rand1 = Math.sin(h * 12.9898) * 43758.5453 % 1;
+                            let rand2 = Math.sin(h * 78.233) * 43758.5453 % 1;
+                            let rand3 = Math.sin(h * 37.719) * 43758.5453 % 1;
+                            let rand4 = Math.sin(h * 91.135) * 43758.5453 % 1;
+                            
+                            let isOnBalls = (rand3 > 0.55); 
+                            let baseHry = isOnBalls ? (bYOffset + 5) : (pY - 20); 
+                            let spreadY = isOnBalls ? 25 : 20;
+                            
+                            let hrx = centerX - 45 + Math.abs(rand1) * 90;
+                            let hry = baseHry - spreadY + Math.abs(rand2) * (spreadY*2); 
+                            
+                            ctx.beginPath();
+                            ctx.moveTo(hrx, hry);
+                            ctx.quadraticCurveTo(hrx + (rand3 * 10), hry - (Math.abs(rand4) * 8), hrx + (rand1 * 15), hry + (rand2 * 10));
+                            ctx.stroke();
+                        }
+                        
+                        ctx.strokeStyle = cOutline; ctx.lineWidth = 3;
+                        
+                        // Glans Cap
+                        ctx.fillStyle = custGlans; 
+                        ctx.beginPath();
+                        let gW = pm.glansWidth || 0;
+                        let gH = pm.glansHeight || 0;
+                        ctx.moveTo(pX, neckY);
+                        ctx.bezierCurveTo(pX - 2 - gW, neckY + 10 - gH, pX + 5, tipY + 10 + gH, centerX, tipY + 10 + gH);
+                        ctx.bezierCurveTo(pX + pWidth - 5, tipY + 10 + gH, pX + pWidth + 2 + gW, neckY + 10 - gH, pX + pWidth, neckY);
+                        ctx.lineTo(pX, neckY);
+                        ctx.fill(); ctx.stroke();
+                        ctx.beginPath(); ctx.moveTo(pX, neckY + 2); ctx.quadraticCurveTo(centerX, neckY + 10, pX + pWidth, neckY + 2); ctx.stroke();
+                        ctx.beginPath(); ctx.moveTo(centerX, tipY); ctx.lineTo(centerX, tipY + 8); ctx.stroke();
+                        ctx.restore();
+                    };
+                    if (staff.isCumming || staff.isPissing) {
+                        let pWidth = 48 + (dynamicHoleSize * 0.05); 
+                        let pHeight = 190 + pm.shaftLength; 
+                        let pX = centerX - pWidth/2;
+                        let pY = centerY - 240 - pm.shaftLength; 
+                        drawPelvis(pY);
+                        drawPenis(pX, pY, pWidth, pHeight, false);
+                        let tipY = pY + pHeight;
+                        
+                        if (staff.isCumming) {
+                            ctx.fillStyle = cCum; 
+                            for (let i=0; i<Math.min(10, ac.cumDropCount); i++) {
+                                let ox = centerX + Math.sin(time*4 + i*0.5) * (ac.cumSpreadX * 0.4); 
+                                let distance = (centerY + 15) - tipY;
+                                let oy = tipY + ((time * ac.cumSpeedY + i * 20) % distance);
+                                let dropSize = Math.max(1.5, ac.cumBaseSize * 0.5) + (i % 2); 
+                                ctx.beginPath(); ctx.ellipse(ox, oy, dropSize, dropSize*1.5, 0, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+                            }
+                        } else {
+                            ctx.fillStyle = cPee; 
+                            for (let i=0; i<ac.peeDropCount; i++) {
+                                let ox = centerX + Math.sin(time*3 + i*2) * ac.peeSpreadX;
+                                let distance = (centerY + 10) - tipY;
+                                let oy = tipY + ((time * ac.peeSpeedY + i * 20) % distance);
+                                let dropSize = ac.peeBaseSize + (i % 3);
+                                ctx.beginPath(); ctx.ellipse(ox, oy, dropSize, dropSize*2, 0, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+                            }
+                        }
+                    } else {
+                        let pWidth = 48 + (dynamicHoleSize * 0.05);
+                        let pX = centerX - pWidth/2;
+                        let pHeight = 190 + pm.shaftLength; 
+                        let pY = centerY - 160 + offset - pm.shaftLength; 
+                        
+                        drawPelvis(pY);
+                        drawPenis(pX, pY, pWidth, pHeight, true);
+                        
+                        let tipY = pY + pHeight;
+                        // --- THE TESTICLES ---
+                        let ballInertia = frictionDrag * -4; 
+                        let ballWobble = wobble * 4; 
+                        let bYOffset = (pY - 10) + ballInertia + ballWobble;
+                        
+                        let bxL = centerX - 20 + (wobbleX * 4);
+                        let bxR = centerX + 20 + (wobbleX * 4);
+                        
+                        ctx.fillStyle = custSkin; ctx.lineWidth = 3;
+                        let tSize = pm.testicleSize;
+                        ctx.beginPath(); ctx.ellipse(bxL, bYOffset, 32 + tSize, 38 + tSize - ballInertia*0.5, -0.2, 0, Math.PI * 2); ctx.fill();
+                        ctx.beginPath(); ctx.ellipse(bxR, bYOffset + 8, 30 + tSize, 40 + tSize - ballInertia*0.5, 0.2, 0, Math.PI * 2); ctx.fill();
+                        
+                        ctx.strokeStyle = cOutline;
+                        ctx.beginPath(); ctx.ellipse(bxL, bYOffset, 32 + tSize, 38 + tSize - ballInertia*0.5, -0.2, 0, Math.PI * 2); ctx.stroke();
+                        ctx.beginPath(); ctx.ellipse(bxR, bYOffset + 8, 30 + tSize, 40 + tSize - ballInertia*0.5, 0.2, 0, Math.PI * 2); ctx.stroke();
+                        
+                        // Ball wrinkles
+                        ctx.lineWidth = 1.5;
+                        ctx.beginPath(); ctx.moveTo(bxL - 10, bYOffset + 15); ctx.quadraticCurveTo(bxL, bYOffset + 30, bxL + 15, bYOffset + 20); ctx.stroke();
+                        ctx.beginPath(); ctx.moveTo(bxR - 15, bYOffset + 20); ctx.quadraticCurveTo(bxR, bYOffset + 35, bxR + 10, bYOffset + 15); ctx.stroke();
+                        ctx.lineWidth = 3;
+                    }
+                    ctx.restore();
+                }
+                ctx.restore(); 
+            });
+            // Loop render using requestAnimationFrame
+            requestAnimationFrame(renderCanvases);
+        }
+        // Start render loop initially
+        renderCanvases();
+    </script>
+</body>
+</html>
