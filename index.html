@@ -5,20 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>hole</title>
     
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            --bg-color: #f2f2f7; /* iOS Light System Grouped Background */
-            --panel-bg: rgba(255, 255, 255, 0.65); /* Frosted white glass */
-            --card-bg: rgba(255, 255, 255, 0.45); /* Lighter glass for nested cards */
-            --border-color: rgba(0, 0, 0, 0.06); /* Ultra-subtle light divider */
-            --primary: #007aff; /* iOS light mode system blue */
-            --primary-glow: rgba(0, 122, 255, 0.15);
-            --accent: #ff2d55; /* iOS light mode system pink */
-            --accent-glow: rgba(255, 45, 85, 0.12);
-            --text-color: #1c1c1e; /* iOS label (primary) */
-            --text-muted: #8e8e93; /* iOS secondary label */
-            --active-bg: rgba(0, 0, 0, 0.04);
-            --neon-pink: #ff3b30; /* iOS light mode system red */
+            --bg-color: #ffd9ac; /* Same as the furthest background color */
+            --panel-bg: #faf6ee; /* Solid warm ivory/cream */
+            --card-bg: #ffffff; /* Solid white card background */
+            --border-color: rgba(110, 73, 47, 0.15); /* Subtle coffee outline */
+            --primary: #cac15f; /* Olive gold/Mustard green */
+            --primary-glow: rgba(202, 193, 95, 0.15);
+            --accent: #d1a978; /* Tan / oatmeal brown secondary accent */
+            --accent-glow: rgba(209, 169, 120, 0.15);
+            --text-color: #6e492f; /* Deep chocolate brown text */
+            --text-muted: #d1a978; /* Tan/oatmeal text for secondary info */
+            --active-bg: rgba(202, 193, 95, 0.08);
+            --neon-pink: #e1db9d; /* Soft moss green accent */
         }
         * {
             box-sizing: border-box;
@@ -27,10 +31,9 @@
             user-select: none;
             -webkit-user-select: none;
             outline: none;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro Icons", system-ui, -apple-system, sans-serif !important;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
         }
         body {
-            background-color: #e5e5ea;
             color: var(--text-color);
             min-height: 100vh;
             display: flex;
@@ -39,18 +42,18 @@
             overflow: hidden;
         }
         
-        /* Mobile Portrait Frame */
+        /* Mobile Portrait Frame - iPhone 14 Aspect Ratio */
         .mobile-frame {
             width: 100%;
             height: 100%;
-            aspect-ratio: 9 / 16;
+            aspect-ratio: 9 / 19.5;
             max-height: 100vh;
-            max-width: calc(100vh * 9 / 16);
+            max-width: calc(100vh * 9 / 19.5);
             position: relative;
-            background: var(--bg-color);
+            background: #faf6ee;
             border-radius: 40px;
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.12);
+            border: 1px solid rgba(110, 73, 47, 0.15);
+            box-shadow: 0 24px 64px rgba(110, 73, 47, 0.15);
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -60,10 +63,47 @@
                 max-width: 100vw;
                 max-height: 100vh;
                 width: 100vw;
-                height: calc(100vw * 16 / 9);
+                height: calc(100vw * 19.5 / 9);
                 border-radius: 0;
                 border: none;
                 box-shadow: none;
+            }
+        }
+
+        /* iPhone 14 Simulated Overlays & Safe Areas */
+        .iphone-island {
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 110px;
+            height: 30px;
+            background: #000000;
+            border-radius: 20px;
+            z-index: 2000;
+            pointer-events: none;
+            box-shadow: inset 0 0 4px rgba(255, 255, 255, 0.1);
+        }
+        @media (max-width: 480px) {
+            .iphone-island {
+                display: none; /* Hide simulated island on real mobile screens */
+            }
+        }
+        .iphone-home-indicator {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 140px;
+            height: 5px;
+            background: rgba(61, 45, 42, 0.3);
+            border-radius: 10px;
+            z-index: 2000;
+            pointer-events: none;
+        }
+        @media (max-width: 480px) {
+            .iphone-home-indicator {
+                display: none;
             }
         }
 
@@ -72,11 +112,11 @@
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
             z-index: 1000;
-            background: var(--bg-color);
+            background: #faf6ee;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 80px 40px 60px 40px;
+            padding: 100px 40px 60px 40px; /* Top padding to clear Dynamic Island */
             align-items: center;
             transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
         }
@@ -118,11 +158,11 @@
             letter-spacing: 0.5px;
             border-radius: 14px;
             border: none;
-            background: var(--accent);
-            color: #ffffff;
+            background: #6e492f;
+            color: #ffefd5;
             cursor: pointer;
             transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
-            box-shadow: 0 2px 8px rgba(255, 45, 85, 0.2);
+            box-shadow: 0 4px 12px rgba(110, 73, 47, 0.15);
         }
         .menu-btn:hover {
             opacity: 0.9;
@@ -133,7 +173,7 @@
         }
         .menu-btn.primary {
             background: var(--primary);
-            color: #ffffff;
+            color: #6e492f;
         }
         .menu-btn.primary:hover {
             opacity: 0.9;
@@ -152,7 +192,7 @@
             flex-direction: column;
             height: 100%;
             overflow: hidden;
-            background: var(--bg-color);
+            background: transparent;
         }
         .mobile-header {
             padding: 16px 24px;
@@ -160,8 +200,6 @@
             justify-content: space-between;
             align-items: center;
             background: var(--panel-bg);
-            backdrop-filter: blur(40px) saturate(180%);
-            -webkit-backdrop-filter: blur(40px) saturate(180%);
             border-bottom: 1px solid var(--border-color);
             z-index: 100;
         }
@@ -200,7 +238,7 @@
         .canvas-section {
             width: 100%;
             aspect-ratio: 1 / 1;
-            background: #1c1c1e;
+            background: rgba(255, 217, 172, 0.15);
             position: relative;
             border-bottom: 1px solid var(--border-color);
             display: flex;
@@ -223,7 +261,7 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            background: var(--bg-color);
+            background: rgba(255, 217, 172, 0.25);
             overflow: hidden;
         }
         .tab-bar-mobile {
@@ -244,7 +282,7 @@
             transition: all 0.3s ease;
             text-align: center;
             border-bottom: 2px solid transparent;
-            /* inherits system font */
+            font-family: 'Outfit', sans-serif;
             text-transform: uppercase;
         }
         .tab-btn-mobile:hover {
@@ -301,23 +339,25 @@
         .slider-input {
             width: 100%;
             -webkit-appearance: none;
-            background: rgba(0, 0, 0, 0.06);
-            height: 2px;
+            background: rgba(0, 0, 0, 0.08);
+            height: 4px;
+            border-radius: 2px;
             outline: none;
             transition: background 0.3s;
         }
         .slider-input::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            width: 10px;
-            height: 10px;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
-            background: var(--primary);
+            background: #fff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
             cursor: pointer;
             transition: transform 0.15s;
         }
         .slider-input::-webkit-slider-thumb:hover {
-            transform: scale(1.4);
+            transform: scale(1.1);
         }
         .toggle-row {
             display: flex;
@@ -349,7 +389,7 @@
             position: absolute;
             cursor: pointer;
             top: 0; left: 0; right: 0; bottom: 0;
-            background-color: rgba(0, 0, 0, 0.08);
+            background-color: transparent;
             border: 1px solid var(--border-color);
             transition: .3s;
             border-radius: 30px;
@@ -366,11 +406,11 @@
             border-radius: 50%;
         }
         input:checked + .switch-slider {
-            border-color: var(--primary);
             background-color: var(--primary);
+            border-color: var(--primary);
         }
         input:checked + .switch-slider:before {
-            background-color: #ffffff;
+            background-color: #fff;
             transform: translateX(18px);
         }
         .btn-grid {
@@ -394,12 +434,12 @@
         }
         .state-btn:hover {
             color: var(--text-color);
-            border-color: rgba(0, 0, 0, 0.12);
+            border-color: rgba(0, 0, 0, 0.15);
         }
         .state-btn.active {
             border-color: var(--primary);
             color: var(--primary);
-            background: var(--primary-glow);
+            background: rgba(0, 122, 255, 0.05);
         }
         .color-pickers {
             display: grid;
@@ -433,7 +473,7 @@
             padding: 0;
         }
         .color-input::-webkit-color-swatch {
-            border: 1px solid rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.15);
             border-radius: 50%;
         }
         /* Scrollbar custom styling */
@@ -451,27 +491,32 @@
             background: rgba(0, 0, 0, 0.15);
         }
 
-        /* iOS 26 Light Glass Dashboard & UI Styles */
         .game-dashboard {
-            padding: 16px 24px;
+            padding: 40px 24px 20px 24px; /* Added safe area top padding for Dynamic Island */
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--panel-bg);
-            border-bottom: 1px solid var(--border-color);
-            backdrop-filter: blur(40px) saturate(180%);
-            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+            background: transparent;
+            border-bottom: 1px solid rgba(110, 73, 47, 0.1);
+            z-index: 100;
         }
         .db-stat {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-muted);
+            background: var(--primary);
+            color: #6e492f;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
             letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 4px 10px rgba(110, 73, 47, 0.05);
         }
         .db-stat span {
-            color: var(--text-color);
-            font-weight: 700;
-            margin-left: 4px;
+            color: #6e492f;
+            font-weight: 800;
         }
         .game-dashboard-subrow {
             display: none; /* Subrow hidden for visual simplicity */
@@ -491,9 +536,9 @@
             padding: 0 24px 16px 24px;
         }
         .staff-slot {
-            background: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
+            background: #ffffff;
+            border: 1px solid rgba(110, 73, 47, 0.12);
+            border-radius: 24px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -501,14 +546,14 @@
             position: relative;
             overflow: hidden;
             transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 8px 16px rgba(110, 73, 47, 0.04);
         }
         .staff-slot.hired {
-            background: var(--panel-bg);
+            background: #ffffff;
         }
         .staff-slot.drag-over {
             border-color: var(--primary);
-            box-shadow: 0 0 16px var(--primary-glow);
+            box-shadow: 0 0 16px rgba(202, 193, 95, 0.35);
             transform: scale(1.03);
         }
         .slot-hire-btn {
@@ -525,7 +570,7 @@
             justify-content: center;
             cursor: pointer;
             transition: all 0.15s ease;
-            box-shadow: 0 2px 8px rgba(0, 122, 255, 0.25);
+            box-shadow: 0 4px 8px rgba(10, 132, 255, 0.3);
         }
         .slot-hire-btn:hover {
             transform: scale(1.1);
@@ -587,10 +632,10 @@
         .customer-card {
             flex: 0 0 115px;
             height: 150px;
-            background: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            background: #ffffff;
+            border: 1px solid rgba(110, 73, 47, 0.12);
+            border-radius: 24px;
+            box-shadow: 0 8px 16px rgba(110, 73, 47, 0.04);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -635,9 +680,9 @@
         .modal-overlay {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.15);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            background: rgba(110, 73, 47, 0.35);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             z-index: 2000;
             display: flex;
             align-items: center;
@@ -653,12 +698,10 @@
         .modal-content-card {
             width: 85%;
             max-width: 320px;
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(40px) saturate(200%);
-            -webkit-backdrop-filter: blur(40px) saturate(200%);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            border-radius: 24px;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+            background: #faf6ee;
+            border: 1px solid rgba(110, 73, 47, 0.15);
+            border-radius: 32px;
+            box-shadow: 0 16px 48px rgba(110, 73, 47, 0.2);
             padding: 20px;
             display: flex;
             flex-direction: column;
@@ -696,9 +739,9 @@
         .candidate-card {
             flex: 0 0 100px;
             height: 180px;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
+            background: #ffffff;
+            border: 1px solid rgba(110, 73, 47, 0.12);
+            border-radius: 24px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -717,7 +760,7 @@
             border: 1px solid var(--border-color);
             border-radius: 10px;
             overflow: hidden;
-            background: #1c1c1e;
+            background: var(--panel-bg);
             margin-bottom: 4px;
             flex-shrink: 0;
         }
@@ -784,17 +827,68 @@
                 opacity: 0;
             }
         }
+        .bottom-nav-bar {
+            height: 72px;
+            background: #faf6ee;
+            border-top: 1px solid rgba(110, 73, 47, 0.15);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding-bottom: 8px;
+            z-index: 1000;
+        }
+        .nav-item {
+            flex: 1;
+            height: 100%;
+            background: none;
+            border: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            color: #d1a978;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            color: currentColor;
+            transition: transform 0.2s ease;
+        }
+        .nav-label {
+            font-size: 0.6rem;
+            font-weight: 500;
+            text-transform: lowercase;
+            letter-spacing: 0.5px;
+        }
+        .nav-item.active {
+            color: #6e492f;
+        }
+        .nav-item.active .nav-icon {
+            transform: scale(1.1);
+        }
+        .game-tab-pane {
+            display: none;
+            flex: 1;
+            overflow-y: auto;
+        }
+        .game-tab-pane.active {
+            display: flex;
+            flex-direction: column;
+        }
         .db-btn {
-            background: var(--primary);
+            background: #6e492f;
             color: #ffffff;
             border: none;
-            border-radius: 12px;
-            padding: 8px 14px;
+            border-radius: 20px;
+            padding: 8px 18px;
             font-size: 0.75rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.15s ease;
-            box-shadow: 0 2px 8px rgba(0, 122, 255, 0.25);
+            box-shadow: 0 4px 10px rgba(110, 73, 47, 0.15);
         }
         .db-btn:hover {
             opacity: 0.9;
@@ -803,7 +897,33 @@
             transform: scale(0.96);
         }
         .db-btn:disabled {
-            background: var(--active-bg);
+            background: rgba(110, 73, 47, 0.15);
+            color: var(--text-muted);
+            border-color: transparent;
+            cursor: not-allowed;
+            box-shadow: none;
+            opacity: 0.6;
+        }
+        .hire-header-btn {
+            background: var(--primary);
+            color: #6e492f;
+            border: none;
+            border-radius: 12px;
+            padding: 8px 14px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            box-shadow: 0 4px 10px rgba(110, 73, 47, 0.1);
+        }
+        .hire-header-btn:hover {
+            opacity: 0.9;
+        }
+        .hire-header-btn:active {
+            transform: scale(0.96);
+        }
+        .hire-header-btn:disabled {
+            background: rgba(110, 73, 47, 0.15);
             color: var(--text-muted);
             cursor: not-allowed;
             box-shadow: none;
@@ -825,16 +945,18 @@
             font-size: 0.75rem;
             color: var(--text-muted);
             letter-spacing: 0.5px;
+            font-weight: 600;
         }
         .setup-input {
             width: 100%;
-            padding: 12px 16px;
-            background: var(--panel-bg);
+            padding: 12px 20px;
+            background: #ffffff;
             border: 1px solid var(--border-color);
-            border-radius: 12px;
+            border-radius: 24px;
             color: var(--text-color);
-            font-weight: 500;
-            font-size: 0.9rem;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
             transition: all 0.2s ease;
         }
         .setup-input:focus {
@@ -843,29 +965,29 @@
         }
         .setup-pref-container {
             border: 1px solid var(--border-color);
-            border-radius: 16px;
-            background: var(--panel-bg);
+            border-radius: 24px;
+            background: #ffffff;
             margin-top: 10px;
             overflow: hidden;
+            box-shadow: 0 8px 16px rgba(110, 73, 47, 0.04);
         }
         .setup-pref-header {
-            padding: 12px 16px;
-            background: var(--panel-bg);
+            padding: 14px 20px;
+            background: #ffffff;
             display: flex;
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
-            font-size: 0.75rem;
-            font-weight: 600;
+            font-size: 0.8rem;
+            font-weight: 700;
             color: var(--text-color);
-            border-bottom: 1px solid var(--border-color);
         }
         .setup-pref-content {
             padding: 16px;
             display: flex;
             flex-direction: column;
             gap: 12px;
-            background: rgba(0, 0, 0, 0.03);
+            background: rgba(0, 0, 0, 0.3);
             max-height: 200px;
             overflow-y: auto;
         }
@@ -914,6 +1036,9 @@
 </head>
 <body>
     <div class="mobile-frame">
+        <!-- iPhone 14 Simulated Overlays -->
+        <div class="iphone-island"></div>
+        <div class="iphone-home-indicator"></div>
         <!-- Start Menu Screen -->
         <div class="menu-screen" id="menu-screen">
             <div class="menu-header">
@@ -996,39 +1121,144 @@
         <div class="game-screen" id="game-screen" style="display: none;">
             <!-- Game Top Dashboard -->
             <div class="game-dashboard">
-                <div class="db-stat">GÜN <span id="db-day">1</span></div>
-                <div class="db-stat">KASA <span id="db-money">$300</span></div>
-                <button class="db-btn" id="btn-next-day" title="Sonraki Gün">Sonraki Gün</button>
-            </div>
-
-            <div class="game-section-title">Personel</div>
-            <!-- Staff Slots Grid -->
-            <div class="staff-slots-grid" id="staff-slots-grid">
-                <!-- Dynamically filled with renderStaffSlots() -->
-            </div>
-
-            <div class="game-section-title">Müşteriler</div>
-            <!-- Customers Queue -->
-            <div class="customers-queue-wrapper">
-                <div class="customers-queue-scroll" id="customers-queue">
-                    <!-- Dynamically filled with renderCustomersQueue() -->
+                <!-- Top Row with back arrow and small label -->
+                <div style="display: flex; align-items: center; gap: 8px; color: var(--text-color); cursor: pointer;" onclick="document.getElementById('game-screen').style.display='none'; document.getElementById('menu-screen').classList.remove('hidden');">
+                    <span style="font-size: 1.2rem; font-weight: bold; line-height: 1;">←</span>
+                    <span style="font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Geri Dön</span>
+                </div>
+                <!-- Main Venue Title -->
+                <h1 id="header-venue-name" style="font-size: 1.5rem; font-weight: 800; color: var(--text-color); line-height: 1.2; font-family: 'Poppins', sans-serif;">Gül Yuvası</h1>
+                <!-- Badge and Button Row -->
+                <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 8px; margin-top: 4px;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <div class="db-stat">GÜN <span id="db-day">1</span></div>
+                        <div class="db-stat">KASA <span id="db-money">$300</span></div>
+                    </div>
+                    <button class="db-btn" id="btn-next-day" title="Sonraki Gün">Sonraki Gün</button>
                 </div>
             </div>
 
-            <!-- Hire Overlay Modal -->
-            <div class="modal-overlay" id="hire-modal">
-                <div class="modal-content-card">
-                    <div class="modal-header">
-                        <div class="modal-title">Personel İşe Al</div>
-                        <div class="close-btn" onclick="closeHireModal()">&times;</div>
+            <!-- Tab Contents Wrapper -->
+            <div class="game-tab-content-wrapper" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column;">
+                
+                <!-- Tab: Home (Main Gameplay) -->
+                <div class="game-tab-pane active" id="tab-home">
+                    <div class="game-section-header" style="display: flex; justify-content: space-between; align-items: center; padding-right: 24px;">
+                        <div class="game-section-title" style="padding-right: 0;">Personel</div>
+                        <button class="hire-header-btn" id="btn-general-hire" onclick="openHireModalForFirstEmptySlot()">+ Yeni</button>
                     </div>
-                    <div class="candidates-list" id="candidates-list">
-                        <!-- Dynamically filled candidate cards -->
+                    <!-- Staff Slots Grid -->
+                    <div class="staff-slots-grid" id="staff-slots-grid">
+                        <!-- Dynamically filled with renderStaffSlots() -->
                     </div>
-                    <div class="modal-footer" style="display: flex; justify-content: center; width: 100%; margin-top: 8px;">
-                        <button id="modal-hire-action-btn" class="menu-btn primary" onclick="hireSelectedCandidate()" style="margin: 0; width: 100%; padding: 12px; font-size: 0.95rem; border-radius: 12px; border: none; box-shadow: 0 2px 8px rgba(0, 122, 255, 0.25);">İşe Al</button>
+
+                    <div class="game-section-title">Müşteriler</div>
+                    <!-- Customers Queue -->
+                    <div class="customers-queue-wrapper">
+                        <div class="customers-queue-scroll" id="customers-queue">
+                            <!-- Dynamically filled with renderCustomersQueue() -->
+                        </div>
                     </div>
                 </div>
+
+                <!-- Tab: Menu (Settings) -->
+                <div class="game-tab-pane" id="tab-menu" style="padding: 24px;">
+                    <div class="game-section-title" style="padding-left: 0; padding-top: 0;">Oyun Tercihleri</div>
+                    <div class="settings-container" style="background: #ffffff; border: 1px solid rgba(110, 73, 47, 0.12); border-radius: 24px; padding: 20px; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 8px 16px rgba(110, 73, 47, 0.04);">
+                        <div style="font-weight: 700; font-size: 0.85rem; color: var(--text-color);">Personel Tercihleri</div>
+                        <div style="display: flex; gap: 20px;">
+                            <label class="pref-checkbox-label" style="font-size: 0.8rem;">
+                                <input type="checkbox" id="game-pref-staff-kadin" checked onchange="updateGamePrefs()"> KADIN
+                            </label>
+                            <label class="pref-checkbox-label" style="font-size: 0.8rem;">
+                                <input type="checkbox" id="game-pref-staff-trans" checked onchange="updateGamePrefs()"> TRANS
+                            </label>
+                        </div>
+                        <hr style="border: 0; border-top: 1px solid rgba(110, 73, 47, 0.1);">
+                        <div style="font-weight: 700; font-size: 0.85rem; color: var(--text-color);">Müşteri Tercihleri</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <label class="pref-checkbox-label" style="font-size: 0.8rem;">
+                                <input type="checkbox" id="game-pref-cust-beyaz" checked onchange="updateGamePrefs()"> Beyaz
+                            </label>
+                            <label class="pref-checkbox-label" style="font-size: 0.8rem;">
+                                <input type="checkbox" id="game-pref-cust-siyahi" checked onchange="updateGamePrefs()"> Siyahi
+                            </label>
+                            <label class="pref-checkbox-label" style="font-size: 0.8rem;">
+                                <input type="checkbox" id="game-pref-cust-hetero" checked onchange="updateGamePrefs()"> Hetero
+                            </label>
+                            <label class="pref-checkbox-label" style="font-size: 0.8rem;">
+                                <input type="checkbox" id="game-pref-cust-trans" checked onchange="updateGamePrefs()"> Trans
+                            </label>
+                            <label class="pref-checkbox-label" style="font-size: 0.8rem;">
+                                <input type="checkbox" id="game-pref-cust-bi" checked onchange="updateGamePrefs()"> Biseksüel
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab: Basket (Hiring Shop) -->
+                <div class="game-tab-pane" id="tab-basket" style="padding: 24px;">
+                    <div class="game-section-title" style="padding-left: 0; padding-top: 0;">Personel İşe Al</div>
+                    <div id="shop-candidates-container" style="display: flex; flex-direction: column; gap: 16px;">
+                        <!-- Candidates list will be rendered here dynamically -->
+                    </div>
+                </div>
+
+                <!-- Tab: Account (Profile) -->
+                <div class="game-tab-pane" id="tab-account" style="padding: 24px;">
+                    <div class="game-section-title" style="padding-left: 0; padding-top: 0;">Oyuncu Profili</div>
+                    <div class="profile-card" style="background: #ffffff; border: 1px solid rgba(110, 73, 47, 0.12); border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 8px 16px rgba(110, 73, 47, 0.04);">
+                        <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-color);" id="profile-venue-name">Gül Yuvası</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">Yönetici: <span id="profile-player-name" style="font-weight: 600; color: var(--text-color);">Süleyman</span></div>
+                        <hr style="border: 0; border-top: 1px solid rgba(110, 73, 47, 0.1);">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
+                            <span style="color: var(--text-muted);">Mevcut Gün:</span>
+                            <span id="profile-day" style="font-weight: 700; color: var(--text-color);">1</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
+                            <span style="color: var(--text-muted);">Kasa Bakiyesi:</span>
+                            <span id="profile-money" style="font-weight: 700; color: var(--text-color);">1</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
+                            <span style="color: var(--text-muted);">Çalışan Sayısı:</span>
+                            <span id="profile-staff-count" style="font-weight: 700; color: var(--text-color);">0 / 3</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Bottom Navigation Bar -->
+            <div class="bottom-nav-bar">
+                <button class="nav-item active" id="nav-btn-home" onclick="switchTab('home')">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                    <span class="nav-label">home</span>
+                </button>
+                <button class="nav-item" id="nav-btn-menu" onclick="switchTab('menu')">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 20h9"></path>
+                        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                    </svg>
+                    <span class="nav-label">menu</span>
+                </button>
+                <button class="nav-item" id="nav-btn-basket" onclick="switchTab('basket')">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <path d="M16 10a4 4 0 0 1-8 0"></path>
+                    </svg>
+                    <span class="nav-label">basket</span>
+                </button>
+                <button class="nav-item" id="nav-btn-account" onclick="switchTab('account')">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <span class="nav-label">account</span>
+                </button>
             </div>
         </div>
     </div>
@@ -1038,7 +1268,7 @@
         const DefaultAnatomy = {
             // Colors
             cSkin: '#eab29a', cSkinShadow: '#d49479', cHole: '#d45d5d', cHoleShadow: '#8f2f2f',
-            cVein: '#b87a8a', cCum: '#e2e7ec', cPee: '#f5e4b2', cOutline: '#ffffff', cHair: '#2c1d11',
+            cVein: '#b87a8a', cCum: '#e2e7ec', cPee: '#f5e4b2', cOutline: '#000000', cHair: '#2c1d11',
             
             // Physics & Animations
             impactMultiplierX: 2.0,
@@ -1117,7 +1347,7 @@
         };
         // Live config object bound to window
         window.AnatomyConfig = JSON.parse(JSON.stringify(DefaultAnatomy));
-        window.CANVAS_BG = '#1c1c1e';
+        window.CANVAS_BG = '#f4efe8';
         
         // --- 2. GAME STATE ---
         const GameState = {
@@ -1296,7 +1526,7 @@
             }
             
             const pm = customer.traits.penisMorph;
-            const cOutline = '#ffffff';
+            const cOutline = '#000000';
             const cHair = '#2c1d11';
             const cSkinShadow = customer.type === 'black' ? '#4b3020' : '#d49479';
             
@@ -1543,6 +1773,14 @@
             updateDashboard();
             renderStaffSlots();
             renderCustomersQueue();
+            
+            // Set header title
+            const headerVenueEl = document.getElementById('header-venue-name');
+            if (headerVenueEl) {
+                headerVenueEl.textContent = GameState.venueName;
+            }
+            
+            switchTab('home');
         }
 
         function updateDashboard() {
@@ -1576,60 +1814,63 @@
             grid.innerHTML = '';
             
             GameState.staff.forEach((staff, index) => {
+                if (!staff) return;
+                
                 const slot = document.createElement('div');
-                slot.className = 'staff-slot' + (staff ? ' hired' : '');
+                slot.className = 'staff-slot hired';
                 slot.setAttribute('data-index', index);
                 
-                if (!staff) {
-                    slot.innerHTML = `
-                        <button class="slot-hire-btn" onclick="openHireModal(${index})">+</button>
-                        <div class="slot-hire-label">İşe Al</div>
-                    `;
-                } else {
-                    const genderColor = staff.gender === 'KADIN' ? '#ff69b4' : '#7c5c8c';
-                    slot.innerHTML = `
-                        <div class="slot-canvas-container">
-                            <canvas class="staff-canvas" data-staff-id="${staff.id}"></canvas>
-                        </div>
-                        <div class="slot-info">
-                            <div class="slot-name">${staff.name} <span style="font-size: 0.55rem; color: ${genderColor}; font-weight: 500;">(${staff.gender})</span></div>
-                            <div class="slot-status">Boşta</div>
-                        </div>
-                    `;
+                const genderColor = staff.gender === 'KADIN' ? '#ff69b4' : '#7c5c8c';
+                slot.innerHTML = `
+                    <div class="slot-canvas-container">
+                        <canvas class="staff-canvas" data-staff-id="${staff.id}"></canvas>
+                    </div>
+                    <div class="slot-info">
+                        <div class="slot-name">${staff.name} <span style="font-size: 0.55rem; color: ${genderColor}; font-weight: 500;">(${staff.gender})</span></div>
+                        <div class="slot-status">Boşta</div>
+                    </div>
+                `;
+                
+                // Bind drag & drop events to the hired slot
+                slot.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    if (!staff.isServing) {
+                        slot.classList.add('drag-over');
+                    }
+                });
+                slot.addEventListener('dragleave', () => {
+                    slot.classList.remove('drag-over');
+                });
+                slot.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    slot.classList.remove('drag-over');
+                    if (staff.isServing) return;
                     
-                    // Bind drag & drop events to the hired slot
-                    slot.addEventListener('dragover', (e) => {
-                        e.preventDefault();
-                        if (!staff.isServing) {
-                            slot.classList.add('drag-over');
-                        }
-                    });
-                    slot.addEventListener('dragleave', () => {
-                        slot.classList.remove('drag-over');
-                    });
-                    slot.addEventListener('drop', (e) => {
-                        e.preventDefault();
-                        slot.classList.remove('drag-over');
-                        if (staff.isServing) return;
-                        
-                        const customerId = e.dataTransfer.getData("text/plain");
-                        if (customerId) {
-                            assignCustomerToStaff(customerId, index);
-                        }
-                    });
-                    
-                    // Click handler for tap-to-assign
-                    slot.addEventListener('click', () => {
-                        if (staff.isServing) return;
-                        if (window.selectedCustomerId) {
-                            assignCustomerToStaff(window.selectedCustomerId, index);
-                            window.selectedCustomerId = null;
-                            document.querySelectorAll('.customer-card').forEach(c => c.style.borderColor = 'var(--border-color)');
-                        }
-                    });
-                }
+                    const customerId = e.dataTransfer.getData("text/plain");
+                    if (customerId) {
+                        assignCustomerToStaff(customerId, index);
+                    }
+                });
+                
+                // Click handler for tap-to-assign
+                slot.addEventListener('click', () => {
+                    if (staff.isServing) return;
+                    if (window.selectedCustomerId) {
+                        assignCustomerToStaff(window.selectedCustomerId, index);
+                        window.selectedCustomerId = null;
+                        document.querySelectorAll('.customer-card').forEach(c => c.style.borderColor = 'var(--border-color)');
+                    }
+                });
+                
                 grid.appendChild(slot);
             });
+            
+            // Update general hire button state
+            const hireBtn = document.getElementById('btn-general-hire');
+            if (hireBtn) {
+                const firstEmptyIndex = GameState.staff.findIndex(s => s === null);
+                hireBtn.disabled = (firstEmptyIndex === -1);
+            }
             
             updateDashboard();
         }
@@ -1779,112 +2020,110 @@
             }, 1200);
         }
 
-        // --- 5. HIRING MODAL CONTROLLER ---
+        // --- 5. TAB SYSTEM & SHOP CONTROLLERS ---
 
-        let activeHiringSlotIndex = null;
-        let selectedCandidateId = null;
-        
-        window.openHireModal = function(slotIndex) {
-            activeHiringSlotIndex = slotIndex;
+        window.switchTab = function(tabId) {
+            // Hide all tab content panes
+            document.querySelectorAll('.game-tab-pane').forEach(pane => {
+                pane.style.display = 'none';
+                pane.classList.remove('active');
+            });
             
-            // Generate 3 candidates
-            GameState.candidates = [];
-            for (let i = 0; i < 3; i++) {
-                GameState.candidates.push(generateCandidate("cand_" + Date.now() + "_" + i));
+            // Show target tab content pane
+            const targetPane = document.getElementById('tab-' + tabId);
+            if (targetPane) {
+                targetPane.style.display = 'flex';
+                targetPane.classList.add('active');
             }
             
-            // Auto select first candidate
-            selectedCandidateId = GameState.candidates[0].id;
+            // Update active state in nav bar buttons
+            document.querySelectorAll('.nav-item').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            const activeBtn = document.getElementById('nav-btn-' + tabId);
+            if (activeBtn) {
+                activeBtn.classList.add('active');
+            }
             
-            renderCandidatesList();
-            
-            const modal = document.getElementById('hire-modal');
-            if (modal) modal.classList.add('active');
-        };
-        
-        window.closeHireModal = function() {
-            const modal = document.getElementById('hire-modal');
-            if (modal) modal.classList.remove('active');
-            activeHiringSlotIndex = null;
-            selectedCandidateId = null;
-        };
-
-        window.selectCandidate = function(candidateId) {
-            selectedCandidateId = candidateId;
-            renderCandidatesList();
+            // Refresh contents if needed
+            if (tabId === 'basket') {
+                renderShopCandidates();
+            } else if (tabId === 'account') {
+                updateProfileTab();
+            }
         };
 
-        function renderCandidatesList() {
-            const listEl = document.getElementById('candidates-list');
-            if (!listEl) return;
+        window.openHireModalForFirstEmptySlot = function() {
+            window.switchTab('basket');
+        };
+
+        function renderShopCandidates() {
+            const shopContainer = document.getElementById('shop-candidates-container');
+            if (!shopContainer) return;
             
-            listEl.innerHTML = '';
+            // If candidates array is empty, generate 3 candidates
+            if (GameState.candidates.length === 0) {
+                GameState.candidates = [];
+                for (let i = 0; i < 3; i++) {
+                    GameState.candidates.push(generateCandidate("cand_" + Date.now() + "_" + i));
+                }
+            }
+            
+            shopContainer.innerHTML = '';
+            
+            const firstEmptyIndex = GameState.staff.findIndex(s => s === null);
             
             GameState.candidates.forEach(candidate => {
                 const card = document.createElement('div');
                 card.className = 'candidate-card';
-                
-                // Clicking selects the candidate
-                card.setAttribute('onclick', `selectCandidate('${candidate.id}')`);
-                
-                // Add highlight style if selected
-                if (candidate.id === selectedCandidateId) {
-                    card.style.borderColor = 'var(--primary)';
-                    card.style.transform = 'scale(1.03)';
-                    card.style.boxShadow = '0 0 16px rgba(0, 122, 255, 0.3)';
-                } else {
-                    card.style.borderColor = 'var(--border-color)';
-                    card.style.transform = 'none';
-                    card.style.boxShadow = 'none';
-                }
+                card.style.flexDirection = 'row';
+                card.style.width = '100%';
+                card.style.height = 'auto';
+                card.style.padding = '12px';
+                card.style.alignItems = 'center';
+                card.style.gap = '12px';
+                card.style.boxShadow = '0 8px 16px rgba(110, 73, 47, 0.04)';
                 
                 const genderColor = candidate.gender === 'KADIN' ? '#ff69b4' : '#7c5c8c';
+                const canAfford = GameState.money >= candidate.hireCost;
                 
                 card.innerHTML = `
-                    <div class="candidate-canvas-container">
+                    <div class="candidate-canvas-container" style="width: 80px; height: 80px; margin-bottom: 0;">
                         <canvas class="staff-canvas" data-staff-id="${candidate.id}" data-idle-only="true"></canvas>
                     </div>
-                    <div class="candidate-info" style="text-align: center; width: 100%; flex: 1;">
-                        <div class="candidate-name" style="font-size: 0.75rem; font-weight: 600; color: var(--text-color); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${candidate.name}</div>
-                        <div class="candidate-stat" style="font-size: 0.6rem; color: ${genderColor}; font-weight: 600; margin-bottom: 1px;">${candidate.gender}</div>
-                        <div class="candidate-stat" style="font-size: 0.55rem; color: var(--text-muted); margin-bottom: 1px;">Ten: ${candidate.toneLabel}</div>
-                        <div class="candidate-stat" style="font-size: 0.55rem; color: var(--text-muted); margin-bottom: 1px;">Çap: ${candidate.baseHoleSize}px</div>
-                        <div class="candidate-stat candidate-cost" style="font-size: 0.65rem; color: var(--accent); font-weight: 700; margin-bottom: 4px;">$${candidate.hireCost}</div>
+                    <div class="candidate-info" style="text-align: left; flex: 1;">
+                        <div class="candidate-name" style="font-size: 0.8rem; font-weight: 700; color: var(--text-color);">${candidate.name} <span style="font-size: 0.6rem; color: ${genderColor};">(${candidate.gender})</span></div>
+                        <div class="candidate-stat" style="font-size: 0.65rem; color: var(--text-muted); margin-top: 2px;">Ten: ${candidate.toneLabel} / Çap: ${candidate.baseHoleSize}px</div>
+                        <div class="candidate-stat candidate-cost" style="font-size: 0.8rem; color: var(--text-color); font-weight: 700; margin-top: 4px;">$${candidate.hireCost}</div>
                     </div>
+                    <button class="db-btn" ${(!canAfford || firstEmptyIndex === -1) ? 'disabled' : ''} onclick="hireShopCandidate('${candidate.id}')" style="margin-left: auto; padding: 6px 12px; font-size: 0.7rem; border-radius: 16px;">İşe Al</button>
                 `;
                 
-                listEl.appendChild(card);
+                shopContainer.appendChild(card);
             });
-
-            // Update action button in footer
-            const activeCandidate = GameState.candidates.find(c => c.id === selectedCandidateId);
-            const actionBtn = document.getElementById('modal-hire-action-btn');
-            if (actionBtn && activeCandidate) {
-                const canAfford = GameState.money >= activeCandidate.hireCost;
-                actionBtn.disabled = !canAfford;
-                actionBtn.textContent = `İşe Al ($${activeCandidate.hireCost})`;
-            }
         }
 
-        window.hireSelectedCandidate = function() {
-            if (activeHiringSlotIndex === null || !selectedCandidateId) return;
+        window.hireShopCandidate = function(candidateId) {
+            const firstEmptyIndex = GameState.staff.findIndex(s => s === null);
+            if (firstEmptyIndex === -1) return;
             
-            const candidate = GameState.candidates.find(c => c.id === selectedCandidateId);
-            if (!candidate || GameState.money < candidate.hireCost) return;
+            const candidate = GameState.candidates.find(c => c.id !== candidateId ? false : true); // simple check
+            const candReal = GameState.candidates.find(c => c.id === candidateId);
+            if (!candReal || GameState.money < candReal.hireCost) return;
             
-            GameState.money -= candidate.hireCost;
+            GameState.money -= candReal.hireCost;
             
-            GameState.staff[activeHiringSlotIndex] = {
+            GameState.staff[firstEmptyIndex] = {
                 id: "staff_" + Date.now(),
-                name: candidate.name,
-                gender: candidate.gender,
-                cSkin: candidate.cSkin,
-                cSkinShadow: candidate.cSkinShadow,
-                cHole: candidate.cHole,
-                cHoleShadow: candidate.cHoleShadow,
-                cHair: candidate.cHair,
-                baseHoleSize: candidate.baseHoleSize,
-                currentHoleDamage: candidate.baseHoleSize,
+                name: candReal.name,
+                gender: candReal.gender,
+                cSkin: candReal.cSkin,
+                cSkinShadow: candReal.cSkinShadow,
+                cHole: candReal.cHole,
+                cHoleShadow: candReal.cHoleShadow,
+                cHair: candReal.cHair,
+                baseHoleSize: candReal.baseHoleSize,
+                currentHoleDamage: candReal.baseHoleSize,
                 holeRedness: 0,
                 activeCustomer: null,
                 isServing: false,
@@ -1899,9 +2138,41 @@
                 timeWithoutPenis: 0
             };
             
-            closeHireModal();
+            // Remove candidate from list
+            GameState.candidates = GameState.candidates.filter(c => c.id !== candidateId);
+            
+            renderShopCandidates();
             renderStaffSlots();
             updateDashboard();
+        };
+
+        function updateProfileTab() {
+            document.getElementById('profile-player-name').textContent = GameState.playerName || 'Süleyman';
+            document.getElementById('profile-venue-name').textContent = GameState.venueName || 'Gül Yuvası';
+            document.getElementById('profile-day').textContent = GameState.day;
+            document.getElementById('profile-money').textContent = "$" + GameState.money;
+            
+            const count = GameState.staff.filter(s => s !== null).length;
+            document.getElementById('profile-staff-count').textContent = `${count} / 3`;
+        }
+        
+        window.updateGamePrefs = function() {
+            // Read checkboxes and update game prefs
+            let kadin = document.getElementById('game-pref-staff-kadin')?.checked ?? true;
+            let transStaff = document.getElementById('game-pref-staff-trans')?.checked ?? true;
+            if (!kadin && !transStaff) { kadin = true; transStaff = true; }
+
+            let beyaz = document.getElementById('game-pref-cust-beyaz')?.checked ?? true;
+            let siyahi = document.getElementById('game-pref-cust-siyahi')?.checked ?? true;
+            let hetero = document.getElementById('game-pref-cust-hetero')?.checked ?? true;
+            let transCust = document.getElementById('game-pref-cust-trans')?.checked ?? true;
+            let bi = document.getElementById('game-pref-cust-bi')?.checked ?? true;
+            if (!beyaz && !siyahi && !hetero && !transCust && !bi) {
+                beyaz = true; siyahi = true; hetero = true; transCust = true; bi = true;
+            }
+
+            GameState.prefs.staff = { kadin, trans: transStaff };
+            GameState.prefs.customers = { beyaz, siyahi, hetero, trans: transCust, bi };
         };
 
         window.toggleSetupPrefs = function(event) {
