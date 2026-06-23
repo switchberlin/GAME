@@ -9,234 +9,307 @@
     
     <style>
         :root {
-            --bg-color: #0b0c10;
-            --panel-bg: rgba(22, 26, 37, 0.6);
+            --bg-color: #08080c;
+            --panel-bg: rgba(18, 20, 28, 0.6);
             --border-color: rgba(255, 255, 255, 0.08);
             --primary: #d4af37; /* Gold accent */
-            --primary-glow: rgba(212, 175, 55, 0.3);
+            --primary-glow: rgba(212, 175, 55, 0.25);
             --accent: #ff4a85; /* Pink accent */
-            --accent-glow: rgba(255, 74, 133, 0.3);
-            --text-color: #e0e6ed;
-            --text-muted: #8892b0;
-            --active-bg: rgba(212, 175, 55, 0.15);
+            --accent-glow: rgba(255, 74, 133, 0.25);
+            --text-color: #f1f3f9;
+            --text-muted: #7c889b;
+            --active-bg: rgba(212, 175, 55, 0.12);
         }
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
             user-select: none;
+            -webkit-user-select: none;
         }
         body {
-            background-color: var(--bg-color);
+            background-color: #030305;
             color: var(--text-color);
             font-family: 'Outfit', sans-serif;
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
-            overflow-x: hidden;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
             background-image: 
-                radial-gradient(circle at 10% 20%, rgba(212, 175, 55, 0.05) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(255, 74, 133, 0.05) 0%, transparent 40%);
+                radial-gradient(circle at 15% 15%, rgba(212, 175, 55, 0.07) 0%, transparent 50%),
+                radial-gradient(circle at 85% 85%, rgba(255, 74, 133, 0.07) 0%, transparent 50%);
         }
-        header {
-            padding: 20px 40px;
-            border-bottom: 1px solid var(--border-color);
+        
+        /* Mobile Portrait Frame (9:16 Aspect Ratio) */
+        .mobile-frame {
+            width: 100vw;
+            height: 100vh;
+            max-width: 430px;
+            max-height: 860px;
+            position: relative;
+            background: #08080c;
+            border-radius: 32px;
+            border: 4px solid #1a1a24;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.85), 0 0 50px rgba(212, 175, 55, 0.03);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        @media (max-width: 480px) {
+            .mobile-frame {
+                max-width: 100vw;
+                max-height: 100vh;
+                border-radius: 0;
+                border: none;
+            }
+        }
+
+        /* Menu Screen */
+        .menu-screen {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 1000;
+            background: #08080c;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 50px 30px 40px 30px;
+            align-items: center;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+        }
+        .menu-screen.hidden {
+            transform: translateY(-100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+        .menu-header {
+            text-align: center;
+            margin-top: 40px;
+        }
+        .menu-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: 8px;
+            background: linear-gradient(45deg, var(--primary), #fff, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 35px rgba(212, 175, 55, 0.3);
+            margin-bottom: 8px;
+        }
+        .menu-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            letter-spacing: 2.5px;
+            font-family: 'JetBrains Mono', monospace;
+            text-transform: uppercase;
+        }
+        .menu-options {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            align-items: center;
+        }
+        .menu-btn {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.05rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            border-radius: 14px;
+            border: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.03);
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            font-family: 'Outfit', sans-serif;
+            text-transform: uppercase;
+        }
+        .menu-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        .menu-btn.primary {
+            background: linear-gradient(135deg, var(--primary), #e5c158);
+            color: #000;
+            border: none;
+            box-shadow: 0 8px 25px var(--primary-glow);
+        }
+        .menu-btn.primary:hover {
+            box-shadow: 0 12px 30px rgba(212, 175, 55, 0.5);
+            transform: translateY(-2px);
+        }
+        .menu-presets-container {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .menu-presets-title {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-family: 'JetBrains Mono', monospace;
+            text-align: center;
+        }
+        .menu-presets-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            width: 100%;
+        }
+        .preset-btn {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .preset-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-color);
+        }
+        .preset-btn.active {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--active-bg);
+        }
+        .menu-footer {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+            opacity: 0.6;
+        }
+
+        /* Game Screen Layout */
+        .game-screen {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow: hidden;
+        }
+        .mobile-header {
+            padding: 12px 18px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(11, 12, 16, 0.8);
+            background: rgba(11, 12, 16, 0.95);
+            border-bottom: 1px solid var(--border-color);
             backdrop-filter: blur(10px);
             z-index: 100;
         }
-        .header-title h1 {
-            font-size: 1.8rem;
+        .header-title-clean {
+            font-size: 0.9rem;
             font-weight: 800;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
             background: linear-gradient(45deg, var(--primary), #fff, var(--accent));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        .header-title p {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-top: 4px;
-            font-family: 'JetBrains Mono', monospace;
-        }
-        .header-actions {
+        .header-actions-clean {
             display: flex;
             gap: 12px;
+            align-items: center;
         }
-        .btn {
-            background: rgba(255, 255, 255, 0.05);
+        .icon-btn {
+            background: rgba(255, 255, 255, 0.02);
             border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 10px 20px;
             border-radius: 8px;
+            color: var(--text-color);
             cursor: pointer;
-            font-weight: 600;
-            font-size: 0.9rem;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
-        .btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.2);
-            transform: translateY(-1px);
+        .icon-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: scale(1.05);
         }
-        .btn.primary {
-            background: var(--primary);
-            color: #000;
-            border-color: var(--primary);
-            box-shadow: 0 4px 15px var(--primary-glow);
-        }
-        .btn.primary:hover {
-            background: #e5c158;
-            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
-        }
-        .btn.accent {
+        .icon-btn.active {
             background: var(--accent);
-            color: #fff;
             border-color: var(--accent);
-            box-shadow: 0 4px 15px var(--accent-glow);
+            color: #fff;
         }
-        .btn.accent:hover {
-            background: #ff6699;
-            box-shadow: 0 6px 20px rgba(255, 74, 133, 0.5);
-        }
-        .main-container {
-            display: flex;
-            flex: 1;
-            padding: 30px;
-            gap: 30px;
-            max-width: 1600px;
-            margin: 0 auto;
+
+        /* Canvas Display Section */
+        .canvas-section {
             width: 100%;
-        }
-        /* Left side: Canvas display & Telemetry */
-        .preview-pane {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            min-width: 450px;
-        }
-        .canvas-container {
-            position: relative;
+            aspect-ratio: 1 / 1;
             background: #000;
-            border-radius: 16px;
-            padding: 10px;
-            border: 2px solid rgba(212, 175, 55, 0.2);
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(212, 175, 55, 0.05);
-            transition: border-color 0.3s ease;
+            position: relative;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        .canvas-container::after {
-            content: '';
-            position: absolute;
-            top: -2px; left: -2px; right: -2px; bottom: -2px;
-            background: linear-gradient(45deg, var(--primary), transparent, var(--accent));
-            border-radius: 16px;
-            z-index: -1;
-            opacity: 0.4;
-            pointer-events: none;
+        .canvas-container-mobile {
+            width: 100%;
+            height: 100%;
+            position: relative;
         }
         .staff-canvas {
             display: block;
-            width: 400px;
-            height: 400px;
-            border-radius: 10px;
-            background: #b0bec5;
+            width: 100% !important;
+            height: 100% !important;
         }
-        .telemetry-panel {
-            width: 100%;
-            background: var(--panel-bg);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
-        }
-        .telemetry-title {
-            font-size: 0.8rem;
-            color: var(--primary);
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 12px;
-            font-weight: 800;
-            font-family: 'JetBrains Mono', monospace;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 6px;
-        }
-        .telemetry-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
-        }
-        .telemetry-item {
-            display: flex;
-            justify-content: space-between;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 6px 10px;
-            border-radius: 4px;
-            border-left: 2px solid var(--text-muted);
-        }
-        .telemetry-item.active {
-            border-left-color: var(--primary);
-        }
-        .telemetry-label {
-            color: var(--text-muted);
-        }
-        .telemetry-value {
-            color: #fff;
-            font-weight: bold;
-        }
-        /* Right side: Editor & Control tabs */
-        .control-pane {
-            flex: 1.2;
-            background: var(--panel-bg);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
+
+        /* Controls Section Layout */
+        .controls-section {
+            flex: 1;
             display: flex;
             flex-direction: column;
+            background: rgba(8, 8, 12, 0.9);
             overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
         }
-        .tab-bar {
+        .tab-bar-mobile {
             display: flex;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.4);
             border-bottom: 1px solid var(--border-color);
         }
-        .tab-btn {
+        .tab-btn-mobile {
             flex: 1;
-            padding: 15px 10px;
+            padding: 14px 5px;
             background: none;
             border: none;
             color: var(--text-muted);
-            font-size: 0.9rem;
-            font-weight: 600;
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 1.5px;
             cursor: pointer;
             transition: all 0.2s ease;
             text-align: center;
-            border-bottom: 2px solid transparent;
+            border-bottom: 3px solid transparent;
+            font-family: 'Outfit', sans-serif;
         }
-        .tab-btn:hover {
+        .tab-btn-mobile:hover {
             color: var(--text-color);
-            background: rgba(255, 255, 255, 0.02);
         }
-        .tab-btn.active {
+        .tab-btn-mobile.active {
             color: var(--primary);
             border-bottom-color: var(--primary);
-            background: rgba(212, 175, 55, 0.04);
+            background: rgba(212, 175, 55, 0.05);
         }
-        .tab-content {
-            padding: 25px;
-            overflow-y: auto;
+        .tab-content-mobile {
             flex: 1;
-            max-height: 550px;
+            overflow-y: auto;
+            padding: 20px 18px;
         }
         .control-group {
             display: none;
@@ -246,15 +319,16 @@
         }
         .section-title {
             color: var(--primary);
-            font-size: 1rem;
-            margin-bottom: 18px;
+            font-size: 0.85rem;
+            margin-bottom: 16px;
             border-bottom: 1px solid var(--border-color);
-            padding-bottom: 8px;
-            font-weight: 600;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            padding-bottom: 6px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
+        
+        /* Sliders and Toggles Mobile styling */
         .slider-row {
             margin-bottom: 16px;
             display: flex;
@@ -264,7 +338,7 @@
         .slider-header {
             display: flex;
             justify-content: space-between;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
         .slider-label {
             color: var(--text-color);
@@ -273,12 +347,12 @@
         .slider-val {
             color: var(--primary);
             font-family: 'JetBrains Mono', monospace;
-            font-weight: bold;
+            font-weight: 700;
         }
         .slider-input {
             width: 100%;
             -webkit-appearance: none;
-            background: rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.07);
             height: 6px;
             border-radius: 3px;
             outline: none;
@@ -293,10 +367,10 @@
             background: var(--primary);
             cursor: pointer;
             box-shadow: 0 0 8px var(--primary-glow);
-            transition: transform 0.1s;
+            transition: transform 0.15s;
         }
         .slider-input::-webkit-slider-thumb:hover {
-            transform: scale(1.2);
+            transform: scale(1.25);
         }
         .toggle-row {
             display: flex;
@@ -304,19 +378,21 @@
             align-items: center;
             margin-bottom: 16px;
             background: rgba(255,255,255,0.02);
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid rgba(255,255,255,0.03);
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.04);
         }
         .toggle-label {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             font-weight: 500;
+            color: var(--text-color);
         }
+        
         /* Modern Switch */
         .switch {
             position: relative;
             display: inline-block;
-            width: 44px;
+            width: 42px;
             height: 22px;
         }
         .switch input { 
@@ -328,47 +404,49 @@
             position: absolute;
             cursor: pointer;
             top: 0; left: 0; right: 0; bottom: 0;
-            background-color: rgba(255,255,255,0.15);
+            background-color: rgba(255,255,255,0.1);
             transition: .3s;
             border-radius: 34px;
+            border: 1px solid var(--border-color);
         }
         .switch-slider:before {
             position: absolute;
             content: "";
-            height: 16px;
-            width: 16px;
+            height: 14px;
+            width: 14px;
             left: 3px;
             bottom: 3px;
-            background-color: white;
+            background-color: #fff;
             transition: .3s;
             border-radius: 50%;
         }
         input:checked + .switch-slider {
             background-color: var(--accent);
+            border-color: var(--accent);
         }
         input:checked + .switch-slider:before {
-            transform: translateX(22px);
+            transform: translateX(20px);
         }
         .btn-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
             margin-bottom: 20px;
         }
         .state-btn {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.02);
             border: 1px solid var(--border-color);
             color: var(--text-muted);
-            padding: 10px;
-            border-radius: 6px;
-            font-size: 0.8rem;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
             text-align: center;
         }
         .state-btn:hover {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.06);
             color: var(--text-color);
         }
         .state-btn.active {
@@ -380,27 +458,28 @@
         .color-pickers {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
+            gap: 10px;
             margin-bottom: 20px;
         }
         .color-row {
             display: flex;
             align-items: center;
-            gap: 10px;
-            background: rgba(0,0,0,0.15);
-            padding: 8px;
+            gap: 8px;
+            background: rgba(0,0,0,0.2);
+            padding: 8px 10px;
             border-radius: 8px;
             border: 1px solid var(--border-color);
         }
         .color-label {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             flex: 1;
+            color: var(--text-color);
         }
         .color-input {
             -webkit-appearance: none;
             border: none;
-            width: 32px;
-            height: 32px;
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
             cursor: pointer;
             background: none;
@@ -409,392 +488,299 @@
             padding: 0;
         }
         .color-input::-webkit-color-swatch {
-            border: 2px solid var(--border-color);
+            border: 2px solid rgba(255,255,255,0.2);
             border-radius: 50%;
-        }
-        .documentation {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 30px;
-            max-width: 1600px;
-            margin: 0 auto 50px auto;
-            width: calc(100% - 60px);
-        }
-        .doc-title {
-            color: var(--primary);
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-        .doc-section {
-            margin-bottom: 20px;
-        }
-        .doc-section h4 {
-            color: var(--accent);
-            font-size: 0.95rem;
-            margin-bottom: 8px;
-        }
-        .doc-section p {
-            font-size: 0.85rem;
-            line-height: 1.6;
-            color: var(--text-muted);
-            margin-bottom: 10px;
-        }
-        .code-block {
-            background: #050508;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 15px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
-            overflow-x: auto;
-            color: #c5c9db;
-            margin-top: 10px;
         }
         /* Scrollbar custom styling */
         ::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
         }
         ::-webkit-scrollbar-track {
             background: rgba(0,0,0,0.1);
         }
         ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 3px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.15);
         }
     </style>
 </head>
-<body>
-    <header>
-        <div class="header-title">
-            <h1>Anatomy & Physics Render Sandbox</h1>
-            <p>Canvas 2D Procedural Graphic Engine v3.0</p>
-        </div>
-        <div class="header-actions">
-            <button class="btn" id="btn-pause">Duraklat</button>
-            <button class="btn primary" id="btn-reset">Varsayılana Sıfırla</button>
-        </div>
-    </header>
-    <div class="main-container">
-        
-        <!-- Preview & Telemetry -->
-        <div class="preview-pane">
-            <div class="canvas-container">
-                <canvas class="staff-canvas" data-staff-id="char_01"></canvas>
+<<body>
+    <div class="mobile-frame">
+        <!-- Start Menu Screen -->
+        <div class="menu-screen" id="menu-screen">
+            <div class="menu-header">
+                <h1 class="menu-title">HOLE</h1>
+                <p class="menu-subtitle">Anatomy & Physics Sandbox</p>
             </div>
             
-            <div class="telemetry-panel">
-                <div class="telemetry-title">SİSTEMSİZ TELEMETRİ / MATEMATİKSEL ÇIKTILAR</div>
-                <div class="telemetry-grid">
-                    <div class="telemetry-item active">
-                        <span class="telemetry-label">Aktif Durum:</span>
-                        <span class="telemetry-value" id="t-state">IDLE</span>
+            <div class="menu-options">
+                <button class="menu-btn primary" id="btn-start-game">Oyuna Başla</button>
+                
+                <div class="menu-presets-container">
+                    <div class="menu-presets-title">Hızlı Ön Tanımlar</div>
+                    <div class="menu-presets-grid">
+                        <button class="preset-btn active" id="preset-white" onclick="setPreset('white')">Beyaz Ten</button>
+                        <button class="preset-btn" id="preset-black" onclick="setPreset('black')">Esmer Ten</button>
+                        <button class="preset-btn" id="preset-cut" onclick="setPreset('cut')">Sünnetli</button>
+                        <button class="preset-btn" id="preset-uncut" onclick="setPreset('uncut')">Sünnetsiz</button>
                     </div>
-                    <div class="telemetry-item active">
-                        <span class="telemetry-label">Hız Aşımı / Offset:</span>
-                        <span class="telemetry-value" id="t-offset">0.00 px</span>
+                </div>
+            </div>
+            
+            <div class="menu-footer">
+                <span>v3.0 Procedural Physics Engine</span>
+            </div>
+        </div>
+
+        <!-- Game/Sandbox Screen -->
+        <div class="game-screen" id="game-screen" style="display: none;">
+            <header class="mobile-header">
+                <button class="icon-btn" id="btn-back-to-menu" title="Menüye Dön">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                </button>
+                <div class="header-title-clean">HOLE SANDBOX</div>
+                <div class="header-actions-clean">
+                    <button class="icon-btn" id="btn-pause-mobile" title="Duraklat/Devam Et">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                    </button>
+                    <button class="icon-btn" id="btn-reset-mobile" title="Sıfırla">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Preview Canvas Section -->
+            <div class="canvas-section">
+                <div class="canvas-container-mobile">
+                    <canvas class="staff-canvas" data-staff-id="char_01"></canvas>
+                </div>
+            </div>
+
+            <!-- Controls Section -->
+            <div class="controls-section">
+                <div class="tab-bar-mobile">
+                    <button class="tab-btn-mobile active" data-tab="tab-state">DURUM</button>
+                    <button class="tab-btn-mobile" data-tab="tab-anatomy">TEN</button>
+                    <button class="tab-btn-mobile" data-tab="tab-morph">PENİS</button>
+                    <button class="tab-btn-mobile" data-tab="tab-physics">FİZİK</button>
+                </div>
+                
+                <div class="tab-content-mobile">
+                    
+                    <!-- Tab: State and Phase -->
+                    <div class="control-group active" id="tab-state">
+                        <div class="section-title">Etkileşim Modu</div>
+                        <div class="btn-grid">
+                            <button class="state-btn active" id="state-idle">Boşta</button>
+                            <button class="state-btn" id="state-serving">İtiş</button>
+                            <button class="state-btn" id="state-cumming">Boşalma</button>
+                            <button class="state-btn" id="state-pissing">İşeme</button>
+                        </div>
+                        
+                        <div class="section-title">Hız ve Aşama</div>
+                        <div class="slider-row">
+                            <div class="slider-header">
+                                <span class="slider-label">Aktif Aşama</span>
+                                <span class="slider-val" id="val-phase">3</span>
+                            </div>
+                            <input type="range" min="1" max="5" step="1" value="3" class="slider-input" id="input-phase">
+                        </div>
+                        
+                        <div class="slider-row">
+                            <div class="slider-header">
+                                <span class="slider-label">Hız Çarpanı</span>
+                                <span class="slider-val" id="val-speed">1.00x</span>
+                            </div>
+                            <input type="range" min="0.5" max="2.5" step="0.05" value="1" class="slider-input" id="input-speed">
+                        </div>
+                        
+                        <div class="toggle-row">
+                            <span class="toggle-label">Kalça Sallantısını Engelle</span>
+                            <label class="switch">
+                                <input type="checkbox" id="input-idle-only">
+                                <span class="switch-slider"></span>
+                            </label>
+                        </div>
                     </div>
-                    <div class="telemetry-item">
-                        <span class="telemetry-label">Dinamik Delik Genişliği:</span>
-                        <span class="telemetry-value" id="t-holesize">0.00 px</span>
+                    
+                    <!-- Tab: Female Anatomy Settings -->
+                    <div class="control-group" id="tab-anatomy">
+                        <div class="section-title">Renk Paleti</div>
+                        <div class="color-pickers">
+                            <div class="color-row">
+                                <span class="color-label">Ten Rengi</span>
+                                <input type="color" class="color-input" id="color-skin" value="#eab29a">
+                            </div>
+                            <div class="color-row">
+                                <span class="color-label">Ten Gölgesi</span>
+                                <input type="color" class="color-input" id="color-skin-shadow" value="#d49479">
+                            </div>
+                            <div class="color-row">
+                                <span class="color-label">Mukoza Rengi</span>
+                                <input type="color" class="color-input" id="color-hole" value="#d45d5d">
+                            </div>
+                            <div class="color-row">
+                                <span class="color-label">Mukoza Gölgesi</span>
+                                <input type="color" class="color-input" id="color-hole-shadow" value="#8f2f2f">
+                            </div>
+                            <div class="color-row">
+                                <span class="color-label">Kıl Rengi</span>
+                                <input type="color" class="color-input" id="color-hair" value="#2c1d11">
+                            </div>
+                            <div class="color-row">
+                                <span class="color-label">Çizgi Rengi</span>
+                                <input type="color" class="color-input" id="color-outline" value="#1c1c1c">
+                            </div>
+                        </div>
+                        
+                        <div class="section-title">Vücut Yapısı</div>
+                        <div class="slider-row">
+                            <div class="slider-header">
+                                <span class="slider-label">Beden İnceliği</span>
+                                <span class="slider-val" id="val-slimness">0 px</span>
+                            </div>
+                            <input type="range" min="-20" max="50" step="1" value="0" class="slider-input" id="input-slimness">
+                        </div>
+                        
+                        <div class="slider-row">
+                            <div class="slider-header">
+                                <span class="slider-label">Delik Çapı</span>
+                                <span class="slider-val" id="val-basehole">6 px</span>
+                            </div>
+                            <input type="range" min="3" max="15" step="0.5" value="6" class="slider-input" id="input-basehole">
+                        </div>
                     </div>
-                    <div class="telemetry-item">
-                        <span class="telemetry-label">Gape (Açık Kalma) Esnemesi:</span>
-                        <span class="telemetry-value" id="t-gape">0.00</span>
+                    
+                    <!-- Tab: Male Anatomy (Penis Morph) -->
+                    <div class="control-group" id="tab-morph">
+                        <div class="section-title">Karakter Tipi</div>
+                        <div class="slider-row">
+                            <div class="slider-header">
+                                <span class="slider-label">Ten Rengi</span>
+                                <span class="slider-val" id="val-race">Beyaz</span>
+                            </div>
+                            <input type="range" min="0" max="1" step="1" value="0" class="slider-input" id="input-race">
+                        </div>
+                        
+                        <div class="section-title">Penis Yapısı</div>
+                        <div class="slider-row">
+                            <div class="slider-header">
+                                <span class="slider-label">Uzunluk</span>
+                                <span class="slider-val" id="val-length">0 px</span>
+                            </div>
+                            <input type="range" min="-40" max="60" step="1" value="0" class="slider-input" id="input-length">
+                        </div>
+                        
+                        <div class="slider-row">
+                            <div class="slider-header">
+                                <span class="slider-label">Kalınlık</span>
+                                <span class="slider-val" id="val-width">0 px</span>
+                            </div>
+                            <input type="range" min="-15" max="30" step="1" value="0" class="slider-input" id="input-width">
+                        </div>
+                        
+                        <div class="slider-row">
+                            <div class="slider-header">
+                                <span class="slider-label">Eğrilik</span>
+                                <span class="slider-val" id="val-curve">0 px</span>
+                            </div>
+                            <input type="range" min="-30" max="30" step="1" value="0" class="slider-input" id="input-curve">
+                        </div>
+                        <div class="slider-row">
+                            <div class="slider-header">
+                                <span class="slider-label">Glans Genişliği</span>
+                                <span class="slider-val" id="val-glans-w">0 px</span>
+                            </div>
+                            <input type="range" min="-10" max="20" step="1" value="0" class="slider-input" id="input-glans-w">
+                        </div>
+                        <div class="slider-row">
+                            <div class="slider-header">
+                                <span class="slider-label">Glans Yüksekliği</span>
+                                <span class="slider-val" id="val-glans-h">0 px</span>
+                            </div>
+                            <input type="range" min="-10" max="20" step="1" value="0" class="slider-input" id="input-glans-h">
+                        </div>
+                        <div class="slider-row">
+                            <div class="slider-header">
+                                <span class="slider-label">Testis Büyüklüğü</span>
+                                <span class="slider-val" id="val-testicle">0 px</span>
+                            </div>
+                            <input type="range" min="-15" max="30" step="1" value="0" class="slider-input" id="input-testicle">
+                        </div>
+                        <div class="toggle-row">
+                            <span class="toggle-label">Sünnetsiz</span>
+                            <label class="switch">
+                                <input type="checkbox" id="input-uncut">
+                                <span class="switch-slider"></span>
+                            </label>
+                        </div>
+                        <div class="section-title">Detaylar</div>
+                        <div class="slider-row">
+                            <div class="slider-header">
+                                <span class="slider-label">Damar Yoğunluğu</span>
+                                <span class="slider-val" id="val-vein">0.50</span>
+                            </div>
+                            <input type="range" min="0" max="1" step="0.05" value="0.5" class="slider-input" id="input-vein">
+                        </div>
+                        <div class="slider-row">
+                            <div class="slider-header">
+                                <span class="slider-label">Kıl Yoğunluğu</span>
+                                <span class="slider-val" id="val-hair">0.50</span>
+                            </div>
+                            <input type="range" min="0" max="1" step="0.05" value="0.5" class="slider-input" id="input-hair">
+                        </div>
                     </div>
-                    <div class="telemetry-item">
-                        <span class="telemetry-label">Et Jiggle (Y sarsıntısı):</span>
-                        <span class="telemetry-value" id="t-jiggle-y">0.00 px</span>
-                    </div>
-                    <div class="telemetry-item">
-                        <span class="telemetry-label">Et Jiggle (X esnemesi):</span>
-                        <span class="telemetry-value" id="t-jiggle-x">0.00 px</span>
-                    </div>
-                    <div class="telemetry-item">
-                        <span class="telemetry-label">Basınç / Vakum (Suction):</span>
-                        <span class="telemetry-value" id="t-suction">0.00</span>
-                    </div>
-                    <div class="telemetry-item">
-                        <span class="telemetry-label">Sürtünme Yönü (Friction):</span>
-                        <span class="telemetry-value" id="t-friction">0.00</span>
+                    
+                    <!-- Tab: Physics and Fluids -->
+                    <div class="control-group" id="tab-physics">
+                        <div class="section-title">Sallantı Fiziği</div>
+                        <div class="slider-row">
+                            <div class="slider-header">
+                                <span class="slider-label">Dikey Sallantı</span>
+                                <span class="slider-val" id="val-jiggle-y">4.00</span>
+                            </div>
+                            <input type="range" min="0" max="10" step="0.5" value="4" class="slider-input" id="input-jiggle-y">
+                        </div>
+                        <div class="slider-row">
+                            <div class="slider-header">
+                                <span class="slider-label">Yatay Sallantı</span>
+                                <span class="slider-val" id="val-jiggle-x">2.00</span>
+                            </div>
+                            <input type="range" min="0" max="10" step="0.5" value="2" class="slider-input" id="input-jiggle-x">
+                        </div>
+                        
+                        <div class="slider-row">
+                            <div class="slider-header">
+                                <span class="slider-label">Esneme Oranı</span>
+                                <span class="slider-val" id="val-stretch">0.80</span>
+                            </div>
+                            <input type="range" min="0" max="2" step="0.05" value="0.8" class="slider-input" id="input-stretch">
+                        </div>
+                        
+                        <div class="section-title">Sıvı Fiziği</div>
+                        <div class="slider-row">
+                            <div class="slider-header">
+                                <span class="slider-label">Boşalma Sıvısı</span>
+                                <span class="slider-val" id="val-cum-count">6</span>
+                            </div>
+                            <input type="range" min="1" max="15" step="1" value="6" class="slider-input" id="input-cum-count">
+                        </div>
+                        <div class="slider-row">
+                            <div class="slider-header">
+                                <span class="slider-label">İşeme Sıvısı</span>
+                                <span class="slider-val" id="val-pee-count">25</span>
+                            </div>
+                            <input type="range" min="5" max="40" step="1" value="25" class="slider-input" id="input-pee-count">
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        
-        <!-- Controls Panels -->
-        <div class="control-pane">
-            <div class="tab-bar">
-                <button class="tab-btn active" data-tab="tab-state">DURUM / FAZ</button>
-                <button class="tab-btn" data-tab="tab-anatomy">KADIN ANATOMİSİ</button>
-                <button class="tab-btn" data-tab="tab-morph">ERKEK (PENİS) MORPH</button>
-                <button class="tab-btn" data-tab="tab-physics">FİZİK / SIVILAR</button>
-            </div>
-            
-            <div class="tab-content">
-                
-                <!-- Tab: State and Phase -->
-                <div class="control-group active" id="tab-state">
-                    <div class="section-title">ETKİLEŞİM MODU</div>
-                    <div class="btn-grid">
-                        <button class="state-btn active" id="state-idle">Boşta (Idle)</button>
-                        <button class="state-btn" id="state-serving">Hizmette (Thrusting)</button>
-                        <button class="state-btn" id="state-cumming">Boşalma (Cumming)</button>
-                        <button class="state-btn" id="state-pissing">İşeme (Pissing)</button>
-                    </div>
-                    
-                    <div class="section-title">HIZ & AŞAMA (THRUST PHASES)</div>
-                    <div class="slider-row">
-                        <div class="slider-header">
-                            <span class="slider-label">Aktif Hız Aşaması (Phase)</span>
-                            <span class="slider-val" id="val-phase">3</span>
-                        </div>
-                        <input type="range" min="1" max="5" step="1" value="3" class="slider-input" id="input-phase">
-                    </div>
-                    
-                    <div class="slider-row">
-                        <div class="slider-header">
-                            <span class="slider-label">Hız Çarpanı (speedMultiplier)</span>
-                            <span class="slider-val" id="val-speed">1.00x</span>
-                        </div>
-                        <input type="range" min="0.5" max="2.5" step="0.05" value="1" class="slider-input" id="input-speed">
-                    </div>
-                    
-                    <div class="toggle-row">
-                        <span class="toggle-label">Gluteal Sallantı Engellensin mi? (Idle Only)</span>
-                        <label class="switch">
-                            <input type="checkbox" id="input-idle-only">
-                            <span class="switch-slider"></span>
-                        </label>
-                    </div>
-                </div>
-                
-                <!-- Tab: Female Anatomy Settings -->
-                <div class="control-group" id="tab-anatomy">
-                    <div class="section-title">RENK PALETİ (CHIAROSCURO SYSTEM)</div>
-                    <div class="color-pickers">
-                        <div class="color-row">
-                            <span class="color-label">Ten Rengi (Skin)</span>
-                            <input type="color" class="color-input" id="color-skin" value="#eab29a">
-                        </div>
-                        <div class="color-row">
-                            <span class="color-label">Ten Gölgesi (Shadow)</span>
-                            <input type="color" class="color-input" id="color-skin-shadow" value="#d49479">
-                        </div>
-                        <div class="color-row">
-                            <span class="color-label">Mukoza / Areola (Hole)</span>
-                            <input type="color" class="color-input" id="color-hole" value="#d45d5d">
-                        </div>
-                        <div class="color-row">
-                            <span class="color-label">Mukoza Gölgesi (HoleShadow)</span>
-                            <input type="color" class="color-input" id="color-hole-shadow" value="#8f2f2f">
-                        </div>
-                        <div class="color-row">
-                            <span class="color-label">Kıl Rengi (Hair)</span>
-                            <input type="color" class="color-input" id="color-hair" value="#2c1d11">
-                        </div>
-                        <div class="color-row">
-                            <span class="color-label">Dış Çizgi Rengi (Outline)</span>
-                            <input type="color" class="color-input" id="color-outline" value="#1c1c1c">
-                        </div>
-                    </div>
-                    
-                    <div class="section-title">BACAK & KALÇA PARAMETRELERİ</div>
-                    <div class="slider-row">
-                        <div class="slider-header">
-                            <span class="slider-label">Beden İnceliği (bodySlimness)</span>
-                            <span class="slider-val" id="val-slimness">0 px</span>
-                        </div>
-                        <input type="range" min="-20" max="50" step="1" value="0" class="slider-input" id="input-slimness">
-                    </div>
-                    
-                    <div class="slider-row">
-                        <div class="slider-header">
-                            <span class="slider-label">Taban Delik Çapı (baseHoleSize)</span>
-                            <span class="slider-val" id="val-basehole">6 px</span>
-                        </div>
-                        <input type="range" min="3" max="15" step="0.5" value="6" class="slider-input" id="input-basehole">
-                    </div>
-                </div>
-                
-                <!-- Tab: Male Anatomy (Penis Morph) -->
-                <div class="control-group" id="tab-morph">
-                    <div class="section-title">MÜŞTERİ VÜCUT TİPİ & DERİ TINT</div>
-                    <div class="slider-row">
-                        <div class="slider-header">
-                            <span class="slider-label">Müşteri Irkı (Race/Skin Tone)</span>
-                            <span class="slider-val" id="val-race">Beyaz (White)</span>
-                        </div>
-                        <input type="range" min="0" max="1" step="1" value="0" class="slider-input" id="input-race">
-                    </div>
-                    
-                    <div class="section-title">PENİS GEOMETRİSİ (PENIS MORPH)</div>
-                    <div class="slider-row">
-                        <div class="slider-header">
-                            <span class="slider-label">Uzunluk (shaftLength)</span>
-                            <span class="slider-val" id="val-length">0 px</span>
-                        </div>
-                        <input type="range" min="-40" max="60" step="1" value="0" class="slider-input" id="input-length">
-                    </div>
-                    
-                    <div class="slider-row">
-                        <div class="slider-header">
-                            <span class="slider-label">Kalınlık (shaftWidth)</span>
-                            <span class="slider-val" id="val-width">0 px</span>
-                        </div>
-                        <input type="range" min="-15" max="30" step="1" value="0" class="slider-input" id="input-width">
-                    </div>
-                    
-                    <div class="slider-row">
-                        <div class="slider-header">
-                            <span class="slider-label">Eğrilik (shaftCurve)</span>
-                            <span class="slider-val" id="val-curve">0 px</span>
-                        </div>
-                        <input type="range" min="-30" max="30" step="1" value="0" class="slider-input" id="input-curve">
-                    </div>
-                    <div class="slider-row">
-                        <div class="slider-header">
-                            <span class="slider-label">Penis Başı Genişliği (glansWidth)</span>
-                            <span class="slider-val" id="val-glans-w">0 px</span>
-                        </div>
-                        <input type="range" min="-10" max="20" step="1" value="0" class="slider-input" id="input-glans-w">
-                    </div>
-                    <div class="slider-row">
-                        <div class="slider-header">
-                            <span class="slider-label">Penis Başı Yüksekliği (glansHeight)</span>
-                            <span class="slider-val" id="val-glans-h">0 px</span>
-                        </div>
-                        <input type="range" min="-10" max="20" step="1" value="0" class="slider-input" id="input-glans-h">
-                    </div>
-                    <div class="slider-row">
-                        <div class="slider-header">
-                            <span class="slider-label">Testis Büyüklüğü (testicleSize)</span>
-                            <span class="slider-val" id="val-testicle">0 px</span>
-                        </div>
-                        <input type="range" min="-15" max="30" step="1" value="0" class="slider-input" id="input-testicle">
-                    </div>
-                    <div class="toggle-row">
-                        <span class="toggle-label">Sünnetsiz (Uncut Foreskin)</span>
-                        <label class="switch">
-                            <input type="checkbox" id="input-uncut">
-                            <span class="switch-slider"></span>
-                        </label>
-                    </div>
-                    <div class="section-title">DETAYLAR & KASIK KILLARI</div>
-                    <div class="slider-row">
-                        <div class="slider-header">
-                            <span class="slider-label">Damar Yoğunluğu (veinIntensity)</span>
-                            <span class="slider-val" id="val-vein">0.50</span>
-                        </div>
-                        <input type="range" min="0" max="1" step="0.05" value="0.5" class="slider-input" id="input-vein">
-                    </div>
-                    <div class="slider-row">
-                        <div class="slider-header">
-                            <span class="slider-label">Kasık Kılı Yoğunluğu (hairDensity)</span>
-                            <span class="slider-val" id="val-hair">0.50</span>
-                        </div>
-                        <input type="range" min="0" max="1" step="0.05" value="0.5" class="slider-input" id="input-hair">
-                    </div>
-                </div>
-                
-                <!-- Tab: Physics and Fluids -->
-                <div class="control-group" id="tab-physics">
-                    <div class="section-title">ET SALLANTISI (JIGGLE PHYSICS)</div>
-                    <div class="slider-row">
-                        <div class="slider-header">
-                            <span class="slider-label">Jiggle Çarpanı Y (impactMultiplierY)</span>
-                            <span class="slider-val" id="val-jiggle-y">4.00</span>
-                        </div>
-                        <input type="range" min="0" max="10" step="0.5" value="4" class="slider-input" id="input-jiggle-y">
-                    </div>
-                    <div class="slider-row">
-                        <div class="slider-header">
-                            <span class="slider-label">Jiggle Çarpanı X (impactMultiplierX)</span>
-                            <span class="slider-val" id="val-jiggle-x">2.00</span>
-                        </div>
-                        <input type="range" min="0" max="10" step="0.5" value="2" class="slider-input" id="input-jiggle-x">
-                    </div>
-                    
-                    <div class="slider-row">
-                        <div class="slider-header">
-                            <span class="slider-label">Göt Deliği Esneme Oranı (holeStretch)</span>
-                            <span class="slider-val" id="val-stretch">0.80</span>
-                        </div>
-                        <input type="range" min="0" max="2" step="0.05" value="0.8" class="slider-input" id="input-stretch">
-                    </div>
-                    
-                    <div class="section-title">AKIŞKAN FİZİĞİ (FLUID PHYSICS)</div>
-                    <div class="slider-row">
-                        <div class="slider-header">
-                            <span class="slider-label">Boşalma Damla Adedi</span>
-                            <span class="slider-val" id="val-cum-count">6</span>
-                        </div>
-                        <input type="range" min="1" max="15" step="1" value="6" class="slider-input" id="input-cum-count">
-                    </div>
-                    <div class="slider-row">
-                        <div class="slider-header">
-                            <span class="slider-label">İşeme Damla Adedi</span>
-                            <span class="slider-val" id="val-pee-count">25</span>
-                        </div>
-                        <input type="range" min="5" max="40" step="1" value="25" class="slider-input" id="input-pee-count">
-                    </div>
-                </div>
-            </div>
-        </div>
-        
     </div>
-    <!-- Standalone Documentation and Developer Notes -->
-    <div class="documentation">
-        <h3 class="doc-title">Geliştirici & Entegrasyon Kılavuzu</h3>
-        
-        <div class="doc-section">
-            <h4>1. Matematik ve Fizik Altyapısı</h4>
-            <p>
-                <strong>Dampened Spring Wobble (Jello Effect):</strong> Penis tam içeri girdiğinde (animasyonun derinlik noktasında) 
-                bir eylemsizlik dalgası oluşur. Bedenin sallanması amortisörlü bir yay sönümleme formülü 
-                <code>decay = (1 - wt)^2</code> ve harmonic sinus dalgası <code>sin(wt * PI * freq)</code> ile hesaplanır.
-            </p>
-            <p>
-                <strong>Ballooning (Gape Koruması):</strong> Gape (açık kalma) anında deliğin penisin kalınlığından daha fazla esnemesini engellemek için 
-                <code>maxTargetStretch</code> formülü penisin anlık kalınlığına <code>(24 + shaftWidth*0.5)</code> kilitlenmiştir.
-            </p>
-            <p>
-                <strong>Sürtünme ve Vakum (Friction/Suction):</strong> Penis içeri girerken (Pushing In) sürtünme pozitif, 
-                çıkarken (Pulling Out) negatiftir. Bu yöne bağlı olarak tüm kadın pelvisi 
-                ve gövdesi Y ekseninde <code>staff.currentGlobalY</code> ile yukarı ve aşağı esneyerek dinamik olarak hareket eder.
-            </p>
-        </div>
-        <div class="doc-section">
-            <h4>2. Kendi Projenize Nasıl Entegre Edersiniz?</h4>
-            <p>
-                Bu çizim motoru tamamen bağımsızdır ve HTML5 Canvas 2D API'sine dayanır. Kodu kendi projenize aktarmak için:
-            </p>
-            <ol style="margin-left: 20px; font-size: 0.85rem; color: var(--text-muted); line-height: 1.8;">
-                <li><code>DefaultAnatomy</code> konfigürasyon nesnesini kopyalayıp oyun ayarlarınıza ekleyin.</li>
-                <li>Hizmet alan karakter verilerinizin içine <code>staff.currentHoleDamage</code>, <code>staff.holeRedness</code>, <code>staff.currentGapeStretch</code> gibi fizik durum değişkenlerini ekleyin.</li>
-                <li><code>renderCanvases()</code> çizim döngüsünü oyununuzun ana render döngüsüne (game loop) veya <code>requestAnimationFrame</code> zincirine yerleştirin.</li>
-                <li>Müşteri veya erkek karakterler için <code>traits.penisMorph</code> yapısını kurarak kalınlık, uzunluk ve kıvrım gibi değerleri canvasa aktarın.</li>
-            </ol>
-            
-            <div class="code-block">
-// Oyununuza entegre ederken karakterlerinizi şu şekilde tanımlayabilirsiniz:
-let staff = {
-    id: "char_01",
-    currentHoleDamage: 6,      // Deliğin hasar/genişlik seviyesi
-    holeRedness: 0,            // Kızarıklık oranı (0-1 arası)
-    currentGapeStretch: 0,     // Anlık açık kalma miktarı
-    currentGlobalY: 0,         // Sürtünme kaynaklı beden Y-esnemesi
-    lastRenderTime: Date.now()
-};
-let customer = {
-    traits: {
-        penisMorph: {
-            shaftWidth: 10,   // Kalınlık artışı/azalışı (-15 ile +30 arası)
-            shaftLength: 15,  // Uzunluk artışı/azalışı (-40 ile +60 arası)
+    <!-- Main JavaScript Logic -->h: 15,  // Uzunluk artışı/azalışı (-40 ile +60 arası)
             isUncut: true      // Sünnetsiz/Sünnetli görsel modu
         }
     }
@@ -943,91 +929,159 @@ let customer = {
         };
         // --- 3. UI CONTROLLERS & DATA BINDING ---
         
-        // Tab switching
-        const tabs = document.querySelectorAll('.tab-btn');
+        // Tab switching for mobile layout
+        const tabs = document.querySelectorAll('.tab-btn-mobile');
         tabs.forEach(tab => {
             tab.addEventListener('click', () => {
                 tabs.forEach(t => t.classList.remove('active'));
-                document.querySelectorAll('.tab-content .control-group').forEach(group => group.classList.remove('active'));
+                document.querySelectorAll('.tab-content-mobile .control-group').forEach(group => group.classList.remove('active'));
                 
                 tab.classList.add('active');
-                document.getElementById(tab.getAttribute('data-tab')).classList.add('active');
+                const targetId = tab.getAttribute('data-tab');
+                const targetGroup = document.getElementById(targetId);
+                if (targetGroup) targetGroup.classList.add('active');
             });
         });
-        // Pause/Play Toggle
-        const btnPause = document.getElementById('btn-pause');
-        btnPause.addEventListener('click', () => {
-            gamePausedState = !gamePausedState;
-            btnPause.textContent = gamePausedState ? "Devam Et" : "Duraklat";
-            btnPause.classList.toggle('accent', gamePausedState);
-        });
-        // Reset to default
-        const btnReset = document.getElementById('btn-reset');
-        btnReset.addEventListener('click', () => {
-            window.AnatomyConfig = JSON.parse(JSON.stringify(DefaultAnatomy));
-            
-            // Reset character variables
-            const staff = GameState.staff[0];
-            staff.currentHoleDamage = 6;
-            staff.holeRedness = 0;
-            staff.currentGapeStretch = 0;
-            staff.currentGlobalY = 0;
-            staff.activeServiceTime = 0;
-            
-            // Reset customer morphs
+
+        // Start Menu Navigation & Presets Integration
+        const btnStartGame = document.getElementById('btn-start-game');
+        if (btnStartGame) {
+            btnStartGame.addEventListener('click', () => {
+                document.getElementById('menu-screen').classList.add('hidden');
+                document.getElementById('game-screen').style.display = 'flex';
+            });
+        }
+
+        const btnBackToMenu = document.getElementById('btn-back-to-menu');
+        if (btnBackToMenu) {
+            btnBackToMenu.addEventListener('click', () => {
+                document.getElementById('menu-screen').classList.remove('hidden');
+                document.getElementById('game-screen').style.display = 'none';
+            });
+        }
+
+        // Global function bound to window for Preset Selection on Start Menu
+        window.setPreset = function(type) {
             const pm = GameState.dailyCustomers[0].traits.penisMorph;
-            pm.shaftWidth = 0;
-            pm.shaftCurve = 0;
-            pm.shaftLength = 0;
-            pm.glansWidth = 0;
-            pm.glansHeight = 0;
-            pm.testicleSize = 0;
-            pm.bodySlimness = 0;
-            pm.veinIntensity = 0.5;
-            pm.vein1Offset = 0;
-            pm.vein2Offset = 0;
-            pm.vein3Offset = 0;
-            pm.hairDensity = 0.5;
-            pm.speedMultiplier = 1.0;
-            pm.isUncut = false;
+            const staff = GameState.staff[0];
             
-            syncUI();
-        });
+            if (type === 'white' || type === 'black') {
+                const btnWhite = document.getElementById('preset-white');
+                const btnBlack = document.getElementById('preset-black');
+                if (btnWhite) btnWhite.classList.toggle('active', type === 'white');
+                if (btnBlack) btnBlack.classList.toggle('active', type === 'black');
+                
+                const isBlack = type === 'black';
+                GameState.dailyCustomers[0].type = isBlack ? "black" : "white";
+                
+                const inputRace = document.getElementById('input-race');
+                if (inputRace) {
+                    inputRace.value = isBlack ? 1 : 0;
+                    const valRace = document.getElementById('val-race');
+                    if (valRace) valRace.textContent = isBlack ? "Siyahi" : "Beyaz";
+                }
+            } else if (type === 'uncut' || type === 'cut') {
+                const btnUncut = document.getElementById('preset-uncut');
+                const btnCut = document.getElementById('preset-cut');
+                if (btnUncut) btnUncut.classList.toggle('active', type === 'uncut');
+                if (btnCut) btnCut.classList.toggle('active', type === 'cut');
+                
+                const isUncut = type === 'uncut';
+                pm.isUncut = isUncut;
+                
+                const inputUncut = document.getElementById('input-uncut');
+                if (inputUncut) {
+                    inputUncut.checked = isUncut;
+                }
+            }
+        };
+
+        // Pause/Play Toggle (Mobile Header)
+        const btnPauseMobile = document.getElementById('btn-pause-mobile');
+        if (btnPauseMobile) {
+            btnPauseMobile.addEventListener('click', () => {
+                gamePausedState = !gamePausedState;
+                btnPauseMobile.classList.toggle('active', gamePausedState);
+            });
+        }
+
+        // Reset to default (Mobile Header)
+        const btnResetMobile = document.getElementById('btn-reset-mobile');
+        if (btnResetMobile) {
+            btnResetMobile.addEventListener('click', () => {
+                window.AnatomyConfig = JSON.parse(JSON.stringify(DefaultAnatomy));
+                
+                // Reset character variables
+                const staff = GameState.staff[0];
+                staff.currentHoleDamage = 6;
+                staff.holeRedness = 0;
+                staff.currentGapeStretch = 0;
+                staff.currentGlobalY = 0;
+                staff.activeServiceTime = 0;
+                
+                // Reset customer morphs
+                const pm = GameState.dailyCustomers[0].traits.penisMorph;
+                pm.shaftWidth = 0;
+                pm.shaftCurve = 0;
+                pm.shaftLength = 0;
+                pm.glansWidth = 0;
+                pm.glansHeight = 0;
+                pm.testicleSize = 0;
+                pm.bodySlimness = 0;
+                pm.veinIntensity = 0.5;
+                pm.vein1Offset = 0;
+                pm.vein2Offset = 0;
+                pm.vein3Offset = 0;
+                pm.hairDensity = 0.5;
+                pm.speedMultiplier = 1.0;
+                pm.isUncut = false;
+                
+                syncUI();
+            });
+        }
+
         // State button handlers
         const stateBtns = {
-            'state-idle': { isServing: false, isCumming: false, isPissing: false, label: 'IDLE' },
-            'state-serving': { isServing: true, isCumming: false, isPissing: false, label: 'SERVING (THRUSTING)' },
-            'state-cumming': { isServing: true, isCumming: true, isPissing: false, label: 'CUMMING' },
-            'state-pissing': { isServing: true, isCumming: false, isPissing: true, label: 'PISSING' }
+            'state-idle': { isServing: false, isCumming: false, isPissing: false, label: 'BOŞTA' },
+            'state-serving': { isServing: true, isCumming: false, isPissing: false, label: 'İTİŞ' },
+            'state-cumming': { isServing: true, isCumming: true, isPissing: false, label: 'BOŞALMA' },
+            'state-pissing': { isServing: true, isCumming: false, isPissing: true, label: 'İŞEME' }
         };
         Object.keys(stateBtns).forEach(btnId => {
-            document.getElementById(btnId).addEventListener('click', (e) => {
-                document.querySelectorAll('.state-btn').forEach(btn => btn.classList.remove('active'));
-                e.target.classList.add('active');
-                
-                const state = stateBtns[btnId];
-                const staff = GameState.staff[0];
-                staff.isServing = state.isServing;
-                staff.isCumming = state.isCumming;
-                staff.isPissing = state.isPissing;
-                
-                document.getElementById('t-state').textContent = state.label;
-            });
+            const btnEl = document.getElementById(btnId);
+            if (btnEl) {
+                btnEl.addEventListener('click', (e) => {
+                    document.querySelectorAll('.state-btn').forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+                    
+                    const state = stateBtns[btnId];
+                    const staff = GameState.staff[0];
+                    staff.isServing = state.isServing;
+                    staff.isCumming = state.isCumming;
+                    staff.isPissing = state.isPissing;
+                    
+                    const tState = document.getElementById('t-state');
+                    if (tState) tState.textContent = state.label;
+                });
+            }
         });
+
         // Sliders & inputs bindings
         function bindSlider(inputId, valId, updateFn, suffix = "") {
             const input = document.getElementById(inputId);
             const valDisplay = document.getElementById(valId);
-            
-            input.addEventListener('input', (e) => {
-                let val = parseFloat(e.target.value);
-                valDisplay.textContent = val + suffix;
-                updateFn(val);
-            });
+            if (input && valDisplay) {
+                input.addEventListener('input', (e) => {
+                    let val = parseFloat(e.target.value);
+                    valDisplay.textContent = val + suffix;
+                    updateFn(val);
+                });
+            }
         }
         const staff = GameState.staff[0];
         const customer = GameState.dailyCustomers[0];
         const pm = customer.traits.penisMorph;
+
         // Phase Slider
         bindSlider('input-phase', 'val-phase', (val) => {
             staff.currentPhase = parseInt(val);
@@ -1047,11 +1101,18 @@ let customer = {
         // Race Slider (White / Black)
         const inputRace = document.getElementById('input-race');
         const valRace = document.getElementById('val-race');
-        inputRace.addEventListener('input', (e) => {
-            const isBlack = parseInt(e.target.value) === 1;
-            customer.type = isBlack ? "black" : "white";
-            valRace.textContent = isBlack ? "Siyahi (Black)" : "Beyaz (White)";
-        });
+        if (inputRace && valRace) {
+            inputRace.addEventListener('input', (e) => {
+                const isBlack = parseInt(e.target.value) === 1;
+                customer.type = isBlack ? "black" : "white";
+                valRace.textContent = isBlack ? "Siyahi (Black)" : "Beyaz (White)";
+                // Sync start menu presets
+                const btnWhite = document.getElementById('preset-white');
+                const btnBlack = document.getElementById('preset-black');
+                if (btnWhite) btnWhite.classList.toggle('active', !isBlack);
+                if (btnBlack) btnBlack.classList.toggle('active', isBlack);
+            });
+        }
         // Penis Geometries
         bindSlider('input-length', 'val-length', (val) => { pm.shaftLength = val; }, " px");
         bindSlider('input-width', 'val-width', (val) => { pm.shaftWidth = val; }, " px");
@@ -1069,18 +1130,31 @@ let customer = {
         bindSlider('input-cum-count', 'val-cum-count', (val) => { window.AnatomyConfig.cumDropCount = parseInt(val); });
         bindSlider('input-pee-count', 'val-pee-count', (val) => { window.AnatomyConfig.peeDropCount = parseInt(val); });
         // Toggles
-        document.getElementById('input-idle-only').addEventListener('change', (e) => {
-            document.querySelector('.staff-canvas').setAttribute('data-idle-only', e.target.checked ? 'true' : 'false');
-        });
-        document.getElementById('input-uncut').addEventListener('change', (e) => {
-            pm.isUncut = e.target.checked;
-        });
+        const inputIdleOnly = document.getElementById('input-idle-only');
+        if (inputIdleOnly) {
+            inputIdleOnly.addEventListener('change', (e) => {
+                document.querySelector('.staff-canvas').setAttribute('data-idle-only', e.target.checked ? 'true' : 'false');
+            });
+        }
+        const inputUncut = document.getElementById('input-uncut');
+        if (inputUncut) {
+            inputUncut.addEventListener('change', (e) => {
+                pm.isUncut = e.target.checked;
+                // Sync start menu presets
+                const btnUncut = document.getElementById('preset-uncut');
+                const btnCut = document.getElementById('preset-cut');
+                if (btnUncut) btnUncut.classList.toggle('active', e.target.checked);
+                if (btnCut) btnCut.classList.toggle('active', !e.target.checked);
+            });
+        }
         // Colors binding
         function bindColor(colorId, configKey) {
             const input = document.getElementById(colorId);
-            input.addEventListener('input', (e) => {
-                window.AnatomyConfig[configKey] = e.target.value;
-            });
+            if (input) {
+                input.addEventListener('input', (e) => {
+                    window.AnatomyConfig[configKey] = e.target.value;
+                });
+            }
         }
         bindColor('color-skin', 'cSkin');
         bindColor('color-skin-shadow', 'cSkinShadow');
@@ -1090,76 +1164,155 @@ let customer = {
         bindColor('color-outline', 'cOutline');
         // Sync UI inputs with current values (used during Reset)
         function syncUI() {
-            document.getElementById('input-phase').value = staff.currentPhase || 3;
-            document.getElementById('val-phase').textContent = staff.currentPhase || 3;
+            const elPhase = document.getElementById('input-phase');
+            if (elPhase) elPhase.value = staff.currentPhase || 3;
+            const elValPhase = document.getElementById('val-phase');
+            if (elValPhase) elValPhase.textContent = staff.currentPhase || 3;
             
-            document.getElementById('input-speed').value = pm.speedMultiplier;
-            document.getElementById('val-speed').textContent = pm.speedMultiplier.toFixed(2) + "x";
+            const elSpeed = document.getElementById('input-speed');
+            if (elSpeed) elSpeed.value = pm.speedMultiplier;
+            const elValSpeed = document.getElementById('val-speed');
+            if (elValSpeed) elValSpeed.textContent = pm.speedMultiplier.toFixed(2) + "x";
             
-            document.getElementById('input-slimness').value = pm.bodySlimness;
-            document.getElementById('val-slimness').textContent = pm.bodySlimness + " px";
+            const elSlimness = document.getElementById('input-slimness');
+            if (elSlimness) elSlimness.value = pm.bodySlimness;
+            const elValSlimness = document.getElementById('val-slimness');
+            if (elValSlimness) elValSlimness.textContent = pm.bodySlimness + " px";
             
-            document.getElementById('input-basehole').value = staff.baseHoleSize || 6;
-            document.getElementById('val-basehole').textContent = (staff.baseHoleSize || 6) + " px";
-            document.getElementById('input-race').value = customer.type === "black" ? 1 : 0;
-            document.getElementById('val-race').textContent = customer.type === "black" ? "Siyahi (Black)" : "Beyaz (White)";
+            const elBaseHole = document.getElementById('input-basehole');
+            if (elBaseHole) elBaseHole.value = staff.baseHoleSize || 6;
+            const elValBaseHole = document.getElementById('val-basehole');
+            if (elValBaseHole) elValBaseHole.textContent = (staff.baseHoleSize || 6) + " px";
             
-            document.getElementById('input-length').value = pm.shaftLength;
-            document.getElementById('val-length').textContent = pm.shaftLength + " px";
+            const elRace = document.getElementById('input-race');
+            if (elRace) elRace.value = customer.type === "black" ? 1 : 0;
+            const elValRace = document.getElementById('val-race');
+            if (elValRace) elValRace.textContent = customer.type === "black" ? "Siyahi (Black)" : "Beyaz (White)";
             
-            document.getElementById('input-width').value = pm.shaftWidth;
-            document.getElementById('val-width').textContent = pm.shaftWidth + " px";
+            const elLength = document.getElementById('input-length');
+            if (elLength) elLength.value = pm.shaftLength;
+            const elValLength = document.getElementById('val-length');
+            if (elValLength) elValLength.textContent = pm.shaftLength + " px";
             
-            document.getElementById('input-curve').value = pm.shaftCurve;
-            document.getElementById('val-curve').textContent = pm.shaftCurve + " px";
-            document.getElementById('input-glans-w').value = pm.glansWidth;
-            document.getElementById('val-glans-w').textContent = pm.glansWidth + " px";
-            document.getElementById('input-glans-h').value = pm.glansHeight;
-            document.getElementById('val-glans-h').textContent = pm.glansHeight + " px";
-            document.getElementById('input-testicle').value = pm.testicleSize;
-            document.getElementById('val-testicle').textContent = pm.testicleSize + " px";
-            document.getElementById('input-vein').value = pm.veinIntensity;
-            document.getElementById('val-vein').textContent = pm.veinIntensity.toFixed(2);
-            document.getElementById('input-hair').value = pm.hairDensity;
-            document.getElementById('val-hair').textContent = pm.hairDensity.toFixed(2);
+            const elWidth = document.getElementById('input-width');
+            if (elWidth) elWidth.value = pm.shaftWidth;
+            const elValWidth = document.getElementById('val-width');
+            if (elValWidth) elValWidth.textContent = pm.shaftWidth + " px";
             
-            document.getElementById('input-jiggle-y').value = window.AnatomyConfig.impactMultiplierY;
-            document.getElementById('val-jiggle-y').textContent = window.AnatomyConfig.impactMultiplierY.toFixed(2);
-            document.getElementById('input-jiggle-x').value = window.AnatomyConfig.impactMultiplierX;
-            document.getElementById('val-jiggle-x').textContent = window.AnatomyConfig.impactMultiplierX.toFixed(2);
-            document.getElementById('input-stretch').value = window.AnatomyConfig.holeStretchMultiplier;
-            document.getElementById('val-stretch').textContent = window.AnatomyConfig.holeStretchMultiplier.toFixed(2);
-            document.getElementById('input-cum-count').value = window.AnatomyConfig.cumDropCount;
-            document.getElementById('val-cum-count').textContent = window.AnatomyConfig.cumDropCount;
-            document.getElementById('input-pee-count').value = window.AnatomyConfig.peeDropCount;
-            document.getElementById('val-pee-count').textContent = window.AnatomyConfig.peeDropCount;
-            document.getElementById('input-idle-only').checked = false;
-            document.querySelector('.staff-canvas').setAttribute('data-idle-only', 'false');
-            document.getElementById('input-uncut').checked = pm.isUncut;
+            const elCurve = document.getElementById('input-curve');
+            if (elCurve) elCurve.value = pm.shaftCurve;
+            const elValCurve = document.getElementById('val-curve');
+            if (elValCurve) elValCurve.textContent = pm.shaftCurve + " px";
+            
+            const elGlansW = document.getElementById('input-glans-w');
+            if (elGlansW) elGlansW.value = pm.glansWidth;
+            const elValGlansW = document.getElementById('val-glans-w');
+            if (elValGlansW) elValGlansW.textContent = pm.glansWidth + " px";
+            
+            const elGlansH = document.getElementById('input-glans-h');
+            if (elGlansH) elGlansH.value = pm.glansHeight;
+            const elValGlansH = document.getElementById('val-glans-h');
+            if (elValGlansH) elValGlansH.textContent = pm.glansHeight + " px";
+            
+            const elTesticle = document.getElementById('input-testicle');
+            if (elTesticle) elTesticle.value = pm.testicleSize;
+            const elValTesticle = document.getElementById('val-testicle');
+            if (elValTesticle) elValTesticle.textContent = pm.testicleSize + " px";
+            
+            const elVein = document.getElementById('input-vein');
+            if (elVein) elVein.value = pm.veinIntensity;
+            const elValVein = document.getElementById('val-vein');
+            if (elValVein) elValVein.textContent = pm.veinIntensity.toFixed(2);
+            
+            const elHair = document.getElementById('input-hair');
+            if (elHair) elHair.value = pm.hairDensity;
+            const elValHair = document.getElementById('val-hair');
+            if (elValHair) elValHair.textContent = pm.hairDensity.toFixed(2);
+            
+            const elJiggleY = document.getElementById('input-jiggle-y');
+            if (elJiggleY) elJiggleY.value = window.AnatomyConfig.impactMultiplierY;
+            const elValJiggleY = document.getElementById('val-jiggle-y');
+            if (elValJiggleY) elValJiggleY.textContent = window.AnatomyConfig.impactMultiplierY.toFixed(2);
+            
+            const elJiggleX = document.getElementById('input-jiggle-x');
+            if (elJiggleX) elJiggleX.value = window.AnatomyConfig.impactMultiplierX;
+            const elValJiggleX = document.getElementById('val-jiggle-x');
+            if (elValJiggleX) elValJiggleX.textContent = window.AnatomyConfig.impactMultiplierX.toFixed(2);
+            
+            const elStretch = document.getElementById('input-stretch');
+            if (elStretch) elStretch.value = window.AnatomyConfig.holeStretchMultiplier;
+            const elValStretch = document.getElementById('val-stretch');
+            if (elValStretch) elValStretch.textContent = window.AnatomyConfig.holeStretchMultiplier.toFixed(2);
+            
+            const elCumCount = document.getElementById('input-cum-count');
+            if (elCumCount) elCumCount.value = window.AnatomyConfig.cumDropCount;
+            const elValCumCount = document.getElementById('val-cum-count');
+            if (elValCumCount) elValCumCount.textContent = window.AnatomyConfig.cumDropCount;
+            
+            const elPeeCount = document.getElementById('input-pee-count');
+            if (elPeeCount) elPeeCount.value = window.AnatomyConfig.peeDropCount;
+            const elValPeeCount = document.getElementById('val-pee-count');
+            if (elValPeeCount) elValPeeCount.textContent = window.AnatomyConfig.peeDropCount;
+            
+            const elIdleOnly = document.getElementById('input-idle-only');
+            if (elIdleOnly) elIdleOnly.checked = false;
+            
+            const canvasEl = document.querySelector('.staff-canvas');
+            if (canvasEl) canvasEl.setAttribute('data-idle-only', 'false');
+            
+            const elUncut = document.getElementById('input-uncut');
+            if (elUncut) elUncut.checked = pm.isUncut;
+            
+            // Sync start presets UI too
+            const btnWhite = document.getElementById('preset-white');
+            const btnBlack = document.getElementById('preset-black');
+            if (btnWhite) btnWhite.classList.toggle('active', customer.type !== "black");
+            if (btnBlack) btnBlack.classList.toggle('active', customer.type === "black");
+            const btnUncut = document.getElementById('preset-uncut');
+            const btnCut = document.getElementById('preset-cut');
+            if (btnUncut) btnUncut.classList.toggle('active', pm.isUncut);
+            if (btnCut) btnCut.classList.toggle('active', !pm.isUncut);
+            
             // Colors
-            document.getElementById('color-skin').value = window.AnatomyConfig.cSkin;
-            document.getElementById('color-skin-shadow').value = window.AnatomyConfig.cSkinShadow;
-            document.getElementById('color-hole').value = window.AnatomyConfig.cHole;
-            document.getElementById('color-hole-shadow').value = window.AnatomyConfig.cHoleShadow;
-            document.getElementById('color-hair').value = window.AnatomyConfig.cHair;
-            document.getElementById('color-outline').value = window.AnatomyConfig.cOutline;
+            const elCSkin = document.getElementById('color-skin');
+            if (elCSkin) elCSkin.value = window.AnatomyConfig.cSkin;
+            const elCSkinShadow = document.getElementById('color-skin-shadow');
+            if (elCSkinShadow) elCSkinShadow.value = window.AnatomyConfig.cSkinShadow;
+            const elCHole = document.getElementById('color-hole');
+            if (elCHole) elCHole.value = window.AnatomyConfig.cHole;
+            const elCHoleShadow = document.getElementById('color-hole-shadow');
+            if (elCHoleShadow) elCHoleShadow.value = window.AnatomyConfig.cHoleShadow;
+            const elCHair = document.getElementById('color-hair');
+            if (elCHair) elCHair.value = window.AnatomyConfig.cHair;
+            const elCOutline = document.getElementById('color-outline');
+            if (elCOutline) elCOutline.value = window.AnatomyConfig.cOutline;
+            
             // State active trigger
             document.querySelectorAll('.state-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('state-idle').classList.add('active');
-            document.getElementById('t-state').textContent = 'IDLE';
+            const elStateIdle = document.getElementById('state-idle');
+            if (elStateIdle) elStateIdle.classList.add('active');
+            const elTState = document.getElementById('t-state');
+            if (elTState) elTState.textContent = 'BOŞTA';
         }
         // Initialize UI values
         syncUI();
         // --- 4. RENDER TELEMETRY UPDATE ---
-        // Updates real-time telemetry variables shown below the canvas
+        // Updates real-time telemetry variables (safely guarded)
         function updateTelemetry(vals) {
-            document.getElementById('t-offset').textContent = vals.offset.toFixed(2) + " px";
-            document.getElementById('t-holesize').textContent = vals.holesize.toFixed(2) + " px";
-            document.getElementById('t-gape').textContent = vals.gape.toFixed(2);
-            document.getElementById('t-jiggle-y').textContent = vals.jiggleY.toFixed(2) + " px";
-            document.getElementById('t-jiggle-x').textContent = vals.jiggleX.toFixed(2) + " px";
-            document.getElementById('t-suction').textContent = vals.suction.toFixed(2);
-            document.getElementById('t-friction').textContent = vals.friction.toFixed(2);
+            const elOffset = document.getElementById('t-offset');
+            if (elOffset) elOffset.textContent = vals.offset.toFixed(2) + " px";
+            const elHolesize = document.getElementById('t-holesize');
+            if (elHolesize) elHolesize.textContent = vals.holesize.toFixed(2) + " px";
+            const elGape = document.getElementById('t-gape');
+            if (elGape) elGape.textContent = vals.gape.toFixed(2);
+            const elJiggleY = document.getElementById('t-jiggle-y');
+            if (elJiggleY) elJiggleY.textContent = vals.jiggleY.toFixed(2) + " px";
+            const elJiggleX = document.getElementById('t-jiggle-x');
+            if (elJiggleX) elJiggleX.textContent = vals.jiggleX.toFixed(2) + " px";
+            const elSuction = document.getElementById('t-suction');
+            if (elSuction) elSuction.textContent = vals.suction.toFixed(2);
+            const elFriction = document.getElementById('t-friction');
+            if (elFriction) elFriction.textContent = vals.friction.toFixed(2);
         }
         // --- 5. THE ORIGINAL CANVAS RENDERING ENGINE ---
         // EXACT copy of the v3 rendering function from index.html (slightly modified to push telemetry data)
