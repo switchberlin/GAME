@@ -7,18 +7,18 @@
     
     <style>
         :root {
-            --bg-color: #000000; /* OLED True Black */
-            --panel-bg: rgba(28, 28, 30, 0.75); /* iOS Secondary System Grouped Background */
-            --card-bg: rgba(44, 44, 46, 0.75); /* iOS Tertiary System Grouped Background */
-            --border-color: rgba(255, 255, 255, 0.12); /* Apple thin divider/border */
-            --primary: #0a84ff; /* iOS dark mode system blue */
-            --primary-glow: rgba(10, 132, 255, 0.15);
-            --accent: #ff375f; /* iOS dark mode system pink */
-            --accent-glow: rgba(255, 55, 95, 0.15);
-            --text-color: #ffffff; /* System white text */
-            --text-muted: #8e8e93; /* System gray text */
-            --active-bg: rgba(255, 255, 255, 0.08);
-            --neon-pink: #ff453a; /* iOS dark mode system red */
+            --bg-color: #f2f2f7; /* iOS Light System Grouped Background */
+            --panel-bg: rgba(255, 255, 255, 0.65); /* Frosted white glass */
+            --card-bg: rgba(255, 255, 255, 0.45); /* Lighter glass for nested cards */
+            --border-color: rgba(0, 0, 0, 0.06); /* Ultra-subtle light divider */
+            --primary: #007aff; /* iOS light mode system blue */
+            --primary-glow: rgba(0, 122, 255, 0.15);
+            --accent: #ff2d55; /* iOS light mode system pink */
+            --accent-glow: rgba(255, 45, 85, 0.12);
+            --text-color: #1c1c1e; /* iOS label (primary) */
+            --text-muted: #8e8e93; /* iOS secondary label */
+            --active-bg: rgba(0, 0, 0, 0.04);
+            --neon-pink: #ff3b30; /* iOS light mode system red */
         }
         * {
             box-sizing: border-box;
@@ -30,7 +30,7 @@
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro Icons", system-ui, -apple-system, sans-serif !important;
         }
         body {
-            background-color: #000000;
+            background-color: #e5e5ea;
             color: var(--text-color);
             min-height: 100vh;
             display: flex;
@@ -47,10 +47,10 @@
             max-height: 100vh;
             max-width: calc(100vh * 9 / 16);
             position: relative;
-            background: linear-gradient(180deg, #09090b 0%, #000000 100%);
+            background: var(--bg-color);
             border-radius: 40px;
-            border: 2px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.12);
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -72,7 +72,7 @@
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
             z-index: 1000;
-            background: #000000;
+            background: var(--bg-color);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -122,7 +122,7 @@
             color: #ffffff;
             cursor: pointer;
             transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 8px rgba(255, 45, 85, 0.2);
         }
         .menu-btn:hover {
             opacity: 0.9;
@@ -160,6 +160,8 @@
             justify-content: space-between;
             align-items: center;
             background: var(--panel-bg);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
             border-bottom: 1px solid var(--border-color);
             z-index: 100;
         }
@@ -188,7 +190,7 @@
             transition: all 0.2s ease;
         }
         .icon-btn:hover {
-            color: #fff;
+            color: var(--text-color);
         }
         .icon-btn.active {
             color: var(--accent);
@@ -198,7 +200,7 @@
         .canvas-section {
             width: 100%;
             aspect-ratio: 1 / 1;
-            background: #000;
+            background: #1c1c1e;
             position: relative;
             border-bottom: 1px solid var(--border-color);
             display: flex;
@@ -221,7 +223,7 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            background: #050508;
+            background: var(--bg-color);
             overflow: hidden;
         }
         .tab-bar-mobile {
@@ -242,15 +244,15 @@
             transition: all 0.3s ease;
             text-align: center;
             border-bottom: 2px solid transparent;
-            font-family: 'Outfit', sans-serif;
+            /* inherits system font */
             text-transform: uppercase;
         }
         .tab-btn-mobile:hover {
-            color: #fff;
+            color: var(--text-color);
         }
         .tab-btn-mobile.active {
-            color: #fff;
-            border-bottom-color: #fff;
+            color: var(--primary);
+            border-bottom-color: var(--primary);
         }
         .tab-content-mobile {
             flex: 1;
@@ -299,7 +301,7 @@
         .slider-input {
             width: 100%;
             -webkit-appearance: none;
-            background: rgba(255,255,255,0.04);
+            background: rgba(0, 0, 0, 0.06);
             height: 2px;
             outline: none;
             transition: background 0.3s;
@@ -310,7 +312,7 @@
             width: 10px;
             height: 10px;
             border-radius: 50%;
-            background: #fff;
+            background: var(--primary);
             cursor: pointer;
             transition: transform 0.15s;
         }
@@ -347,7 +349,7 @@
             position: absolute;
             cursor: pointer;
             top: 0; left: 0; right: 0; bottom: 0;
-            background-color: transparent;
+            background-color: rgba(0, 0, 0, 0.08);
             border: 1px solid var(--border-color);
             transition: .3s;
             border-radius: 30px;
@@ -364,10 +366,11 @@
             border-radius: 50%;
         }
         input:checked + .switch-slider {
-            border-color: #fff;
+            border-color: var(--primary);
+            background-color: var(--primary);
         }
         input:checked + .switch-slider:before {
-            background-color: #fff;
+            background-color: #ffffff;
             transform: translateX(18px);
         }
         .btn-grid {
@@ -390,13 +393,13 @@
             text-align: center;
         }
         .state-btn:hover {
-            color: #fff;
-            border-color: rgba(255, 255, 255, 0.15);
+            color: var(--text-color);
+            border-color: rgba(0, 0, 0, 0.12);
         }
         .state-btn.active {
-            border-color: #fff;
-            color: #fff;
-            background: rgba(255, 255, 255, 0.02);
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--primary-glow);
         }
         .color-pickers {
             display: grid;
@@ -430,7 +433,7 @@
             padding: 0;
         }
         .color-input::-webkit-color-swatch {
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             border-radius: 50%;
         }
         /* Scrollbar custom styling */
@@ -441,14 +444,14 @@
             background: transparent;
         }
         ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(0, 0, 0, 0.08);
             border-radius: 2px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.15);
         }
 
-        /* iOS 26 Dark Mode Dashboard & UI Styles */
+        /* iOS 26 Light Glass Dashboard & UI Styles */
         .game-dashboard {
             padding: 16px 24px;
             display: flex;
@@ -456,8 +459,8 @@
             align-items: center;
             background: var(--panel-bg);
             border-bottom: 1px solid var(--border-color);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
         }
         .db-stat {
             font-size: 0.85rem;
@@ -466,7 +469,7 @@
             letter-spacing: 0.5px;
         }
         .db-stat span {
-            color: #ffffff;
+            color: var(--text-color);
             font-weight: 700;
             margin-left: 4px;
         }
@@ -498,14 +501,14 @@
             position: relative;
             overflow: hidden;
             transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
         }
         .staff-slot.hired {
             background: var(--panel-bg);
         }
         .staff-slot.drag-over {
             border-color: var(--primary);
-            box-shadow: 0 0 12px var(--primary-glow);
+            box-shadow: 0 0 16px var(--primary-glow);
             transform: scale(1.03);
         }
         .slot-hire-btn {
@@ -522,7 +525,7 @@
             justify-content: center;
             cursor: pointer;
             transition: all 0.15s ease;
-            box-shadow: 0 4px 8px rgba(10, 132, 255, 0.3);
+            box-shadow: 0 2px 8px rgba(0, 122, 255, 0.25);
         }
         .slot-hire-btn:hover {
             transform: scale(1.1);
@@ -587,7 +590,7 @@
             background: var(--panel-bg);
             border: 1px solid var(--border-color);
             border-radius: 16px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -632,9 +635,9 @@
         .modal-overlay {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.65);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
+            background: rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
             z-index: 2000;
             display: flex;
             align-items: center;
@@ -650,10 +653,12 @@
         .modal-content-card {
             width: 85%;
             max-width: 320px;
-            background: var(--panel-bg);
-            border: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(40px) saturate(200%);
+            -webkit-backdrop-filter: blur(40px) saturate(200%);
+            border: 1px solid rgba(255, 255, 255, 0.6);
             border-radius: 24px;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
             padding: 20px;
             display: flex;
             flex-direction: column;
@@ -712,7 +717,7 @@
             border: 1px solid var(--border-color);
             border-radius: 10px;
             overflow: hidden;
-            background: var(--panel-bg);
+            background: #1c1c1e;
             margin-bottom: 4px;
             flex-shrink: 0;
         }
@@ -789,7 +794,7 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.15s ease;
-            box-shadow: 0 4px 8px rgba(10, 132, 255, 0.3);
+            box-shadow: 0 2px 8px rgba(0, 122, 255, 0.25);
         }
         .db-btn:hover {
             opacity: 0.9;
@@ -860,7 +865,7 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.03);
             max-height: 200px;
             overflow-y: auto;
         }
@@ -1021,7 +1026,7 @@
                         <!-- Dynamically filled candidate cards -->
                     </div>
                     <div class="modal-footer" style="display: flex; justify-content: center; width: 100%; margin-top: 8px;">
-                        <button id="modal-hire-action-btn" class="menu-btn primary" onclick="hireSelectedCandidate()" style="margin: 0; width: 100%; padding: 12px; font-size: 0.95rem; border-radius: 12px; border: none; box-shadow: 0 4px 12px rgba(10, 132, 255, 0.3);">İşe Al</button>
+                        <button id="modal-hire-action-btn" class="menu-btn primary" onclick="hireSelectedCandidate()" style="margin: 0; width: 100%; padding: 12px; font-size: 0.95rem; border-radius: 12px; border: none; box-shadow: 0 2px 8px rgba(0, 122, 255, 0.25);">İşe Al</button>
                     </div>
                 </div>
             </div>
@@ -1826,7 +1831,7 @@
                 if (candidate.id === selectedCandidateId) {
                     card.style.borderColor = 'var(--primary)';
                     card.style.transform = 'scale(1.03)';
-                    card.style.boxShadow = '0 0 12px rgba(10, 132, 255, 0.4)';
+                    card.style.boxShadow = '0 0 16px rgba(0, 122, 255, 0.3)';
                 } else {
                     card.style.borderColor = 'var(--border-color)';
                     card.style.transform = 'none';
