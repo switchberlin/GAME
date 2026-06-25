@@ -10,24 +10,30 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --bg-grass: #a9e34b; /* Light casual grass green */
-            --bg-grass-dark: #82c91e;
-            --path-color: #faf6ee; /* Warm sand/path */
-            --border-color: #000000;
-            --btn-yellow: #fcc419;
-            --btn-yellow-shadow: #b8860b;
-            --btn-green: #51cf66;
-            --btn-green-shadow: #2b8a3e;
-            --btn-blue: #339af0;
-            --btn-blue-shadow: #1c7ed6;
-            --panel-bg: #fffbf4; /* Tycoon warm dialog bg */
-            --text-color: #2b1d11; /* Warm dark brown text */
-            --text-muted: #8b7355;
-            --card-bg: #ffffff;
+            /* Luxury Sensual Obsidian and Gold theme */
+            --bg-grass: #060506;          /* Deepest wine-tinted obsidian */
+            --bg-grass-dark: #020102;     /* Pure rich black */
+            --path-color: #0d0b0d;        /* Deep matte plum/charcoal */
+            --border-color: #251e22;      /* Delicate dark rose-grey border */
+            --border-hover: #c5a880;      /* Champagne Gold accent */
+            
+            --btn-yellow: #c5a880;        /* Champagne Gold primary */
+            --btn-yellow-shadow: #8c7353;
+            
+            --btn-green: #e0536c;         /* Velvet Crimson (Erotic alternative to green) */
+            --btn-green-shadow: #9e2a3f;
+            
+            --btn-blue: #7053e0;          /* Passion Purple (Erotic alternative to blue) */
+            --btn-blue-shadow: #4d36a3;
+            
+            --panel-bg: #0d0b0d;          /* Soft dark panels */
+            --text-color: #f6f3f5;        /* Soft silk white */
+            --text-muted: #9c8e97;        /* Muted lavender-grey */
+            --card-bg: #0d0b0d;
             
             --cSkin: #eab29a;
             --cSkinShadow: #d49479;
@@ -44,12 +50,12 @@
             user-select: none;
             -webkit-user-select: none;
             outline: none;
-            font-family: 'Outfit', 'Poppins', -apple-system, sans-serif;
+            font-family: 'Montserrat', sans-serif;
         }
 
         body {
             color: var(--text-color);
-            background-color: #2b1d11;
+            background-color: #020102;
             height: 100vh;
             height: 100svh;
             min-height: 100vh;
@@ -60,7 +66,7 @@
             overflow: hidden;
         }
 
-        /* Mobile Viewport Container - Flat styling */
+        /* Mobile Viewport Container - Sleek Matte Obsidian Console */
         .mobile-frame {
             width: 100%;
             height: 100%;
@@ -72,11 +78,11 @@
             position: relative;
             background: var(--bg-grass);
             border-radius: 40px;
-            border: 1px solid rgba(0, 0, 0, 0.15);
+            border: 1px solid var(--border-color);
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.95);
         }
 
         @media (max-width: 480px) {
@@ -100,47 +106,72 @@
             padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
         }
 
-        /* Flat UI Button Styles */
+        /* Sleek Button Styles */
         .ty-btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             border: none;
-            font-weight: 900;
+            font-weight: 600;
             color: #ffffff;
             cursor: pointer;
-            transition: transform 0.05s, opacity 0.05s;
+            transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
             text-transform: uppercase;
+            letter-spacing: 2px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.95rem;
+            border-radius: 12px;
         }
         .ty-btn:active {
-            transform: scale(0.95);
+            transform: scale(0.96);
             opacity: 0.9;
         }
 
         .ty-btn-yellow {
-            background: var(--btn-yellow);
-            border-radius: 14px;
+            background: linear-gradient(135deg, var(--btn-yellow), #8c7353);
+            border: 1px solid rgba(197, 168, 128, 0.3);
+            box-shadow: 0 4px 14px rgba(197, 168, 128, 0.15);
+            color: #000000; /* Dark text for contrast on gold button */
+            font-weight: 700;
+        }
+        .ty-btn-yellow:hover {
+            background: linear-gradient(135deg, #e2d1b9, var(--btn-yellow));
+            box-shadow: 0 6px 20px rgba(197, 168, 128, 0.25);
         }
 
         .ty-btn-green {
-            background: var(--btn-green);
-            border-radius: 14px;
+            background: linear-gradient(135deg, var(--btn-green), var(--btn-green-shadow));
+            border: 1px solid rgba(224, 83, 108, 0.3);
+            box-shadow: 0 4px 14px rgba(224, 83, 108, 0.15);
+        }
+        .ty-btn-green:hover {
+            background: linear-gradient(135deg, #f06a83, var(--btn-green));
+            box-shadow: 0 6px 20px rgba(224, 83, 108, 0.25);
         }
         .ty-btn-green:disabled {
-            background: #cccccc;
+            background: #1a1518;
+            border: 1px solid var(--border-color);
+            box-shadow: none;
+            color: var(--text-muted);
             cursor: not-allowed;
-            opacity: 0.6;
+            opacity: 0.5;
         }
 
         .ty-btn-blue {
-            background: var(--btn-blue);
-            border-radius: 14px;
+            background: linear-gradient(135deg, var(--btn-blue), var(--btn-blue-shadow));
+            border: 1px solid rgba(112, 83, 224, 0.3);
+            box-shadow: 0 4px 14px rgba(112, 83, 224, 0.15);
+        }
+        .ty-btn-blue:hover {
+            background: linear-gradient(135deg, #8b73f0, var(--btn-blue));
+            box-shadow: 0 6px 20px rgba(112, 83, 224, 0.25);
         }
 
         .ty-btn-square {
             width: 50px;
             height: 50px;
             flex-shrink: 0;
+            border-radius: 14px;
         }
 
         /* Top Navigation Bar */
@@ -148,99 +179,214 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-left: 20px;
-            padding-right: 20px;
+            padding: 0 20px;
+            height: 60px;
             z-index: 100;
-            background: rgba(0,0,0,0.05);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            background: rgba(6, 5, 6, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(197, 168, 128, 0.1);
         }
 
-        .ty-badge {
-            background: #ffffff;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            border-radius: 20px;
-            height: 40px;
+        .ty-btn-square-minimal {
+            background: transparent;
+            border: none;
+            width: 36px;
+            height: 36px;
             display: flex;
             align-items: center;
-            padding: 0 16px;
-            gap: 8px;
-            font-weight: 800;
-            position: relative;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--btn-yellow);
+            transition: all 0.2s ease;
+        }
+        .ty-btn-square-minimal:hover {
+            color: #ffffff;
+            transform: scale(1.05);
+        }
+        .ty-btn-square-minimal:active {
+            transform: scale(0.95);
         }
 
-        /* Playfield / Room layout */
+
+
+        /* Playfield / Room layout - Erotic Radial Velvet Glow */
         .ty-playfield {
             flex: 1;
             position: relative;
-            background: var(--bg-grass);
+            background: radial-gradient(circle at center, #1b1016 0%, #060506 100%);
             overflow: hidden;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
         }
 
-        /* Grassy pathways styling */
-        .ty-playfield::before {
-            content: '';
-            position: absolute;
-            top: 25%; left: 0; right: 0; height: 50%;
-            background: var(--path-color);
-            border-top: 4px dashed rgba(0,0,0,0.06);
-            border-bottom: 4px dashed rgba(0,0,0,0.06);
-            z-index: 1;
-        }
-
         .ty-rooms-grid {
             position: relative;
             z-index: 2;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-            padding: 16px;
+            display: flex;
+            flex-direction: row;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+            gap: 0px;
+            padding: 0px;
             margin-top: 8px;
+            width: 100%;
+            cursor: grab;
+        }
+        .ty-rooms-grid:active {
+            cursor: grabbing;
+        }
+        .ty-rooms-grid::-webkit-scrollbar {
+            display: none; /* Chrome, Safari and Opera */
         }
 
-        /* Room/Slot card - Flat styling */
+        /* Room/Slot card - Minimal elegant style */
         .ty-room-card {
-            background: var(--card-bg);
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            border-radius: 24px;
-            aspect-ratio: 1 / 1.15;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+            background: transparent;
+            border: none;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
-            padding: 10px;
+            padding: 10px 24px;
             position: relative;
             cursor: pointer;
-            transition: transform 0.1s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.2s, box-shadow 0.2s;
+            transition: transform 0.1s cubic-bezier(0.25, 0.8, 0.25, 1);
+            
+            /* Carousel overrides */
+            flex: 0 0 100%;
+            width: 100%;
+            scroll-snap-align: start;
+            border-radius: 0;
+            aspect-ratio: auto;
+            height: auto;
         }
         .ty-room-card:active {
-            transform: scale(0.97);
+            transform: scale(0.98);
         }
 
         .ty-room-card.locked {
-            background: rgba(255, 255, 255, 0.7);
-            border-style: dashed;
-            border-width: 2px;
+            background: rgba(13, 11, 13, 0.4);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            width: calc(100% - 48px);
+            margin: 0 auto;
             justify-content: center;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
+            height: 380px; /* Locked slots need a default height */
+            transition: all 0.3s ease;
+        }
+        .ty-room-card.locked:hover {
+            border-color: var(--border-hover);
+            background: rgba(197, 168, 128, 0.03);
+            box-shadow: 0 8px 32px rgba(197, 168, 128, 0.05);
+        }
+
+        /* Carousel Navigation and Indicators styling */
+        .carousel-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 44px;
+            height: 44px;
+            background: transparent;
+            border: 1px solid rgba(197, 168, 128, 0.2);
+            border-radius: 50%;
+            color: var(--gold-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: none;
+            transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .carousel-nav-btn:hover {
+            border-color: var(--border-hover);
+            color: var(--text-color);
+            background: rgba(197, 168, 128, 0.05);
+            box-shadow: 0 0 15px rgba(197, 168, 128, 0.2);
+        }
+        .carousel-nav-btn:active {
+            transform: translateY(-50%) scale(0.9);
+        }
+        .carousel-nav-btn.prev-btn {
+            left: 16px;
+        }
+        .carousel-nav-btn.next-btn {
+            right: 16px;
+        }
+        .carousel-nav-btn:disabled {
+            opacity: 0.1 !important;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+        .ty-carousel-indicators {
+            display: flex;
+            gap: 12px;
+            height: 90px;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 14px;
+            margin-bottom: 14px;
+            z-index: 5;
+            padding: 0 20px;
+        }
+        .staff-spot-card {
+            flex: 0 0 calc((100% - 36px) / 4);
+            aspect-ratio: 1 / 1.15;
+            border-radius: 14px;
+            border: 1px solid var(--border-color);
+            background: rgba(13, 11, 13, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            position: relative;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-sizing: border-box;
+            overflow: hidden;
+            transition: all 0.25s ease;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+        }
+        .staff-spot-card.active {
+            border: 1px solid var(--btn-yellow);
+            box-shadow: 0 0 12px rgba(197, 168, 128, 0.25);
+        }
+        .staff-spot-card.serving {
+            border-color: var(--btn-green);
+            box-shadow: 0 0 12px rgba(224, 83, 108, 0.25);
+        }
+        .staff-spot-card .staff-avatar-mini {
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+            object-fit: cover;
+            display: block;
+            pointer-events: none;
         }
 
         .room-title {
-            font-weight: 800;
-            font-size: 0.8rem;
+            font-weight: 500;
+            font-size: 1rem;
             color: var(--text-color);
             text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'Cormorant Garamond', serif;
         }
 
         .room-avatar-circle {
             width: 50px;
             height: 50px;
-            border-radius: 50%;
-            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -250,18 +396,21 @@
         }
 
         .room-status {
-            font-size: 0.7rem;
-            font-weight: 800;
+            font-size: 0.8rem;
+            font-weight: 500;
             text-transform: uppercase;
+            font-family: 'Cormorant Garamond', serif;
+            letter-spacing: 1px;
+            font-style: italic;
         }
 
         /* Circular Progress Indicator on Playfield cards */
         .room-progress-circle {
             position: absolute;
-            top: 6px;
-            right: 6px;
-            width: 28px;
-            height: 28px;
+            top: 10px;
+            right: 24px;
+            width: 32px;
+            height: 32px;
         }
         .room-progress-circle svg {
             width: 100%;
@@ -270,13 +419,13 @@
         }
         .room-progress-circle circle {
             fill: none;
-            stroke-width: 4;
+            stroke-width: 2.5;
         }
         .room-progress-circle .bg-ring {
-            stroke: #e9ecef;
+            stroke: var(--border-color);
         }
         .room-progress-circle .fill-ring {
-            stroke: var(--btn-green);
+            stroke: var(--btn-yellow);
             stroke-dasharray: 88;
             stroke-dashoffset: 88;
             transition: stroke-dashoffset 0.1s linear;
@@ -285,18 +434,21 @@
         /* Floating Activity Icon Bubble */
         .room-bubble {
             position: absolute;
-            top: -18px;
+            top: -12px;
             left: 50%;
             transform: translateX(-50%);
-            background: #ffffff;
-            border: 1px solid rgba(0, 0, 0, 0.15);
-            border-radius: 12px;
-            padding: 2px 8px;
-            font-size: 0.65rem;
-            font-weight: 900;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background: rgba(13, 11, 13, 0.95);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 4px 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--gold-primary);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
             z-index: 5;
             white-space: nowrap;
+            letter-spacing: 0.5px;
         }
 
         /* Customer queue & pathing */
@@ -308,64 +460,55 @@
         }
 
         .ty-customer-avatar {
-            position: absolute;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
-            transition: left 1.2s cubic-bezier(0.25, 1, 0.5, 1), top 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+            touch-action: pan-x;
         }
 
         .ty-queue-area {
             position: relative;
             z-index: 2;
-            background: rgba(0,0,0,0.04);
-            border-top: 1px solid rgba(0, 0, 0, 0.08);
-            padding: 14px;
+            background: rgba(6, 5, 6, 0.4);
+            border-top: 1px solid var(--border-color);
+            padding: 16px 20px;
         }
         .ty-queue-title {
-            font-size: 0.75rem;
-            font-weight: 800;
+            font-size: 0.85rem;
+            font-weight: 500;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 6px;
-            color: var(--text-color);
-            opacity: 0.75;
+            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+            color: var(--gold-primary);
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
         }
         .ty-queue-slots {
             display: flex;
-            gap: 10px;
-            height: 52px;
+            gap: 12px;
+            height: 90px;
             align-items: center;
             overflow-x: auto;
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+            scroll-snap-type: x mandatory;
+            touch-action: pan-x;
+        }
+        .ty-queue-slots::-webkit-scrollbar {
+            display: none; /* Chrome, Safari and Opera */
         }
         .queue-spot {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            border: 2px dashed rgba(0,0,0,0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            color: var(--text-muted);
-            transition: border-color 0.2s, box-shadow 0.2s;
-            cursor: pointer;
+            scroll-snap-align: start;
         }
 
-        /* Bottom Bar UI - Flat design */
+        /* Bottom Bar UI - Sleek Console Panel */
         .ty-bottom-bar {
-            background: var(--panel-bg);
-            border-top: 1px solid rgba(0, 0, 0, 0.08);
+            background: rgba(6, 5, 6, 0.9);
+            border-top: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
             gap: 12px;
-            padding: 12px 20px;
+            padding: 16px 20px;
             z-index: 100;
         }
 
@@ -376,11 +519,13 @@
             gap: 16px;
         }
 
-        /* Dialog / Modal Overlays - Flat Design */
+        /* Dialog / Modal Overlays - Premium Dark Styling */
         .ty-modal-overlay {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(43, 29, 17, 0.4);
+            background: rgba(2, 1, 2, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             z-index: 2000;
             display: flex;
             align-items: center;
@@ -397,17 +542,17 @@
         .ty-modal-card {
             width: 88%;
             max-width: 340px;
-            background: var(--panel-bg);
-            border: 1px solid rgba(0,0,0,0.1);
-            border-radius: 28px;
-            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.15);
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.03);
             padding: 24px;
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 18px;
             position: relative;
-            transform: scale(0.9);
-            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: scale(0.92);
+            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.15);
         }
         .ty-modal-overlay.active .ty-modal-card {
             transform: scale(1);
@@ -415,50 +560,63 @@
 
         .modal-close-btn {
             position: absolute;
-            right: 12px;
-            top: 12px;
+            right: 16px;
+            top: 16px;
             width: 32px;
             height: 32px;
-            background: rgba(0,0,0,0.06);
-            border: none;
-            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
             color: var(--text-color);
-            font-size: 0.9rem;
-            font-weight: 900;
+            font-size: 0.8rem;
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.2s;
+            transition: all 0.2s ease;
+        }
+        .modal-close-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--border-hover);
         }
         .modal-close-btn:active {
-            background: rgba(0,0,0,0.15);
+            transform: scale(0.9);
         }
 
         .modal-header-title {
             text-align: center;
-            font-size: 1.3rem;
-            font-weight: 900;
+            font-size: 1.5rem;
+            font-weight: 400;
             text-transform: uppercase;
             margin-top: 6px;
+            letter-spacing: 2px;
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            background: linear-gradient(135deg, var(--btn-yellow), #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         /* Upgrade card layout in modal */
         .upgrade-stats-card {
-            background: #ffffff;
-            border: 1px solid rgba(0, 0, 0, 0.06);
-            border-radius: 20px;
-            padding: 14px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 16px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 10px;
+            transition: all 0.3s ease;
         }
 
         .stat-row {
             display: flex;
             justify-content: space-between;
             font-size: 0.85rem;
-            font-weight: 800;
+            font-weight: 500;
+            color: var(--text-color);
         }
 
         /* Setup / Start Menu screen */
@@ -466,13 +624,13 @@
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
             z-index: 3000;
-            background: var(--bg-grass);
+            background: radial-gradient(circle at center, #1b1016 0%, #060506 100%);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
-            padding: calc(env(safe-area-inset-top, 0px) + 40px) 30px calc(env(safe-area-inset-bottom, 0px) + 30px) 30px;
-            transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+            padding: calc(env(safe-area-inset-top, 0px) + 50px) 30px calc(env(safe-area-inset-bottom, 0px) + 40px) 30px;
+            transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.5s ease-in-out;
         }
         .ty-start-screen.hidden {
             transform: translateY(-100%);
@@ -481,61 +639,76 @@
         }
 
         .start-logo {
-            font-size: 3.5rem;
-            font-weight: 900;
-            letter-spacing: -1.5px;
-            text-transform: lowercase;
-            color: #ffffff;
-            text-shadow: 2px 2px 0 rgba(0,0,0,0.15);
-            margin-bottom: 6px;
+            font-size: 3.2rem;
+            font-weight: 300;
+            font-style: italic;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-family: 'Cormorant Garamond', serif;
+            background: linear-gradient(135deg, var(--btn-yellow), #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+            text-align: center;
         }
 
         .start-card {
             width: 100%;
-            background: var(--panel-bg);
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            border-radius: 28px;
+            background: rgba(13, 11, 13, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
             padding: 24px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
             display: flex;
             flex-direction: column;
             gap: 16px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
         .start-input-group {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 8px;
         }
 
         .start-label {
             font-size: 0.8rem;
-            font-weight: 800;
+            font-weight: 500;
             text-transform: uppercase;
-            color: var(--text-color);
+            color: var(--text-muted);
+            letter-spacing: 1.5px;
+            font-family: 'Cormorant Garamond', serif;
         }
 
         .start-input {
             width: 100%;
-            padding: 12px 18px;
-            background: #ffffff;
-            border: 1px solid rgba(0,0,0,0.08);
-            border-radius: 16px;
-            font-weight: 800;
+            padding: 14px 18px;
+            background: rgba(6, 5, 6, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            font-weight: 500;
             font-size: 0.9rem;
-            color: var(--text-color);
+            color: #ffffff;
+            transition: all 0.25s ease;
+        }
+        .start-input:focus {
+            border-color: var(--btn-yellow);
+            box-shadow: 0 0 12px rgba(197, 168, 128, 0.25);
         }
 
         /* Floating flying money */
         .flying-coin {
             position: absolute;
-            font-size: 1.1rem;
-            font-weight: 900;
-            color: #fcc419;
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: var(--btn-yellow);
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
             z-index: 1000;
             pointer-events: none;
             animation: floatAndVanish 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-            text-shadow: 1px 1px 0 rgba(0,0,0,0.15);
+            text-shadow: 0 4px 12px rgba(0,0,0,0.5);
         }
 
         @keyframes floatAndVanish {
@@ -544,7 +717,7 @@
                 opacity: 1;
             }
             100% {
-                transform: translateY(-80px) scale(1.3);
+                transform: translateY(-80px) scale(1.25);
                 opacity: 0;
             }
         }
@@ -552,11 +725,12 @@
         .slot-canvas-container {
             width: 100%;
             aspect-ratio: 1.1 / 1;
-            background: #f4efe8;
-            border-radius: 16px;
+            background: #060506;
+            border-radius: 20px;
             overflow: hidden;
-            border: 1px solid rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border-color);
             margin-bottom: 6px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
         }
         .slot-canvas {
             width: 100%;
@@ -590,47 +764,59 @@
         </div>
 
         <!-- Main Tycoon Gameplay View -->
-        <!-- Top Bar -->
         <div class="ty-top-bar safe-padding-top">
-            <button class="ty-btn ty-btn-yellow ty-btn-square" style="border-radius: 50%" id="btn-shop-top" onclick="openShopModal()">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="3">
-                    <circle cx="9" cy="21" r="1"></circle>
-                    <circle cx="20" cy="21" r="1"></circle>
-                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                </svg>
-            </button>
-            
-            <div class="ty-badge" id="badge-coins">
-                <span style="font-size: 1.1rem; line-height: 1;">🪙</span>
-                <span id="txt-coins" style="font-family: monospace; font-size: 1rem;">300</span>
+            <div id="field-venue-name" style="font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-style: italic; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; background: linear-gradient(135deg, var(--btn-yellow), #fff); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                Gül Yuvası
             </div>
-
-            <button class="ty-btn ty-btn-yellow ty-btn-square" style="border-radius: 50%" id="btn-settings-top" onclick="openSettingsModal()">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="3">
-                    <circle cx="12" cy="12" r="3"></circle>
-                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                </svg>
-            </button>
+            
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <div style="display: flex; align-items: center; gap: 10px; font-family: 'Montserrat', sans-serif; font-size: 0.85rem; font-weight: 700; letter-spacing: 1px;">
+                    <span id="txt-day" style="color: var(--text-muted);">GÜN 1</span>
+                    <span style="color: rgba(197, 168, 128, 0.3);">|</span>
+                    <span style="color: var(--btn-yellow); font-family: 'Plus Jakarta Sans', sans-serif;">$<span id="txt-coins">300</span></span>
+                </div>
+                
+                <button class="ty-btn-square-minimal" id="btn-settings-top" onclick="openSettingsModal()" aria-label="Settings">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                </button>
+            </div>
         </div>
 
         <!-- Playfield Area -->
         <div class="ty-playfield">
-            <!-- Title banner showing venue name -->
-            <div style="text-align: center; padding-top: 10px; z-index: 2;">
-                <h2 id="field-venue-name" style="font-size: 1rem; font-weight: 900; text-transform: uppercase; color: var(--text-color); opacity: 0.85;">Gül Yuvası</h2>
+
+
+            <!-- Grid of service slots (Carousel view) -->
+            <div style="position: relative; width: 100%; z-index: 2;">
+                <!-- Left & Right Navigation Arrows -->
+                <button class="carousel-nav-btn prev-btn" id="carousel-prev-btn" onclick="scrollCarousel(-1)" aria-label="Previous staff member">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="3.5">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </button>
+                <button class="carousel-nav-btn next-btn" id="carousel-next-btn" onclick="scrollCarousel(1)" aria-label="Next staff member">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="3.5">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
+
+                <div class="ty-rooms-grid" id="rooms-grid">
+                    <!-- Dynamically filled with renderSlots() -->
+                </div>
             </div>
 
-            <!-- Grid of service slots -->
-            <div class="ty-rooms-grid" id="rooms-grid">
-                <!-- Dynamically filled with renderSlots() -->
-            </div>
+            <!-- Page/Slot indicators -->
+            <div class="ty-carousel-indicators" id="carousel-indicators"></div>
 
             <!-- Layer for moving customer avatars -->
             <div id="ty-customers-layer"></div>
 
             <!-- Bottom queue area -->
             <div class="ty-queue-area">
-                <div class="ty-queue-title">Bekleme Sırası (Sürükle veya Seç)</div>
+                <div class="ty-queue-title">Müşteriler</div>
                 <div class="ty-queue-slots" id="queue-slots">
                     <!-- Queue circles -->
                 </div>
@@ -639,12 +825,15 @@
 
         <!-- Bottom bar actions - Flat Design -->
         <div class="ty-bottom-bar safe-padding-bottom">
-            <div class="ty-bottom-row">
-                <button class="ty-btn ty-btn-yellow" id="btn-staff-menu" onclick="openShopModal()" style="padding: 14px 28px; font-size: 0.95rem; flex: 1; max-width: 150px; gap: 8px;">
-                    👥 Personel
+            <div class="ty-bottom-row" style="gap: 8px;">
+                <button class="ty-btn ty-btn-yellow" id="btn-staff-menu" onclick="openShopModal()" style="padding: 14px 20px; font-size: 0.95rem; flex: 1; max-width: 120px;">
+                    PERSONEL
                 </button>
-                <button class="ty-btn ty-btn-yellow" id="btn-stats" onclick="openStatsModal()" style="padding: 14px 28px; font-size: 0.95rem; flex: 1; max-width: 150px; gap: 8px;">
-                    📈 Finans
+                <button class="ty-btn ty-btn-green" id="btn-next-day" onclick="nextDay()" style="padding: 14px 20px; font-size: 0.95rem; flex: 1.2; max-width: 140px; box-shadow: 0 4px 15px rgba(224, 83, 108, 0.25);">
+                    SIRADAKİ GÜN
+                </button>
+                <button class="ty-btn ty-btn-yellow" id="btn-stats" onclick="openStatsModal()" style="padding: 14px 20px; font-size: 0.95rem; flex: 1; max-width: 120px;">
+                    FİNANS
                 </button>
             </div>
         </div>
@@ -672,20 +861,20 @@
                     </div>
                     <div class="stat-row">
                         <span>Kasa Bakiyesi:</span>
-                        <span id="stat-money" style="font-weight: 800; color: #d9480f;">M 300</span>
+                        <span id="stat-money" style="font-weight: 800; color: var(--btn-yellow);">$300</span>
                     </div>
                     <div class="stat-row">
                         <span>Çalışan Personel:</span>
                         <span id="stat-rooms-count" style="font-weight: 800;">1 / 4</span>
                     </div>
-                    <div class="stat-row" style="border-top: 1px solid #eee; padding-top: 6px; margin-top: 4px;">
+                    <div class="stat-row" style="border-top: 1px solid var(--border-color); padding-top: 6px; margin-top: 4px;">
                         <span>Mekan Gelir Çarpanı:</span>
-                        <span id="stat-multiplier" style="font-weight: 800; color: var(--btn-green-shadow);">x1.0</span>
+                        <span id="stat-multiplier" style="font-weight: 800; color: var(--btn-green);">x1.0</span>
                     </div>
                 </div>
 
                 <button class="ty-btn ty-btn-green" id="btn-upgrade-venue" style="padding: 14px; font-size: 1rem;" onclick="upgradeVenueGlobal()">
-                    MEKANI GELİŞTİR (M 250)
+                    MEKANI GELİŞTİR ($ 250)
                 </button>
             </div>
         </div>
@@ -705,7 +894,7 @@
                             <input type="checkbox" id="sett-staff-trans" checked onchange="updateSettingsPrefs()"> TRANS
                         </label>
                     </div>
-                    <hr style="border: 0; border-top: 1px solid #eee;">
+                    <hr style="border: 0; border-top: 1px solid var(--border-color);">
                     <div style="font-weight: 800; font-size: 0.9rem; text-transform: uppercase;">Müşteri Tercihleri</div>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
                         <label style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 800; cursor: pointer;">
@@ -720,6 +909,46 @@
                         <label style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 800; cursor: pointer;">
                             <input type="checkbox" id="sett-cust-trans" checked onchange="updateSettingsPrefs()"> Trans
                         </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Staff Details Modal -->
+        <div class="ty-modal-overlay" id="modal-staff-details">
+            <div class="ty-modal-card">
+                <button class="modal-close-btn" onclick="closeModal('modal-staff-details')">X</button>
+                <h3 class="modal-header-title" id="staff-detail-name">PERSONEL DETAYI</h3>
+                
+                <div style="width: 140px; height: 140px; margin: 0 auto; border: 1px solid var(--border-color); border-radius: 20px; overflow: hidden; background: #060506; position: relative; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+                    <canvas id="staff-detail-avatar" style="width: 100%; height: 100%; object-fit: cover; display: block;"></canvas>
+                </div>
+
+                <div class="upgrade-stats-card" style="gap: 12px; margin-top: 10px;">
+                    <div class="stat-row">
+                        <span>Cinsiyet:</span>
+                        <span id="staff-detail-gender" style="font-weight: 800;"></span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Ten Rengi:</span>
+                        <span id="staff-detail-tone" style="font-weight: 800;"></span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Hole Çapı:</span>
+                        <span id="staff-detail-hole" style="font-weight: 800;"></span>
+                    </div>
+                    
+                    <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 4px 0;">
+                    
+                    <div style="font-weight: 800; font-size: 0.85rem; text-transform: uppercase; color: var(--text-muted); text-align: center; letter-spacing: 1px;">İstatistikler</div>
+                    
+                    <div class="stat-row">
+                        <span>Vajinal Penetrasyon:</span>
+                        <span id="staff-detail-vaginal" style="font-weight: 800;">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Anal Penetrasyon:</span>
+                        <span id="staff-detail-anal" style="font-weight: 800;">0</span>
                     </div>
                 </div>
             </div>
@@ -748,7 +977,7 @@
             deepSlitHeightTop: 18, deepSlitHeightBottom: 28
         };
         window.AnatomyConfig = JSON.parse(JSON.stringify(DefaultAnatomy));
-        window.CANVAS_BG = '#f4efe8';
+        window.CANVAS_BG = '#060506';
 
         // --- 2. GAME STATE ---
         const GameState = {
@@ -803,6 +1032,7 @@
                 holeRedness: 0,
                 isServing: false,
                 isCumming: false,
+                activeCustomer: null,
                 currentPhase: 1,
                 currentGapeStretch: 0,
                 currentGlobalY: 0,
@@ -812,7 +1042,9 @@
                 timeWithoutPenis: 0,
                 servingTimer: 0,
                 servingDuration: 5000 + Math.floor(Math.random() * 2000), // 5s to 7s duration
-                basePayout: 80 + Math.floor(Math.random() * 40) // 80 to 120 base coins
+                basePayout: 80 + Math.floor(Math.random() * 40), // 80 to 120 base coins
+                vaginalCount: 0,
+                analCount: 0
             };
         }
 
@@ -880,16 +1112,13 @@
             GameState.playerName = pName || "Süleyman";
             GameState.venueName = vName || "Gül Yuvası";
             
-            // Assign default staff to Slot 1 (index 0)
-            GameState.staff[0] = generateStaff("staff_1", "KADIN");
-            
-            // Reset other slots
-            for (let i = 1; i < GameState.staff.length; i++) {
+            // Reset all slots to start with no staff members
+            for (let i = 0; i < GameState.staff.length; i++) {
                 GameState.staff[i] = null;
             }
 
             GameState.customersQueue = [];
-            for (let i = 0; i < 3; i++) {
+            for (let i = 0; i < 8; i++) {
                 GameState.customersQueue.push(generateCustomer("cust_" + Date.now() + "_" + i));
             }
 
@@ -900,12 +1129,28 @@
             document.getElementById('field-venue-name').textContent = GameState.venueName;
         }
 
+        function nextDay() {
+            GameState.day = (GameState.day || 1) + 1;
+            
+            GameState.customersQueue = [];
+            for (let i = 0; i < 8; i++) {
+                GameState.customersQueue.push(generateCustomer("cust_" + Date.now() + "_" + i));
+            }
+            
+            const nextDayBtn = document.getElementById('btn-next-day');
+            spawnFloatingText(nextDayBtn, `GÜN ${GameState.day}!`);
+            
+            updateUI();
+            renderQueue();
+        }
+
         function updateUI() {
             document.getElementById('txt-coins').textContent = Math.floor(GameState.money);
+            document.getElementById('txt-day').textContent = `GÜN ${GameState.day || 1}`;
             
             // Update stats modal
             document.getElementById('stat-player-name').textContent = GameState.playerName;
-            document.getElementById('stat-money').textContent = "M " + Math.floor(GameState.money);
+            document.getElementById('stat-money').textContent = "$" + Math.floor(GameState.money);
             
             const hiredCount = GameState.staff.filter(s => s !== null).length;
             document.getElementById('stat-rooms-count').textContent = `${hiredCount} / 4`;
@@ -916,8 +1161,111 @@
             const upVBtn = document.getElementById('btn-upgrade-venue');
             if (upVBtn) {
                 upVBtn.disabled = GameState.money < vCost;
-                upVBtn.textContent = `MEKANI GELİŞTİR (M ${vCost})`;
+                upVBtn.textContent = `MEKANI GELİŞTİR ($ ${vCost})`;
             }
+        }
+
+        // --- CAROUSEL VIEW CONTROLLERS ---
+        window.isDragging = false;
+        window.currentCarouselIndex = 0;
+        
+        function scrollCarousel(direction) {
+            const grid = document.getElementById('rooms-grid');
+            if (!grid) return;
+            const width = grid.clientWidth;
+            
+            // Get current page
+            const scrollLeft = grid.scrollLeft;
+            const activeIndex = Math.round(scrollLeft / width);
+            let targetIndex = activeIndex + direction;
+            if (targetIndex < 0) targetIndex = 0;
+            if (targetIndex >= GameState.staff.length) targetIndex = GameState.staff.length - 1;
+            
+            grid.scrollTo({ left: targetIndex * width, behavior: 'smooth' });
+        }
+
+        function scrollQueueCarousel(direction) {
+            const grid = document.getElementById('queue-slots');
+            if (!grid) return;
+            const spot = grid.querySelector('.queue-spot');
+            if (!spot) return;
+            const cardWidth = spot.getBoundingClientRect().width + 10;
+            
+            const scrollLeft = grid.scrollLeft;
+            const activeIndex = Math.round(scrollLeft / cardWidth);
+            let targetIndex = activeIndex + direction;
+            
+            const maxIndex = Math.max(0, grid.children.length - 4);
+            if (targetIndex < 0) targetIndex = 0;
+            if (targetIndex > maxIndex) targetIndex = maxIndex;
+            
+            grid.scrollTo({ left: targetIndex * cardWidth, behavior: 'smooth' });
+        }
+
+        function scrollToSlot(index) {
+            const grid = document.getElementById('rooms-grid');
+            if (!grid) return;
+            const width = grid.clientWidth;
+            grid.scrollTo({ left: index * width, behavior: 'smooth' });
+        }
+
+        function renderCarouselDots() {
+            const indicatorsContainer = document.getElementById('carousel-indicators');
+            if (!indicatorsContainer) return;
+            indicatorsContainer.innerHTML = '';
+            
+            const grid = document.getElementById('rooms-grid');
+            const width = grid.clientWidth || 360;
+            const scrollLeft = grid.scrollLeft || 0;
+            const activeIndex = Math.round(scrollLeft / width);
+
+            GameState.staff.forEach((staff, index) => {
+                const card = document.createElement('div');
+                let cardClass = 'staff-spot-card';
+                if (index === activeIndex) cardClass += ' active';
+                if (staff && staff.activeCustomer) cardClass += ' serving';
+                card.className = cardClass;
+                
+                if (staff === null) {
+                    card.innerHTML = `<span style="font-size: 1.5rem; color: #334155;">+</span>`;
+                } else {
+                    card.innerHTML = `
+                        <canvas class="staff-avatar-mini" style="width: 100%; height: 100%; border-radius: 14px; object-fit: cover; display: block; pointer-events: none;"></canvas>
+                    `;
+                }
+                
+                card.onclick = () => scrollToSlot(index);
+                indicatorsContainer.appendChild(card);
+
+                if (staff !== null) {
+                    const miniCanvas = card.querySelector('canvas');
+                    if (miniCanvas) {
+                        drawStaffThumbnail(miniCanvas, staff, index);
+                    }
+                }
+            });
+            
+            // Update prev/next button disabled state
+            updateCarouselArrows(activeIndex);
+        }
+
+        function updateCarouselArrows(activeIndex) {
+            const prevBtn = document.getElementById('carousel-prev-btn');
+            const nextBtn = document.getElementById('carousel-next-btn');
+            if (prevBtn) prevBtn.disabled = activeIndex === 0;
+            if (nextBtn) nextBtn.disabled = activeIndex === GameState.staff.length - 1;
+        }
+
+        function updateCarouselDots(activeIndex) {
+            const cards = document.querySelectorAll('.staff-spot-card');
+            cards.forEach((card, index) => {
+                if (index === activeIndex) {
+                    card.classList.add('active');
+                } else {
+                    card.classList.remove('active');
+                }
+            });
+            updateCarouselArrows(activeIndex);
         }
 
         function renderSlots() {
@@ -956,7 +1304,11 @@
                             </svg>
                         </div>
                     `;
-                    card.onclick = () => spankSlot(index);
+
+                    card.onclick = () => {
+                        if (window.isDragging) return;
+                        openStaffDetailsModal(index);
+                    };
 
                     // Bind Drag and Drop events to card
                     card.addEventListener('dragover', (e) => {
@@ -988,11 +1340,21 @@
                         <span style="font-size: 2rem; font-weight: 800; color: var(--text-muted);">+</span>
                         <div style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase;">BOŞ SLOT</div>
                     `;
-                    card.onclick = () => openShopModal();
+                    card.onclick = () => {
+                        if (window.isDragging) return;
+                        openShopModal();
+                    };
                 }
                 grid.appendChild(card);
             });
+            renderCarouselDots();
             updateUI();
+
+            // Restore scroll position to the index we were on
+            if (window.currentCarouselIndex) {
+                const width = grid.clientWidth || 360;
+                grid.scrollTo({ left: window.currentCarouselIndex * width });
+            }
         }
 
         function renderQueue() {
@@ -1000,97 +1362,46 @@
             if (!queueSlots) return;
             queueSlots.innerHTML = '';
 
-            // Render up to 5 queue spots
-            for (let i = 0; i < 5; i++) {
+            // Render spots dynamically, showing at least 4 spots
+            const totalSpots = Math.max(4, GameState.customersQueue.length);
+            for (let i = 0; i < totalSpots; i++) {
                 const spot = document.createElement('div');
-                spot.className = 'queue-spot';
                 
                 if (GameState.customersQueue[i]) {
                     const cust = GameState.customersQueue[i];
-                    const bg = cust.type === 'black' ? '#6d4332' : '#ffefd5';
+                    
+                    spot.className = 'staff-spot-card queue-spot ty-customer-avatar';
+                    spot.id = `cust-avatar-${cust.id}`;
+                    spot.draggable = true;
+                    spot.style.cursor = 'grab';
                     
                     spot.innerHTML = `
-                        <div class="ty-customer-avatar" draggable="true" id="cust-avatar-${cust.id}" style="position: static; width: 100%; height: 100%; overflow: hidden; background: ${bg}; padding: 0; cursor: grab;">
-                            <canvas id="queue-canvas-${cust.id}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; pointer-events: none;"></canvas>
-                        </div>
+                        <canvas class="staff-avatar-mini" id="queue-canvas-${cust.id}" style="width: 100%; height: 100%; border-radius: 14px; object-fit: cover; display: block; pointer-events: none;"></canvas>
                     `;
                     queueSlots.appendChild(spot);
 
                     // Add drag start/end listeners
-                    const avatarDiv = spot.querySelector('.ty-customer-avatar');
-                    avatarDiv.addEventListener('dragstart', (e) => {
+                    spot.addEventListener('dragstart', (e) => {
                         e.dataTransfer.setData("text/plain", cust.id);
-                        avatarDiv.style.opacity = '0.5';
+                        spot.style.opacity = '0.5';
                     });
-                    avatarDiv.addEventListener('dragend', () => {
-                        avatarDiv.style.opacity = '1';
+                    spot.addEventListener('dragend', () => {
+                        spot.style.opacity = '1';
                     });
-
-                    // Add visual select highlights
-                    const isSelected = window.selectedCustomerId === cust.id;
-                    if (isSelected) {
-                        spot.style.border = '2px solid var(--btn-blue)';
-                        spot.style.boxShadow = '0 0 10px rgba(51, 154, 240, 0.4)';
-                    } else {
-                        spot.style.border = '';
-                        spot.style.boxShadow = '';
-                    }
-
-                    // Click listener for tap-to-select
-                    spot.onclick = (e) => {
-                        e.stopPropagation();
-                        if (window.selectedCustomerId === cust.id) {
-                            window.selectedCustomerId = null;
-                        } else {
-                            window.selectedCustomerId = cust.id;
-                        }
-                        renderQueue();
-                    };
                     
                     const qCanvas = document.getElementById(`queue-canvas-${cust.id}`);
                     if (qCanvas) {
                         drawCustomerPreview(qCanvas, cust);
                     }
                 } else {
-                    spot.textContent = '+';
+                    spot.className = 'staff-spot-card queue-spot';
+                    spot.innerHTML = `<span style="font-size: 1.5rem; color: #334155;">+</span>`;
                     queueSlots.appendChild(spot);
                 }
             }
         }
 
-        // Clicker Spanking & Drag-Drop Tap-Assign Handler
-        function spankSlot(index) {
-            const staff = GameState.staff[index];
-            if (!staff) return;
-            
-            if (!staff.activeCustomer) {
-                // If a customer is currently highlighted in the queue, assign them
-                if (window.selectedCustomerId !== null) {
-                    assignCustomerToSlot(window.selectedCustomerId, index);
-                    window.selectedCustomerId = null;
-                } else {
-                    // Show drag / select hint
-                    const card = document.getElementById(`slot-card-${index}`);
-                    spawnFloatingText(card, "Sürükle veya Seç! 👤");
-                }
-                return;
-            }
-            
-            // Advance service progress by 400ms per click
-            staff.servingTimer += 400;
-            
-            // Spawn float text feedback
-            const card = document.getElementById(`slot-card-${index}`);
-            const sounds = ["ŞAPLAK! 🍑💨", "Ayy! 💕", "Ahhh! 🔥", "Hızlandı! ⚡", "Devam! 💦"];
-            const randSound = sounds[Math.floor(Math.random() * sounds.length)];
-            spawnFloatingText(card, randSound);
-            
-            // Bounce effect
-            card.style.transform = 'scale(0.93)';
-            setTimeout(() => {
-                card.style.transform = '';
-            }, 80);
-        }
+
 
         // Drag/Select customer assignment method
         function assignCustomerToSlot(customerId, slotIndex) {
@@ -1120,7 +1431,7 @@
 
         function triggerServingTick(dt) {
             GameState.staff.forEach((staff, index) => {
-                if (staff !== null && staff.activeCustomer !== null) {
+                if (staff !== null && staff.activeCustomer) {
                     staff.servingTimer += dt;
                     
                     const progress = Math.min(1.0, staff.servingTimer / staff.servingDuration);
@@ -1147,13 +1458,19 @@
             const customer = staff.activeCustomer;
             if (!customer) return;
 
+            if (index % 2 === 0) {
+                staff.vaginalCount = (staff.vaginalCount || 0) + 1;
+            } else {
+                staff.analCount = (staff.analCount || 0) + 1;
+            }
+
             const finalPayout = Math.floor(staff.basePayout * GameState.venueMultiplier);
             GameState.money += finalPayout;
 
             // Spawn floating coins above slot card
             const card = document.getElementById(`slot-card-${index}`);
             if (card) {
-                spawnFloatingText(card, `+🪙 ${finalPayout}`);
+                spawnFloatingText(card, `+$${finalPayout}`);
             }
 
             // Hide slot bubble
@@ -1217,31 +1534,31 @@
                 card.style.justifyContent = 'space-between';
                 card.style.padding = '10px 14px';
 
-                const genderColor = cand.gender === 'KADIN' ? 'pink' : '#da77f2';
+                const genderColor = cand.gender === 'KADIN' ? '#ff8787' : '#da77f2';
                 const cost = 150;
                 const canAfford = GameState.money >= cost;
 
                 card.innerHTML = `
                     <div style="display: flex; align-items: center; gap: 12px;">
-                        <div class="room-avatar-circle" style="width: 50px; height: 50px; flex-shrink: 0; background: ${cand.cSkin}; border-color: ${genderColor}; padding: 0; overflow: hidden;">
-                            <canvas id="candidate-thumb-${cand.id}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block;"></canvas>
+                        <div class="room-avatar-circle" style="width: 50px; height: 50px; flex-shrink: 0; border-color: ${genderColor}; padding: 0; overflow: hidden;">
+                            <canvas id="candidate-thumb-${cand.id}" style="width: 100%; height: 100%; border-radius: 14px; object-fit: cover; display: block;"></canvas>
                         </div>
                         <div style="display: flex; flex-direction: column; gap: 2px;">
                             <span style="font-weight: 800; font-size: 0.95rem;">
                                 ${cand.name} <span style="font-size: 0.65rem; color: ${genderColor}">(${cand.gender})</span>
                             </span>
-                            <span style="font-size: 0.7rem; color: var(--text-muted);">Hole Çapı: ${cand.baseHoleSize}px / Ten: ${cand.toneLabel}</span>
+                            <span style="font-size: 0.7rem; color: var(--text-muted);">Hole Çapı: ${cand.baseHoleSize}cm / Ten: ${cand.toneLabel}</span>
                         </div>
                     </div>
                     <button class="ty-btn ty-btn-green" style="font-size: 0.8rem; padding: 6px 12px;" ${(!canAfford || allFull) ? 'disabled' : ''} onclick="hireCandidate(${idx})">
-                        ${allFull ? 'DOLU' : 'M ' + cost}
+                        ${allFull ? 'DOLU' : '$' + cost}
                     </button>
                 `;
                 container.appendChild(card);
 
                 const candCanvas = document.getElementById(`candidate-thumb-${cand.id}`);
                 if (candCanvas) {
-                    drawStaffThumbnail(candCanvas, cand, idx + 1);
+                    drawStaffThumbnail(candCanvas, cand, idx);
                 }
             });
 
@@ -1276,6 +1593,30 @@
         function openStatsModal() {
             updateUI();
             document.getElementById('modal-stats').classList.add('active');
+        }
+
+        function openStaffDetailsModal(index) {
+            const staff = GameState.staff[index];
+            if (!staff) return;
+
+            document.getElementById('staff-detail-name').textContent = staff.name.toUpperCase();
+            
+            const genderColor = staff.gender === 'KADIN' ? '#ff8787' : '#da77f2';
+            const genderEl = document.getElementById('staff-detail-gender');
+            genderEl.textContent = staff.gender;
+            genderEl.style.color = genderColor;
+            
+            document.getElementById('staff-detail-tone').textContent = staff.toneLabel || 'Bilinmiyor';
+            document.getElementById('staff-detail-hole').textContent = `${staff.currentHoleDamage}cm`;
+            document.getElementById('staff-detail-vaginal').textContent = staff.vaginalCount || 0;
+            document.getElementById('staff-detail-anal').textContent = staff.analCount || 0;
+            
+            document.getElementById('modal-staff-details').classList.add('active');
+            
+            const canvas = document.getElementById('staff-detail-avatar');
+            if (canvas) {
+                drawStaffThumbnail(canvas, staff, index);
+            }
         }
 
         function openSettingsModal() {
@@ -1323,14 +1664,14 @@
             const dpr = Math.max(window.devicePixelRatio || 1, 2);
             
             const rect = canvas.getBoundingClientRect();
-            const rectWidth = rect.width || 44;
-            const rectHeight = rect.height || 44;
+            const rectWidth = rect.width || 71;
+            const rectHeight = rect.height || 82;
             
             canvas.width = rectWidth * dpr;
             canvas.height = rectHeight * dpr;
             
-            const logicalW = 400;
-            const logicalH = 320;
+            const logicalW = 360;
+            const logicalH = 360;
             const scale = Math.min((rectWidth * dpr) / logicalW, (rectHeight * dpr) / logicalH);
             const offsetX = (rectWidth * dpr - logicalW * scale) / 2;
             const offsetY = (rectHeight * dpr - logicalH * scale) / 2;
@@ -1340,11 +1681,10 @@
             const w = logicalW;
             const h = logicalH;
             
-            ctx.fillStyle = window.CANVAS_BG;
-            ctx.fillRect(0, 0, w, h);
+            ctx.clearRect(0, 0, w, h);
             
             const centerX = w / 2;
-            const centerY = 140; 
+            const centerY = 160; 
             
             let custSkin = '#eab29a';
             let custPelvis = '#cf9f86';
@@ -1389,7 +1729,7 @@
                 let thighX = 140 - (pm.bodySlimness || 0);
 
                 ctx.fillStyle = custPelvis;
-                ctx.strokeStyle = cOutline; ctx.lineWidth = 3;
+                ctx.strokeStyle = cOutline; ctx.lineWidth = 3.5;
 
                 ctx.beginPath();
                 ctx.moveTo(centerX - thighX - 20, bodyY - 150);
@@ -1415,7 +1755,7 @@
                 pX -= pm.shaftWidth / 2; 
 
                 // Testicles
-                ctx.fillStyle = cSkinShadow; ctx.lineWidth = 3; ctx.strokeStyle = cOutline;
+                ctx.fillStyle = cSkinShadow; ctx.lineWidth = 3.5; ctx.strokeStyle = cOutline;
                 ctx.beginPath();
                 ctx.moveTo(centerX - pWidth/2 - 10, pY);
                 ctx.bezierCurveTo(centerX - 40, pY + 30, centerX - 30, pY + 70, centerX, pY + 60);
@@ -1424,7 +1764,7 @@
                 ctx.beginPath(); ctx.moveTo(centerX, pY + 20); ctx.quadraticCurveTo(centerX + 3, pY + 45, centerX, pY + 60); ctx.stroke();
                 
                 // Shaft
-                ctx.fillStyle = custSkin; ctx.lineWidth = 3;
+                ctx.fillStyle = custSkin; ctx.lineWidth = 3.5;
                 ctx.beginPath();
                 ctx.moveTo(pX, pY); 
                 let bY = pY + (neckY - pY) * 0.4; 
@@ -1511,7 +1851,7 @@
                     ctx.quadraticCurveTo(hrx + (rand3 * 10), hry - (Math.abs(rand4) * 8), hrx + (rand1 * 15), hry + (rand2 * 10));
                     ctx.stroke();
                 }
-                ctx.strokeStyle = cOutline; ctx.lineWidth = 3;
+                ctx.strokeStyle = cOutline; ctx.lineWidth = 3.5;
                 
                 // Glans Cap
                 ctx.fillStyle = custGlans; 
@@ -1562,14 +1902,14 @@
             const dpr = Math.max(window.devicePixelRatio || 1, 2);
             
             const rect = canvas.getBoundingClientRect();
-            const rectWidth = rect.width || 50;
-            const rectHeight = rect.height || 50;
+            const rectWidth = rect.width || 71;
+            const rectHeight = rect.height || 82;
             
             canvas.width = rectWidth * dpr;
             canvas.height = rectHeight * dpr;
             
-            const logicalW = 120;
-            const logicalH = 120;
+            const logicalW = 360;
+            const logicalH = 360;
             const scale = Math.min((rectWidth * dpr) / logicalW, (rectHeight * dpr) / logicalH);
             const offsetX = (rectWidth * dpr - logicalW * scale) / 2;
             const offsetY = (rectHeight * dpr - logicalH * scale) / 2;
@@ -1581,8 +1921,7 @@
             const centerX = w / 2;
             const centerY = h / 2;
             
-            ctx.fillStyle = '#f4efe8';
-            ctx.fillRect(0, 0, w, h);
+            ctx.clearRect(0, 0, w, h);
             
             const ac = window.AnatomyConfig || DefaultAnatomy;
             const cSkin = staff.cSkin || ac.cSkin;
@@ -1591,38 +1930,115 @@
             const cHoleShadow = staff.cHoleShadow || ac.cHoleShadow;
             const cOutline = '#000000';
             
-            // Draw butt preview
-            ctx.lineWidth = 2.5;
-            ctx.strokeStyle = cOutline;
-            ctx.fillStyle = cSkin;
-            
-            ctx.beginPath();
-            ctx.arc(centerX - 18, centerY, 22, 0, Math.PI * 2);
-            ctx.fill(); ctx.stroke();
-            
-            ctx.beginPath();
-            ctx.arc(centerX + 18, centerY, 22, 0, Math.PI * 2);
-            ctx.fill(); ctx.stroke();
-            
-            // Spinal line
-            ctx.strokeStyle = cSkinShadow;
-            ctx.beginPath();
-            ctx.moveTo(centerX, centerY - 25);
-            ctx.lineTo(centerX, centerY + 20);
-            ctx.stroke();
-            
-            // Hole preview (Vajinal if even, Anal if odd)
+            const base = staff.baseHoleSize || 6;
             const isVajinal = (seed % 2 === 0);
-            const holeCenterY = isVajinal ? centerY + 6 : centerY;
+            const vulvaY = centerY + 80 + (isVajinal ? base * 0.8 : base * 0.8);
+            
+            // Draw curvier, premium body outline
+            ctx.fillStyle = cSkin; ctx.lineWidth = 3.5; ctx.strokeStyle = cOutline;
+            ctx.beginPath();
+            ctx.moveTo(centerX - 90, 0);
+            ctx.bezierCurveTo(centerX - 40, 50, centerX - 160, 110, centerX - 150, centerY + 30);
+            ctx.bezierCurveTo(centerX - 140, 320, centerX - 130, h - 30, centerX - 120, h);
+            ctx.lineTo(centerX - 15, h);
+            ctx.bezierCurveTo(centerX - 15, 330, centerX - 5, 290, centerX, centerY + 100);
+            ctx.bezierCurveTo(centerX + 5, 290, centerX + 15, 330, centerX + 15, h);
+            ctx.lineTo(centerX + 120, h);
+            ctx.bezierCurveTo(centerX + 130, h - 30, centerX + 140, 320, centerX + 150, centerY + 30);
+            ctx.bezierCurveTo(centerX + 160, 110, centerX + 40, 50, centerX + 90, 0);
+            ctx.lineTo(centerX - 90, 0);
+            ctx.fill(); ctx.stroke();
+
+            // Gluteal folds
+            ctx.strokeStyle = cSkinShadow; ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(centerX - 130, centerY + 50);
+            ctx.quadraticCurveTo(centerX - 80, centerY + 110, centerX - 30, centerY + 70);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(centerX + 130, centerY + 50);
+            ctx.quadraticCurveTo(centerX + 80, centerY + 110, centerX + 30, centerY + 70);
+            ctx.stroke();
+
+            // Dimples
+            ctx.fillStyle = cSkinShadow;
+            ctx.beginPath(); ctx.ellipse(centerX - 40, centerY - 85, 4, 8, 0.2, 0, Math.PI*2); ctx.fill();
+            ctx.beginPath(); ctx.ellipse(centerX + 40, centerY - 85, 4, 8, -0.2, 0, Math.PI*2); ctx.fill();
+
+            // Elongated Vertical Crack Line
+            ctx.strokeStyle = cSkinShadow; ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY - 150); 
+            ctx.quadraticCurveTo(centerX - 2, centerY - 10, centerX, vulvaY - 20);
+            ctx.stroke();
+
+            // Vagina / Vulva Rendering
+            let vulvaGradOuter = ctx.createRadialGradient(centerX, vulvaY + 5, 5, centerX, vulvaY + 5, 30);
+            vulvaGradOuter.addColorStop(0, '#c77d5b'); 
+            vulvaGradOuter.addColorStop(0.6, '#d49b77'); 
+            vulvaGradOuter.addColorStop(1, 'rgba(238, 187, 153, 0)'); 
+            ctx.fillStyle = vulvaGradOuter; 
+            ctx.beginPath();
+            ctx.moveTo(centerX, vulvaY - 30);
+            ctx.bezierCurveTo(centerX - 25, vulvaY - 10, centerX - 18, vulvaY + 30, centerX, vulvaY + 40);
+            ctx.bezierCurveTo(centerX + 18, vulvaY + 30, centerX + 25, vulvaY - 10, centerX, vulvaY - 30);
+            ctx.fill(); 
             
             ctx.fillStyle = cHole;
+            ctx.lineWidth = 2.5; ctx.strokeStyle = cOutline;
             ctx.beginPath();
-            ctx.ellipse(centerX, holeCenterY, 5, 7, 0, 0, Math.PI * 2);
-            ctx.fill();
+            ctx.moveTo(centerX, vulvaY - 20);
+            ctx.bezierCurveTo(centerX - 10, vulvaY - 5, centerX - 8, vulvaY + 20, centerX, vulvaY + 30);
+            ctx.bezierCurveTo(centerX + 8, vulvaY + 20, centerX + 10, vulvaY - 5, centerX, vulvaY - 20);
+            ctx.fill(); ctx.stroke(); 
             
+            if (isVajinal) {
+                // Draw opened vagina
+                ctx.fillStyle = cOutline;
+                ctx.beginPath();
+                ctx.ellipse(centerX, vulvaY + 5, base * 0.5, base * 0.7, 0, 0, Math.PI*2);
+                ctx.fill();
+            } else {
+                ctx.beginPath(); ctx.moveTo(centerX, vulvaY - 18); ctx.lineTo(centerX, vulvaY + 28); ctx.stroke();
+            }
+
+            // Anus Rendering
+            let rMax = base * 1.8;
+            let innerGradR = base * 0.4;
+            let holeGrad = ctx.createRadialGradient(centerX, centerY, innerGradR, centerX, centerY, rMax);
+            holeGrad.addColorStop(0, '#b46e64'); 
+            holeGrad.addColorStop(0.2, '#d49479'); 
+            holeGrad.addColorStop(0.6, 'rgba(212, 148, 121, 0.6)'); 
+            holeGrad.addColorStop(1, 'rgba(238, 187, 153, 0)'); 
+            
+            ctx.fillStyle = holeGrad;
+            ctx.beginPath();
+            const numFolds = 16;
+            for (let i = 0; i <= numFolds; i++) {
+                let angle = (i / numFolds) * Math.PI * 2;
+                let r = base * 1.5 + Math.sin(i*4)*base*0.25;
+                let x = centerX + Math.cos(angle) * r;
+                let y = centerY + Math.sin(angle) * r;
+                if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+            }
+            ctx.fill(); 
+            
+            // Anus Wrinkles
+            ctx.strokeStyle = 'rgba(44, 31, 26, 0.25)'; 
+            ctx.lineWidth = 1.5;
+            for(let i=0; i<12; i++) {
+                let angle = (i/12)*Math.PI*2 + 0.1;
+                ctx.beginPath();
+                let r1 = base * 0.4;
+                let r2 = base * 1.5;
+                ctx.moveTo(centerX + Math.cos(angle)*r1, centerY + Math.sin(angle)*r1);
+                ctx.lineTo(centerX + Math.cos(angle)*r2, centerY + Math.sin(angle)*r2);
+                ctx.stroke();
+            }
+            // Inner Anus Hole
             ctx.fillStyle = cOutline;
             ctx.beginPath();
-            ctx.ellipse(centerX, holeCenterY, 2.5, 3.5, 0, 0, Math.PI * 2);
+            ctx.ellipse(centerX, centerY, base * 0.5, base * 0.7, 0, 0, Math.PI*2);
             ctx.fill();
         }
 
@@ -1707,7 +2123,7 @@
                 staff.lastRenderTime = nowGlobal;
 
                 // Phase progression
-                const hasCustomer = staff.activeCustomer !== null;
+                const hasCustomer = !!staff.activeCustomer;
                 if (hasCustomer) {
                     staff.isServing = true;
                     
@@ -2197,13 +2613,7 @@
             setTimeout(gameLoop, 100);
         }
 
-        // Spawn customer every 6 seconds if queue has space
-        setInterval(() => {
-            if (GameState.customersQueue.length < 5) {
-                GameState.customersQueue.push(generateCustomer("cust_" + Date.now()));
-                renderQueue();
-            }
-        }, 6000);
+        // Auto-spawner disabled as per user request (customers are static 8 and generated on New Day)
 
         // Bind Start Screen
         const btnStart = document.getElementById('btn-start-game');
@@ -2221,124 +2631,280 @@
 
         // --- TOUCH DRAG & DROP CONTROLLER FOR MOBILE ---
         let activeTouchDrag = null;
+        let touchStartPos = null;
+        let touchDragAvatar = null;
+        let touchDragCustomerId = null;
 
         document.addEventListener('touchstart', (e) => {
             const avatar = e.target.closest('.ty-customer-avatar');
             if (!avatar) return;
 
+            // Prevent native HTML5 dragging on touch to allow normal container scrolling
+            avatar.draggable = false;
+
             const customerId = avatar.id.replace('cust-avatar-', '');
             if (!customerId) return;
 
-            e.preventDefault(); // Prevent scrolling/zooming while dragging
-
             const touch = e.targetTouches[0];
-            const frame = document.querySelector('.mobile-frame');
-            const frameRect = frame.getBoundingClientRect();
-
-            // Create a floating clone/indicator
-            const floatEl = document.createElement('div');
-            floatEl.className = 'touch-drag-avatar';
-            floatEl.style.position = 'absolute';
-            floatEl.style.width = '48px';
-            floatEl.style.height = '48px';
-            floatEl.style.borderRadius = '50%';
-            floatEl.style.border = '2px solid var(--btn-blue)';
-            floatEl.style.background = avatar.style.background || '#ffefd5';
-            floatEl.style.boxShadow = '0 8px 16px rgba(0,0,0,0.2)';
-            floatEl.style.pointerEvents = 'none';
-            floatEl.style.zIndex = '9999';
-            floatEl.style.opacity = '0.9';
-
-            floatEl.innerHTML = avatar.innerHTML;
-            
-            const x = touch.clientX - frameRect.left - 24;
-            const y = touch.clientY - frameRect.top - 24;
-            floatEl.style.left = x + 'px';
-            floatEl.style.top = y + 'px';
-
-            frame.appendChild(floatEl);
-
-            activeTouchDrag = {
-                customerId: customerId,
-                floatEl: floatEl,
-                touchId: touch.identifier
-            };
-        }, { passive: false });
+            touchStartPos = { x: touch.clientX, y: touch.clientY, id: touch.identifier };
+            touchDragAvatar = avatar;
+            touchDragCustomerId = customerId;
+            activeTouchDrag = null;
+        }, { passive: true });
 
         document.addEventListener('touchmove', (e) => {
-            if (!activeTouchDrag) return;
-
             let touch = null;
-            for (let i = 0; i < e.touches.length; i++) {
-                if (e.touches[i].identifier === activeTouchDrag.touchId) {
-                    touch = e.touches[i];
-                    break;
+            if (activeTouchDrag) {
+                for (let i = 0; i < e.touches.length; i++) {
+                    if (e.touches[i].identifier === activeTouchDrag.touchId) {
+                        touch = e.touches[i];
+                        break;
+                    }
                 }
-            }
-            if (!touch) return;
+                if (!touch) return;
+                
+                e.preventDefault(); // Stop native scrolling/swiping
 
-            e.preventDefault();
+                const frame = document.querySelector('.mobile-frame');
+                const frameRect = frame.getBoundingClientRect();
 
-            const frame = document.querySelector('.mobile-frame');
-            const frameRect = frame.getBoundingClientRect();
+                const x = touch.clientX - frameRect.left - 32;
+                const y = touch.clientY - frameRect.top - 32;
+                activeTouchDrag.floatEl.style.left = x + 'px';
+                activeTouchDrag.floatEl.style.top = y + 'px';
 
-            const x = touch.clientX - frameRect.left - 24;
-            const y = touch.clientY - frameRect.top - 24;
-            activeTouchDrag.floatEl.style.left = x + 'px';
-            activeTouchDrag.floatEl.style.top = y + 'px';
-
-            const el = document.elementFromPoint(touch.clientX, touch.clientY);
-            const slotCard = el ? el.closest('.ty-room-card') : null;
-
-            document.querySelectorAll('.ty-room-card').forEach(card => {
-                if (!card.classList.contains('locked')) {
-                    card.style.borderColor = '';
-                    card.style.boxShadow = '';
-                }
-            });
-
-            if (slotCard && !slotCard.classList.contains('locked')) {
-                const slotIndex = parseInt(slotCard.id.replace('slot-card-', ''));
-                const staff = GameState.staff[slotIndex];
-                if (staff && !staff.activeCustomer) {
-                    slotCard.style.borderColor = 'var(--btn-green)';
-                    slotCard.style.boxShadow = '0 0 12px rgba(81, 207, 102, 0.3)';
-                }
-            }
-        }, { passive: false });
-
-        document.addEventListener('touchend', (e) => {
-            if (!activeTouchDrag) return;
-
-            let touch = null;
-            for (let i = 0; i < e.changedTouches.length; i++) {
-                if (e.changedTouches[i].identifier === activeTouchDrag.touchId) {
-                    touch = e.changedTouches[i];
-                    break;
-                }
-            }
-
-            if (touch) {
                 const el = document.elementFromPoint(touch.clientX, touch.clientY);
                 const slotCard = el ? el.closest('.ty-room-card') : null;
+
+                document.querySelectorAll('.ty-room-card').forEach(card => {
+                    if (!card.classList.contains('locked')) {
+                        card.style.borderColor = '';
+                        card.style.boxShadow = '';
+                    }
+                });
 
                 if (slotCard && !slotCard.classList.contains('locked')) {
                     const slotIndex = parseInt(slotCard.id.replace('slot-card-', ''));
                     const staff = GameState.staff[slotIndex];
                     if (staff && !staff.activeCustomer) {
-                        assignCustomerToSlot(activeTouchDrag.customerId, slotIndex);
+                        slotCard.style.borderColor = 'var(--btn-green)';
+                        slotCard.style.boxShadow = '0 0 12px rgba(81, 207, 102, 0.3)';
                     }
                 }
+            } else if (touchStartPos && touchDragAvatar) {
+                for (let i = 0; i < e.touches.length; i++) {
+                    if (e.touches[i].identifier === touchStartPos.id) {
+                        touch = e.touches[i];
+                        break;
+                    }
+                }
+                if (!touch) return;
+
+                const dx = touch.clientX - touchStartPos.x;
+                const dy = touch.clientY - touchStartPos.y;
+
+                // Initiate drag if pulled upwards
+                if (dy < -8 && Math.abs(dy) > Math.abs(dx)) {
+                    e.preventDefault(); // Block container swipe
+
+                    const frame = document.querySelector('.mobile-frame');
+                    const frameRect = frame.getBoundingClientRect();
+
+                    const floatEl = document.createElement('div');
+                    floatEl.className = 'touch-drag-avatar';
+                    floatEl.style.position = 'absolute';
+                    floatEl.style.width = '64px';
+                    floatEl.style.height = '64px';
+                    floatEl.style.borderRadius = '14px';
+                    floatEl.style.border = '2px solid var(--btn-blue)';
+                    floatEl.style.background = 'transparent';
+                    floatEl.style.boxShadow = '0 8px 16px rgba(0,0,0,0.2)';
+                    floatEl.style.pointerEvents = 'none';
+                    floatEl.style.zIndex = '9999';
+                    floatEl.style.opacity = '0.9';
+
+                    floatEl.innerHTML = touchDragAvatar.innerHTML;
+                    
+                    const x = touch.clientX - frameRect.left - 32;
+                    const y = touch.clientY - frameRect.top - 32;
+                    floatEl.style.left = x + 'px';
+                    floatEl.style.top = y + 'px';
+
+                    frame.appendChild(floatEl);
+
+                    activeTouchDrag = {
+                        customerId: touchDragCustomerId,
+                        floatEl: floatEl,
+                        touchId: touchStartPos.id
+                    };
+                } else if (Math.abs(dx) > 10) {
+                    // Swiping horizontally, cancel dragging for this touch cycle
+                    touchStartPos = null;
+                    touchDragAvatar = null;
+                    touchDragCustomerId = null;
+                }
             }
+        }, { passive: false });
 
-            activeTouchDrag.floatEl.remove();
-            activeTouchDrag = null;
+        document.addEventListener('touchend', (e) => {
+            if (touchDragAvatar) {
+                touchDragAvatar.draggable = true;
+            }
+            if (activeTouchDrag) {
+                let touch = null;
+                for (let i = 0; i < e.changedTouches.length; i++) {
+                    if (e.changedTouches[i].identifier === activeTouchDrag.touchId) {
+                        touch = e.changedTouches[i];
+                        break;
+                    }
+                }
 
-            document.querySelectorAll('.ty-room-card').forEach(card => {
-                card.style.borderColor = '';
-                card.style.boxShadow = '';
-            });
+                if (touch) {
+                    const el = document.elementFromPoint(touch.clientX, touch.clientY);
+                    const slotCard = el ? el.closest('.ty-room-card') : null;
+
+                    if (slotCard && !slotCard.classList.contains('locked')) {
+                        const slotIndex = parseInt(slotCard.id.replace('slot-card-', ''));
+                        const staff = GameState.staff[slotIndex];
+                        if (staff && !staff.activeCustomer) {
+                            assignCustomerToSlot(activeTouchDrag.customerId, slotIndex);
+                        }
+                    }
+                }
+
+                activeTouchDrag.floatEl.remove();
+                activeTouchDrag = null;
+
+                document.querySelectorAll('.ty-room-card').forEach(card => {
+                    card.style.borderColor = '';
+                    card.style.boxShadow = '';
+                });
+            }
+            touchStartPos = null;
+            touchDragAvatar = null;
+            touchDragCustomerId = null;
         });
+
+        document.addEventListener('touchcancel', (e) => {
+            if (touchDragAvatar) {
+                touchDragAvatar.draggable = true;
+            }
+            if (activeTouchDrag) {
+                activeTouchDrag.floatEl.remove();
+                activeTouchDrag = null;
+            }
+            touchStartPos = null;
+            touchDragAvatar = null;
+            touchDragCustomerId = null;
+        });
+
+        // --- DESKTOP MOUSE DRAG TO SCROLL CONTROLLER ---
+        const roomsGrid = document.getElementById('rooms-grid');
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+        let dragStartX = 0;
+        let dragStartY = 0;
+        let dragHasMoved = false;
+
+        roomsGrid.addEventListener('mousedown', (e) => {
+            isDown = true;
+            dragStartX = e.clientX;
+            dragStartY = e.clientY;
+            dragHasMoved = false;
+            startX = e.pageX - roomsGrid.offsetLeft;
+            scrollLeft = roomsGrid.scrollLeft;
+            roomsGrid.style.scrollBehavior = 'auto';
+            roomsGrid.style.scrollSnapType = 'none';
+        });
+
+        roomsGrid.addEventListener('mouseleave', () => {
+            if (!isDown) return;
+            isDown = false;
+            roomsGrid.style.scrollBehavior = 'smooth';
+            roomsGrid.style.scrollSnapType = 'x mandatory';
+            
+            // Snap to closest card
+            const width = roomsGrid.clientWidth || 360;
+            const activeIndex = Math.round(roomsGrid.scrollLeft / width);
+            roomsGrid.scrollTo({ left: activeIndex * width, behavior: 'smooth' });
+            
+            setTimeout(() => { window.isDragging = false; }, 50);
+        });
+
+        roomsGrid.addEventListener('mouseup', (e) => {
+            if (!isDown) return;
+            isDown = false;
+            roomsGrid.style.scrollBehavior = 'smooth';
+            roomsGrid.style.scrollSnapType = 'x mandatory';
+            
+            // Snap to closest card
+            const width = roomsGrid.clientWidth || 360;
+            const activeIndex = Math.round(roomsGrid.scrollLeft / width);
+            roomsGrid.scrollTo({ left: activeIndex * width, behavior: 'smooth' });
+            
+            if (dragHasMoved) {
+                e.stopPropagation();
+                e.preventDefault();
+            }
+            setTimeout(() => { window.isDragging = false; }, 50);
+        });
+
+        roomsGrid.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - roomsGrid.offsetLeft;
+            const walk = (x - startX) * 1.3; // scroll speed multiplier
+            roomsGrid.scrollLeft = scrollLeft - walk;
+            
+            if (Math.abs(e.clientX - dragStartX) > 8 || Math.abs(e.clientY - dragStartY) > 8) {
+                dragHasMoved = true;
+                window.isDragging = true;
+            }
+        });
+
+        // Listen for scroll event to update dots
+        roomsGrid.addEventListener('scroll', () => {
+            const width = roomsGrid.clientWidth || 360;
+            const activeIndex = Math.round(roomsGrid.scrollLeft / width);
+            window.currentCarouselIndex = activeIndex;
+            updateCarouselDots(activeIndex);
+        });
+
+        // Horizontal mouse wheel scrolling for the queue slots
+        const queueSlotsEl = document.getElementById('queue-slots');
+        let isQueueWheelScrolling = false;
+        if (queueSlotsEl) {
+            queueSlotsEl.addEventListener('wheel', (e) => {
+                if (e.deltaY !== 0) {
+                    e.preventDefault();
+                    if (isQueueWheelScrolling) return;
+                    isQueueWheelScrolling = true;
+                    const dir = e.deltaY > 0 ? 1 : -1;
+                    scrollQueueCarousel(dir);
+                    setTimeout(() => {
+                        isQueueWheelScrolling = false;
+                    }, 250);
+                }
+            }, { passive: false });
+        }
+
+        // Horizontal mouse wheel scrolling for the personnel cards
+        let isWheelScrolling = false;
+        if (roomsGrid) {
+            roomsGrid.addEventListener('wheel', (e) => {
+                if (e.deltaY !== 0) {
+                    e.preventDefault();
+                    if (isWheelScrolling) return;
+                    isWheelScrolling = true;
+                    const dir = e.deltaY > 0 ? 1 : -1;
+                    scrollCarousel(dir);
+                    setTimeout(() => {
+                        isWheelScrolling = false;
+                    }, 400);
+                }
+            }, { passive: false });
+        }
 
         // Init loops
         gameLoop();
