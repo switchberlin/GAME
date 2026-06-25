@@ -99,6 +99,48 @@
             }
         }
 
+        @media (max-height: 740px) {
+            .ty-bottom-bar {
+                padding: 10px 16px;
+                gap: 8px;
+            }
+            .ty-bottom-row button {
+                padding: 10px 12px !important;
+                font-size: 0.85rem !important;
+            }
+            .ty-top-bar {
+                height: 50px;
+                padding: 0 16px;
+            }
+            .ty-top-bar #field-venue-name {
+                font-size: 1.1rem !important;
+            }
+            .ty-carousel-indicators {
+                margin-top: 4px;
+                margin-bottom: 4px;
+            }
+            .ty-queue-area {
+                padding: 8px 16px;
+            }
+        }
+
+        @media (max-height: 680px) {
+            .ty-start-screen {
+                padding: calc(env(safe-area-inset-top, 0px) + 20px) 20px calc(env(safe-area-inset-bottom, 0px) + 20px) 20px;
+            }
+            .start-logo {
+                font-size: 2.2rem;
+            }
+            .start-card {
+                padding: 16px;
+                gap: 12px;
+            }
+            #btn-start-game {
+                padding: 14px !important;
+                font-size: 1rem !important;
+            }
+        }
+
         .safe-padding-top {
             padding-top: calc(env(safe-area-inset-top, 0px) + 16px);
         }
@@ -252,7 +294,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
-            padding: 10px 24px;
+            padding: 8px 16px;
             position: relative;
             cursor: pointer;
             transition: transform 0.1s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -273,12 +315,14 @@
             background: rgba(13, 11, 13, 0.4);
             border: 1px solid var(--border-color);
             border-radius: 24px;
-            width: calc(100% - 48px);
+            width: calc(100% - 32px);
             margin: 0 auto;
             justify-content: center;
             align-items: center;
             gap: 12px;
-            height: 380px; /* Locked slots need a default height */
+            height: 34vh;
+            max-height: 280px;
+            min-height: 120px;
             transition: all 0.3s ease;
         }
         .ty-room-card.locked:hover {
@@ -328,17 +372,19 @@
         }
         .ty-carousel-indicators {
             display: flex;
-            gap: 12px;
-            height: 90px;
+            gap: 10px;
+            height: 11vh;
+            max-height: 80px;
+            min-height: 50px;
             align-items: center;
             justify-content: space-between;
-            margin-top: 14px;
-            margin-bottom: 14px;
+            margin-top: 8px;
+            margin-bottom: 8px;
             z-index: 5;
             padding: 0 20px;
         }
         .staff-spot-card {
-            flex: 0 0 calc((100% - 36px) / 4);
+            height: 100%;
             aspect-ratio: 1 / 1.15;
             border-radius: 14px;
             border: 1px solid var(--border-color);
@@ -349,12 +395,13 @@
             font-weight: 800;
             position: relative;
             color: var(--text-muted);
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             cursor: pointer;
             box-sizing: border-box;
             overflow: hidden;
             transition: all 0.25s ease;
             box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+            flex-shrink: 0;
         }
         .staff-spot-card.active {
             border: 1px solid var(--btn-yellow);
@@ -471,10 +518,10 @@
             z-index: 2;
             background: rgba(6, 5, 6, 0.4);
             border-top: 1px solid var(--border-color);
-            padding: 16px 20px;
+            padding: 12px 20px;
         }
         .ty-queue-title {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 1.5px;
@@ -485,8 +532,10 @@
         }
         .ty-queue-slots {
             display: flex;
-            gap: 12px;
-            height: 90px;
+            gap: 10px;
+            height: 11vh;
+            max-height: 80px;
+            min-height: 50px;
             align-items: center;
             overflow-x: auto;
             -ms-overflow-style: none;  /* IE and Edge */
@@ -542,6 +591,9 @@
         .ty-modal-card {
             width: 88%;
             max-width: 340px;
+            max-height: 85vh;
+            max-height: 85dvh;
+            overflow-y: auto;
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 24px;
@@ -553,6 +605,19 @@
             position: relative;
             transform: scale(0.92);
             transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.15);
+        }
+        .ty-modal-card::-webkit-scrollbar {
+            width: 6px;
+        }
+        .ty-modal-card::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+        }
+        .ty-modal-card::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 3px;
+        }
+        .ty-modal-card::-webkit-scrollbar-thumb:hover {
+            background: var(--btn-yellow);
         }
         .ty-modal-overlay.active .ty-modal-card {
             transform: scale(1);
@@ -723,13 +788,17 @@
         }
 
         .slot-canvas-container {
-            width: 100%;
+            width: auto;
+            max-width: 100%;
+            height: 34vh;
+            max-height: 280px;
+            min-height: 120px;
             aspect-ratio: 1.1 / 1;
+            margin: 0 auto 6px auto;
             background: #060506;
             border-radius: 20px;
             overflow: hidden;
             border: 1px solid var(--border-color);
-            margin-bottom: 6px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
         }
         .slot-canvas {
@@ -2905,6 +2974,12 @@
                 }
             }, { passive: false });
         }
+
+        // Resize event listener to redraw carousel indicators and queue slots dynamically
+        window.addEventListener('resize', () => {
+            renderSlots();
+            renderQueue();
+        });
 
         // Init loops
         gameLoop();
