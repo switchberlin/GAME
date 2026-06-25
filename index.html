@@ -894,6 +894,13 @@
 
         <!-- Bottom bar actions - Flat Design -->
         <div class="ty-bottom-bar safe-padding-bottom">
+            <!-- Trans preference toggle row -->
+            <div class="ty-bottom-row" style="margin-bottom: 4px; justify-content: center;">
+                <label style="display: inline-flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 800; color: var(--text-muted); cursor: pointer; letter-spacing: 1.5px; text-transform: uppercase;">
+                    <input type="checkbox" id="pref-allow-trans" checked onchange="toggleTransPreference()" style="width: 16px; height: 16px; accent-color: var(--btn-blue);">
+                    TRANS SEKSE İZİN VER
+                </label>
+            </div>
             <div class="ty-bottom-row" style="gap: 8px;">
                 <button class="ty-btn ty-btn-yellow" id="btn-staff-menu" onclick="openShopModal()" style="padding: 14px 20px; font-size: 0.95rem; flex: 1; max-width: 120px;">
                     PERSONEL
@@ -953,32 +960,8 @@
             <div class="ty-modal-card">
                 <button class="modal-close-btn" onclick="closeModal('modal-settings')">X</button>
                 <h3 class="modal-header-title">AYARLAR</h3>
-                <div class="upgrade-stats-card" style="gap: 12px;">
-                    <div style="font-weight: 800; font-size: 0.9rem; text-transform: uppercase;">Personel Tercihleri</div>
-                    <div style="display: flex; gap: 16px;">
-                        <label style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 800; cursor: pointer;">
-                            <input type="checkbox" id="sett-staff-kadin" checked onchange="updateSettingsPrefs()"> KADIN
-                        </label>
-                        <label style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 800; cursor: pointer;">
-                            <input type="checkbox" id="sett-staff-trans" checked onchange="updateSettingsPrefs()"> TRANS
-                        </label>
-                    </div>
-                    <hr style="border: 0; border-top: 1px solid var(--border-color);">
-                    <div style="font-weight: 800; font-size: 0.9rem; text-transform: uppercase;">Müşteri Tercihleri</div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                        <label style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 800; cursor: pointer;">
-                            <input type="checkbox" id="sett-cust-beyaz" checked onchange="updateSettingsPrefs()"> Beyaz
-                        </label>
-                        <label style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 800; cursor: pointer;">
-                            <input type="checkbox" id="sett-cust-siyahi" checked onchange="updateSettingsPrefs()"> Siyahi
-                        </label>
-                        <label style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 800; cursor: pointer;">
-                            <input type="checkbox" id="sett-cust-hetero" checked onchange="updateSettingsPrefs()"> Hetero
-                        </label>
-                        <label style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 800; cursor: pointer;">
-                            <input type="checkbox" id="sett-cust-trans" checked onchange="updateSettingsPrefs()"> Trans
-                        </label>
-                    </div>
+                <div class="upgrade-stats-card" style="text-align: center; padding: 20px; color: var(--text-muted);">
+                    <p style="font-size: 0.9rem; font-weight: 500;">Gelecekte buraya yeni ayarlar eklenecektir.</p>
                 </div>
             </div>
         </div>
@@ -1003,7 +986,7 @@
                         <span id="staff-detail-tone" style="font-weight: 800;"></span>
                     </div>
                     <div class="stat-row">
-                        <span>Hole Çapı:</span>
+                        <span>Göt Deliği Genişliği:</span>
                         <span id="staff-detail-hole" style="font-weight: 800;"></span>
                     </div>
                     
@@ -1110,7 +1093,7 @@
                 winkCooldown: 10000,
                 timeWithoutPenis: 0,
                 servingTimer: 0,
-                servingDuration: 5000 + Math.floor(Math.random() * 2000), // 5s to 7s duration
+                servingDuration: 53000, // 5 phases of 10s + 3s cumming
                 basePayout: 80 + Math.floor(Math.random() * 40), // 80 to 120 base coins
                 vaginalCount: 0,
                 analCount: 0
@@ -1351,26 +1334,22 @@
                     const genderColor = staff.gender === 'KADIN' ? '#ff8787' : '#da77f2';
                     const statusText = staff.activeCustomer ? "SERVİSTE" : "BOŞTA";
                     
+                    const customerText = staff.activeCustomer ? `${staff.activeCustomer.name} (${staff.activeCustomer.lengthCm}cm)` : '';
                     card.innerHTML = `
-                        <div class="room-bubble" id="bubble-slot-${index}" style="display: ${staff.activeCustomer ? 'block' : 'none'};">
-                            ${staff.activeCustomer ? staff.activeCustomer.name + ' (' + staff.activeCustomer.lengthCm + 'cm)' : ''}
+                        <div class="slot-canvas-container" style="display: flex; flex-direction: column;">
+                            <div style="flex: 1; position: relative; overflow: hidden;">
+                                <canvas class="slot-canvas" id="slot-canvas-${index}" data-slot-index="${index}"></canvas>
+                            </div>
+                            <!-- Flat horizontal progress bar directly below the canvas -->
+                            <div style="width: 100%; height: 6px; background: rgba(255, 255, 255, 0.05); position: relative;">
+                                <div id="progress-bar-slot-${index}" style="width: 0%; height: 100%; background: var(--btn-yellow); transition: width 0.1s linear;"></div>
+                            </div>
                         </div>
-                        <div class="slot-canvas-container">
-                            <canvas class="slot-canvas" id="slot-canvas-${index}" data-slot-index="${index}"></canvas>
+                        <div class="room-title" style="margin-top: 4px; font-size: 0.85rem; font-weight: 700;">
+                            ${staff.name} <span style="font-size: 0.7rem; color: ${genderColor}">(${staff.gender})</span>
                         </div>
-                        <div class="room-title" style="margin-top: 4px; font-size: 0.8rem;">
-                            ${staff.name} <span style="font-size: 0.65rem; color: ${genderColor}">(${staff.gender})</span>
-                        </div>
-                        <div class="room-status" style="font-size: 0.7rem; color: ${staff.activeCustomer ? 'var(--btn-green-shadow)' : 'var(--text-muted)'}; margin-bottom: 2px;">
-                            ${statusText}
-                        </div>
-                        
-                        <!-- Progress indicator -->
-                        <div class="room-progress-circle">
-                            <svg>
-                                <circle class="bg-ring" cx="16" cy="16" r="14" />
-                                <circle class="fill-ring" id="progress-bar-slot-${index}" cx="16" cy="16" r="14" />
-                            </svg>
+                        <div class="room-status" style="font-size: 0.75rem; color: ${staff.activeCustomer ? 'var(--btn-green)' : 'var(--text-muted)'}; margin-bottom: 2px;">
+                            ${staff.activeCustomer ? 'MÜŞTERİ: ' + customerText : 'BOŞTA'}
                         </div>
                     `;
 
@@ -1487,12 +1466,6 @@
             staff.activeCustomer = customer;
             staff.servingTimer = 0;
             
-            // Show slot bubble
-            const bubble = document.getElementById(`bubble-slot-${slotIndex}`);
-            if (bubble) {
-                bubble.textContent = `${customer.name} (${customer.lengthCm}cm)`;
-                bubble.style.display = 'block';
-            }
             
             renderSlots();
             renderQueue();
@@ -1505,11 +1478,10 @@
                     
                     const progress = Math.min(1.0, staff.servingTimer / staff.servingDuration);
                     
-                    // Update radial progress circle
-                    const fillRing = document.getElementById(`progress-bar-slot-${index}`);
-                    if (fillRing) {
-                        const offset = 88 - (88 * progress);
-                        fillRing.style.strokeDashoffset = offset;
+                    // Update progress bar width
+                    const progressBar = document.getElementById(`progress-bar-slot-${index}`);
+                    if (progressBar) {
+                        progressBar.style.width = (progress * 100) + '%';
                     }
 
                     // Automatic service complete
@@ -1542,17 +1514,13 @@
                 spawnFloatingText(card, `+$${finalPayout}`);
             }
 
-            // Hide slot bubble
-            const bubble = document.getElementById(`bubble-slot-${index}`);
-            if (bubble) bubble.style.display = 'none';
-
             // Reset states
             staff.activeCustomer = null;
             staff.servingTimer = 0;
             
-            // Clean up progress circle stroke
-            const fillRing = document.getElementById(`progress-bar-slot-${index}`);
-            if (fillRing) fillRing.style.strokeDashoffset = 88;
+            // Clean up progress bar width
+            const progressBar = document.getElementById(`progress-bar-slot-${index}`);
+            if (progressBar) progressBar.style.width = '0%';
 
             renderSlots();
             updateUI();
@@ -1609,14 +1577,14 @@
 
                 card.innerHTML = `
                     <div style="display: flex; align-items: center; gap: 12px;">
-                        <div class="room-avatar-circle" style="width: 50px; height: 50px; flex-shrink: 0; border-color: ${genderColor}; padding: 0; overflow: hidden;">
+                        <div class="room-avatar-circle" style="width: 80px; height: 80px; flex-shrink: 0; border-color: ${genderColor}; padding: 0; overflow: hidden; border-radius: 16px;">
                             <canvas id="candidate-thumb-${cand.id}" style="width: 100%; height: 100%; border-radius: 14px; object-fit: cover; display: block;"></canvas>
                         </div>
                         <div style="display: flex; flex-direction: column; gap: 2px;">
                             <span style="font-weight: 800; font-size: 0.95rem;">
                                 ${cand.name} <span style="font-size: 0.65rem; color: ${genderColor}">(${cand.gender})</span>
                             </span>
-                            <span style="font-size: 0.7rem; color: var(--text-muted);">Hole Çapı: ${cand.baseHoleSize}cm / Ten: ${cand.toneLabel}</span>
+                            <span style="font-size: 0.7rem; color: var(--text-muted);">Göt Deliği Genişliği: ${(cand.baseHoleSize * 0.25).toFixed(2)} cm / Ten: ${cand.toneLabel}</span>
                         </div>
                     </div>
                     <button class="ty-btn ty-btn-green" style="font-size: 0.8rem; padding: 6px 12px;" ${(!canAfford || allFull) ? 'disabled' : ''} onclick="hireCandidate(${idx})">
@@ -1676,7 +1644,7 @@
             genderEl.style.color = genderColor;
             
             document.getElementById('staff-detail-tone').textContent = staff.toneLabel || 'Bilinmiyor';
-            document.getElementById('staff-detail-hole').textContent = `${staff.currentHoleDamage}cm`;
+            document.getElementById('staff-detail-hole').textContent = `${(staff.baseHoleSize * 0.25).toFixed(2)} cm`;
             document.getElementById('staff-detail-vaginal').textContent = staff.vaginalCount || 0;
             document.getElementById('staff-detail-anal').textContent = staff.analCount || 0;
             
@@ -1696,24 +1664,10 @@
             document.getElementById(id).classList.remove('active');
         }
 
-        function updateSettingsPrefs() {
-            GameState.prefs.staff.kadin = document.getElementById('sett-staff-kadin').checked;
-            GameState.prefs.staff.trans = document.getElementById('sett-staff-trans').checked;
-            
-            if (!GameState.prefs.staff.kadin && !GameState.prefs.staff.trans) {
-                GameState.prefs.staff.kadin = true;
-                document.getElementById('sett-staff-kadin').checked = true;
-            }
-
-            GameState.prefs.customers.beyaz = document.getElementById('sett-cust-beyaz').checked;
-            GameState.prefs.customers.siyahi = document.getElementById('sett-cust-siyahi').checked;
-            GameState.prefs.customers.hetero = document.getElementById('sett-cust-hetero').checked;
-            GameState.prefs.customers.trans = document.getElementById('sett-cust-trans').checked;
-
-            if (!GameState.prefs.customers.beyaz && !GameState.prefs.customers.siyahi) {
-                GameState.prefs.customers.beyaz = true;
-                document.getElementById('sett-cust-beyaz').checked = true;
-            }
+        function toggleTransPreference() {
+            const isChecked = document.getElementById('pref-allow-trans').checked;
+            GameState.prefs.staff.trans = isChecked;
+            GameState.prefs.customers.trans = isChecked;
         }
 
         function upgradeVenueGlobal() {
@@ -2191,19 +2145,30 @@
                 let dtGlobal = Math.min(100, nowGlobal - staff.lastRenderTime);
                 staff.lastRenderTime = nowGlobal;
 
-                // Phase progression
+                // Phase progression (Each phase lasts exactly 10 seconds, followed by 3s cumming phase)
                 const hasCustomer = !!staff.activeCustomer;
                 if (hasCustomer) {
                     staff.isServing = true;
                     
-                    const duration = staff.servingDuration;
-                    const progress = staff.servingTimer / duration;
-                    if (progress < 0.2) staff.currentPhase = 1;
-                    else if (progress < 0.4) staff.currentPhase = 2;
-                    else if (progress < 0.6) staff.currentPhase = 3;
-                    else if (progress < 0.8) staff.currentPhase = 4;
-                    else if (progress < 0.95) staff.currentPhase = 5;
-                    else staff.isCumming = true;
+                    const timeMs = staff.servingTimer;
+                    if (timeMs < 10000) {
+                        staff.currentPhase = 1;
+                        staff.isCumming = false;
+                    } else if (timeMs < 20000) {
+                        staff.currentPhase = 2;
+                        staff.isCumming = false;
+                    } else if (timeMs < 30000) {
+                        staff.currentPhase = 3;
+                        staff.isCumming = false;
+                    } else if (timeMs < 40000) {
+                        staff.currentPhase = 4;
+                        staff.isCumming = false;
+                    } else if (timeMs < 50000) {
+                        staff.currentPhase = 5;
+                        staff.isCumming = false;
+                    } else {
+                        staff.isCumming = true;
+                    }
                 } else {
                     staff.isServing = false;
                     staff.isCumming = false;
