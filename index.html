@@ -827,6 +827,11 @@
                     <label class="start-label" for="venue-name">Mekan Adı</label>
                     <input class="start-input" type="text" id="venue-name" value="Gül Yuvası">
                 </div>
+                <!-- Transsexual checkbox preference -->
+                <div class="start-input-group" style="flex-direction: row; align-items: center; gap: 8px; margin-top: 4px;">
+                    <input type="checkbox" id="pref-allow-trans" checked style="width: 18px; height: 18px; accent-color: var(--btn-blue); cursor: pointer;">
+                    <label class="start-label" for="pref-allow-trans" style="cursor: pointer; margin-bottom: 0;">TRANS SEKSE İZİN VER</label>
+                </div>
             </div>
 
             <button class="ty-btn ty-btn-yellow" id="btn-start-game" style="width: 100%; padding: 18px; font-size: 1.2rem; border-radius: 20px;">Oyuna Başla</button>
@@ -894,13 +899,6 @@
 
         <!-- Bottom bar actions - Flat Design -->
         <div class="ty-bottom-bar safe-padding-bottom">
-            <!-- Trans preference toggle row -->
-            <div class="ty-bottom-row" style="margin-bottom: 4px; justify-content: center;">
-                <label style="display: inline-flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 800; color: var(--text-muted); cursor: pointer; letter-spacing: 1.5px; text-transform: uppercase;">
-                    <input type="checkbox" id="pref-allow-trans" checked onchange="toggleTransPreference()" style="width: 16px; height: 16px; accent-color: var(--btn-blue);">
-                    TRANS SEKSE İZİN VER
-                </label>
-            </div>
             <div class="ty-bottom-row" style="gap: 8px;">
                 <button class="ty-btn ty-btn-yellow" id="btn-staff-menu" onclick="openShopModal()" style="padding: 14px 20px; font-size: 0.95rem; flex: 1; max-width: 120px;">
                     PERSONEL
@@ -1163,6 +1161,11 @@
             const vName = document.getElementById('venue-name').value.trim();
             GameState.playerName = pName || "Süleyman";
             GameState.venueName = vName || "Gül Yuvası";
+            
+            // Set Trans preference before creating staff and customers
+            const isTransChecked = document.getElementById('pref-allow-trans').checked;
+            GameState.prefs.staff.trans = isTransChecked;
+            GameState.prefs.customers.trans = isTransChecked;
             
             // Reset all slots to start with no staff members
             for (let i = 0; i < GameState.staff.length; i++) {
@@ -1664,11 +1667,7 @@
             document.getElementById(id).classList.remove('active');
         }
 
-        function toggleTransPreference() {
-            const isChecked = document.getElementById('pref-allow-trans').checked;
-            GameState.prefs.staff.trans = isChecked;
-            GameState.prefs.customers.trans = isChecked;
-        }
+        // Transsexual preferences set at game start
 
         function upgradeVenueGlobal() {
             const cost = Math.floor(250 * GameState.venueMultiplier);
