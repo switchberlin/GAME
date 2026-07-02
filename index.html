@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>hole</title>
+    <title>Gül Yuvası</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -807,6 +807,48 @@
             display: block;
         }
     </style>
+    <script>
+        window.onerror = function(message, source, lineno, colno, error) {
+            const errDiv = document.createElement('div');
+            errDiv.style.position = 'fixed';
+            errDiv.style.top = '10px';
+            errDiv.style.left = '10px';
+            errDiv.style.right = '10px';
+            errDiv.style.background = 'rgba(224, 83, 108, 0.95)';
+            errDiv.style.color = '#fff';
+            errDiv.style.padding = '14px';
+            errDiv.style.borderRadius = '12px';
+            errDiv.style.fontSize = '0.85rem';
+            errDiv.style.fontFamily = 'monospace';
+            errDiv.style.zIndex = '999999';
+            errDiv.style.boxShadow = '0 10px 30px rgba(0,0,0,0.5)';
+            errDiv.style.border = '1px solid rgba(255,255,255,0.2)';
+            errDiv.style.whiteSpace = 'pre-wrap';
+            errDiv.style.wordBreak = 'break-all';
+            errDiv.textContent = `JS HATA:\nMesaj: ${message}\nKaynak: ${source}\nSatır: ${lineno}:${colno}\nError nesnesi: ${error ? error.stack : 'yok'}`;
+            document.body.appendChild(errDiv);
+        };
+        window.addEventListener('unhandledrejection', function(event) {
+            const errDiv = document.createElement('div');
+            errDiv.style.position = 'fixed';
+            errDiv.style.top = '10px';
+            errDiv.style.left = '10px';
+            errDiv.style.right = '10px';
+            errDiv.style.background = 'rgba(112, 83, 224, 0.95)';
+            errDiv.style.color = '#fff';
+            errDiv.style.padding = '14px';
+            errDiv.style.borderRadius = '12px';
+            errDiv.style.fontSize = '0.85rem';
+            errDiv.style.fontFamily = 'monospace';
+            errDiv.style.zIndex = '999999';
+            errDiv.style.boxShadow = '0 10px 30px rgba(0,0,0,0.5)';
+            errDiv.style.border = '1px solid rgba(255,255,255,0.2)';
+            errDiv.style.whiteSpace = 'pre-wrap';
+            errDiv.style.wordBreak = 'break-all';
+            errDiv.textContent = `JS UNHANDLED REJECTION:\nSebep: ${event.reason}`;
+            document.body.appendChild(errDiv);
+        });
+    </script>
 </head>
 <body>
     <div class="mobile-frame">
@@ -987,6 +1029,10 @@
                         <span>Göt Deliği Genişliği:</span>
                         <span id="staff-detail-hole" style="font-weight: 800;"></span>
                     </div>
+                    <div class="stat-row">
+                        <span>Verdiği Hizmetler:</span>
+                        <span id="staff-detail-services" style="font-weight: 800; color: var(--btn-yellow);"></span>
+                    </div>
                     
                     <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 4px 0;">
                     
@@ -1067,6 +1113,17 @@
             if (genders.length === 0) genders = ["KADIN"];
             const gender = forceGender || genders[Math.floor(Math.random() * genders.length)];
 
+            // Determine services capability randomly: 40% both, 30% only vaginal, 30% only anal
+            let services = [];
+            const roll = Math.random();
+            if (roll < 0.4) {
+                services = ['vajinal', 'anal'];
+            } else if (roll < 0.7) {
+                services = ['vajinal'];
+            } else {
+                services = ['anal'];
+            }
+
             return {
                 id: id,
                 name: name,
@@ -1094,7 +1151,8 @@
                 servingDuration: 53000, // 5 phases of 10s + 3s cumming
                 basePayout: 80 + Math.floor(Math.random() * 40), // 80 to 120 base coins
                 vaginalCount: 0,
-                analCount: 0
+                analCount: 0,
+                services: services
             };
         }
 
@@ -1122,6 +1180,7 @@
             const identity = identities[Math.floor(Math.random() * identities.length)];
 
             const name = CUSTOMER_NAMES[Math.floor(Math.random() * CUSTOMER_NAMES.length)];
+            const serviceType = Math.random() < 0.5 ? 'vajinal' : 'anal';
 
             return {
                 id: id,
@@ -1131,6 +1190,7 @@
                 type: type,
                 identity: identity,
                 isUncut: Math.random() < 0.3,
+                serviceType: serviceType,
                 traits: {
                     penisMorph: {
                         shaftLength: shaftLength,
@@ -1337,7 +1397,8 @@
                     const genderColor = staff.gender === 'KADIN' ? '#ff8787' : '#da77f2';
                     const statusText = staff.activeCustomer ? "SERVİSTE" : "BOŞTA";
                     
-                    const customerText = staff.activeCustomer ? `${staff.activeCustomer.name} (${staff.activeCustomer.lengthCm}cm)` : '';
+                    const serviceCapabilities = (staff.services || ['vajinal', 'anal']).map(s => s.toUpperCase()).join(' & ');
+                    const customerText = staff.activeCustomer ? `${staff.activeCustomer.name} (${staff.activeCustomer.lengthCm}cm - ${staff.activeCustomer.serviceType.toUpperCase()})` : '';
                     card.innerHTML = `
                         <div class="slot-canvas-container" style="display: flex; flex-direction: column;">
                             <div style="flex: 1; position: relative; overflow: hidden;">
@@ -1350,6 +1411,9 @@
                         </div>
                         <div class="room-title" style="margin-top: 4px; font-size: 0.85rem; font-weight: 700;">
                             ${staff.name} <span style="font-size: 0.7rem; color: ${genderColor}">(${staff.gender})</span>
+                        </div>
+                        <div style="font-size: 0.65rem; color: var(--btn-yellow); font-weight: 600; letter-spacing: 0.5px; margin-bottom: 2px;">
+                            Yetenek: ${serviceCapabilities}
                         </div>
                         <div class="room-status" style="font-size: 0.75rem; color: ${staff.activeCustomer ? 'var(--btn-green)' : 'var(--text-muted)'}; margin-bottom: 2px;">
                             ${staff.activeCustomer ? 'MÜŞTERİ: ' + customerText : 'BOŞTA'}
@@ -1426,8 +1490,12 @@
                     spot.draggable = true;
                     spot.style.cursor = 'grab';
                     
+                    const badgeBg = cust.serviceType === 'vajinal' ? 'var(--btn-green)' : 'var(--btn-blue)';
                     spot.innerHTML = `
                         <canvas class="staff-avatar-mini" id="queue-canvas-${cust.id}" style="width: 100%; height: 100%; border-radius: 14px; object-fit: cover; display: block; pointer-events: none;"></canvas>
+                        <div style="position: absolute; bottom: 4px; left: 4px; right: 4px; background: ${badgeBg}; color: #ffffff; font-size: 0.65rem; padding: 2px 4px; border-radius: 6px; text-align: center; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; letter-spacing: 0.5px; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.4);">
+                            ${cust.serviceType.toUpperCase()}
+                        </div>
                     `;
                     queueSlots.appendChild(spot);
 
@@ -1454,6 +1522,44 @@
 
 
 
+        function showToast(message, isError = true) {
+            const frame = document.querySelector('.mobile-frame');
+            if (!frame) return;
+            const toast = document.createElement('div');
+            toast.style.position = 'absolute';
+            toast.style.top = '70px';
+            toast.style.left = '50%';
+            toast.style.transform = 'translateX(-50%) translateY(-20px)';
+            toast.style.background = isError ? 'rgba(224, 83, 108, 0.95)' : 'rgba(197, 168, 128, 0.95)';
+            toast.style.color = isError ? '#fff' : '#000';
+            toast.style.padding = '8px 16px';
+            toast.style.borderRadius = '10px';
+            toast.style.fontSize = '0.8rem';
+            toast.style.fontWeight = '700';
+            toast.style.textAlign = 'center';
+            toast.style.zIndex = '5000';
+            toast.style.boxShadow = '0 10px 25px rgba(0,0,0,0.5)';
+            toast.style.transition = 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+            toast.style.opacity = '0';
+            toast.style.pointerEvents = 'none';
+            toast.style.whiteSpace = 'nowrap';
+            toast.textContent = message;
+            
+            frame.appendChild(toast);
+            
+            // Trigger reflow
+            toast.offsetHeight;
+            
+            toast.style.transform = 'translateX(-50%) translateY(0)';
+            toast.style.opacity = '1';
+            
+            setTimeout(() => {
+                toast.style.transform = 'translateX(-50%) translateY(-20px)';
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 2500);
+        }
+
         // Drag/Select customer assignment method
         function assignCustomerToSlot(customerId, slotIndex) {
             const customerIndex = GameState.customersQueue.findIndex(c => c.id === customerId);
@@ -1462,13 +1568,28 @@
             const staff = GameState.staff[slotIndex];
             if (!staff || staff.activeCustomer) return;
 
+            const customer = GameState.customersQueue[customerIndex];
+            
+            // Ensure serviceType is populated to avoid TypeError in case of cached files
+            if (!customer.serviceType) {
+                customer.serviceType = (slotIndex % 2 === 0) ? 'vajinal' : 'anal';
+            }
+            if (!staff.services) {
+                staff.services = ['vajinal', 'anal'];
+            }
+
+            const staffServices = staff.services;
+            if (!staffServices.includes(customer.serviceType)) {
+                showToast(`Uyumsuz Hizmet! Müşteri ${customer.serviceType.toUpperCase()} istiyor, fakat ${staff.name} bu yeteneğe sahip değil.`);
+                return;
+            }
+
             // Dequeue
-            const customer = GameState.customersQueue.splice(customerIndex, 1)[0];
+            const deqCustomer = GameState.customersQueue.splice(customerIndex, 1)[0];
             
             // Assign customer to staff
-            staff.activeCustomer = customer;
+            staff.activeCustomer = deqCustomer;
             staff.servingTimer = 0;
-            
             
             renderSlots();
             renderQueue();
@@ -1502,7 +1623,7 @@
             const customer = staff.activeCustomer;
             if (!customer) return;
 
-            if (index % 2 === 0) {
+            if (customer.serviceType === 'vajinal') {
                 staff.vaginalCount = (staff.vaginalCount || 0) + 1;
             } else {
                 staff.analCount = (staff.analCount || 0) + 1;
@@ -1578,6 +1699,7 @@
                 const cost = 150;
                 const canAfford = GameState.money >= cost;
 
+                const serviceLabel = (cand.services || ['vajinal', 'anal']).map(s => s.toUpperCase()).join(' & ');
                 card.innerHTML = `
                     <div style="display: flex; align-items: center; gap: 12px;">
                         <div class="room-avatar-circle" style="width: 80px; height: 80px; flex-shrink: 0; border-color: ${genderColor}; padding: 0; overflow: hidden; border-radius: 16px;">
@@ -1587,7 +1709,8 @@
                             <span style="font-weight: 800; font-size: 0.95rem;">
                                 ${cand.name} <span style="font-size: 0.65rem; color: ${genderColor}">(${cand.gender})</span>
                             </span>
-                            <span style="font-size: 0.7rem; color: var(--text-muted);">Göt Deliği Genişliği: ${(cand.baseHoleSize * 0.25).toFixed(2)} cm / Ten: ${cand.toneLabel}</span>
+                            <span style="font-size: 0.7rem; color: var(--btn-yellow); font-weight: 700;">Hizmet: ${serviceLabel}</span>
+                            <span style="font-size: 0.65rem; color: var(--text-muted);">Göt Deliği Genişliği: ${(cand.baseHoleSize * 0.25).toFixed(2)} cm / Ten: ${cand.toneLabel}</span>
                         </div>
                     </div>
                     <button class="ty-btn ty-btn-green" style="font-size: 0.8rem; padding: 6px 12px;" ${(!canAfford || allFull) ? 'disabled' : ''} onclick="hireCandidate(${idx})">
@@ -1648,6 +1771,7 @@
             
             document.getElementById('staff-detail-tone').textContent = staff.toneLabel || 'Bilinmiyor';
             document.getElementById('staff-detail-hole').textContent = `${(staff.baseHoleSize * 0.25).toFixed(2)} cm`;
+            document.getElementById('staff-detail-services').textContent = (staff.services || ['vajinal', 'anal']).map(s => s.toUpperCase()).join(' & ');
             document.getElementById('staff-detail-vaginal').textContent = staff.vaginalCount || 0;
             document.getElementById('staff-detail-anal').textContent = staff.analCount || 0;
             
@@ -2066,572 +2190,585 @@
 
         // --- 8. EXPLICIT CANVAS RENDERING ENGINE (Optimized Multi-Canvas) ---
         function renderCanvases() {
-            const canvases = document.querySelectorAll('.slot-canvas');
-            
-            canvases.forEach(canvas => {
-                const slotIndex = parseInt(canvas.dataset.slotIndex);
-                const staff = GameState.staff[slotIndex];
-                if (!staff) return;
+const canvases = document.querySelectorAll('.slot-canvas');
 
-                const ctx = canvas.getContext('2d');
-                const dpr = Math.max(window.devicePixelRatio || 1, 2);
-                const rect = canvas.getBoundingClientRect();
-                if (rect.width === 0 || rect.height === 0) {
-                    return; // wait for layout to resolve sizes
-                }
+canvases.forEach(canvas => {
+const slotIndex = parseInt(canvas.dataset.slotIndex);
+const staff = GameState.staff[slotIndex];
+if (!staff) return;
 
-                // Adjust internal buffer size to match bounding layout
-                if (canvas.width !== rect.width * dpr || canvas.height !== rect.height * dpr) {
-                    canvas.width = rect.width * dpr;
-                    canvas.height = rect.height * dpr;
-                }
+const ctx = canvas.getContext('2d');
+const dpr = Math.max(window.devicePixelRatio || 1, 2);
+const rect = canvas.getBoundingClientRect();
+if (rect.width === 0 || rect.height === 0) {
+return; // wait for layout to resolve sizes
+}
 
-                ctx.save(); // Save default untransformed state
+// Adjust internal buffer size to match bounding layout
+if (canvas.width !== rect.width * dpr || canvas.height !== rect.height * dpr) {
+canvas.width = rect.width * dpr;
+canvas.height = rect.height * dpr;
+}
 
-                // Set fixed logical coordinate space to scale drawings perfectly
-                const logicalW = 360;
-                const logicalH = 360;
-                const scale = Math.min((rect.width * dpr) / logicalW, (rect.height * dpr) / logicalH);
-                const offsetX = (rect.width * dpr - logicalW * scale) / 2;
-                const offsetY = (rect.height * dpr - logicalH * scale) / 2;
+ctx.save(); // Save default untransformed state
 
-                ctx.setTransform(scale, 0, 0, scale, offsetX, offsetY);
+// Set fixed logical coordinate space to scale drawings perfectly
+const logicalW = 360;
+const logicalH = 360;
+const scale = Math.min((rect.width * dpr) / logicalW, (rect.height * dpr) / logicalH);
+const offsetX = (rect.width * dpr - logicalW * scale) / 2;
+const offsetY = (rect.height * dpr - logicalH * scale) / 2;
 
-                const w = logicalW;
-                const h = logicalH;
-                const centerX = w / 2;
-                const centerY = h / 2;
+ctx.setTransform(scale, 0, 0, scale, offsetX, offsetY);
 
-                ctx.clearRect(0, 0, w, h);
-                ctx.lineJoin = 'round';
-                ctx.lineCap = 'round';
+const w = logicalW;
+const h = logicalH;
+const centerX = w / 2;
+const centerY = h / 2;
 
-                const ac = window.AnatomyConfig;
-                const cSkin = staff.cSkin || ac.cSkin;
-                const cSkinShadow = staff.cSkinShadow || ac.cSkinShadow;
-                const cHole = staff.cHole || ac.cHole;
-                const cHoleShadow = staff.cHoleShadow || ac.cHoleShadow;
-                const cOutline = ac.cOutline;
-                const cHair = staff.cHair || ac.cHair;
-                const cCum = ac.cCum;
+ctx.clearRect(0, 0, w, h);
+ctx.lineJoin = 'round';
+ctx.lineCap = 'round';
 
-                function drawWigglyLine(startX, startY, endX, endY, segments, wiggliness, seed) {
-                    ctx.beginPath();
-                    ctx.moveTo(startX, startY);
-                    for(let i=1; i<=segments; i++) {
-                        let t = i/segments;
-                        let r1 = Math.sin(seed * i * 12.3);
-                        let r2 = Math.cos(seed * i * 45.6);
-                        let nx = startX + (endX-startX)*t + r1 * wiggliness;
-                        let ny = startY + (endY-startY)*t + r2 * wiggliness;
-                        ctx.lineTo(nx, ny);
-                    }
-                    ctx.stroke();
-                }
+const ac = window.AnatomyConfig;
+const cSkin = staff.cSkin || ac.cSkin;
+const cSkinShadow = staff.cSkinShadow || ac.cSkinShadow;
+const cHole = staff.cHole || ac.cHole;
+const cHoleShadow = staff.cHoleShadow || ac.cHoleShadow;
+const cOutline = ac.cOutline;
+const cHair = staff.cHair || ac.cHair;
+const cCum = ac.cCum;
 
-                let base = staff.baseHoleSize || 6;
-                const time = Date.now() / 150;
-                let offset = 0;
-                let currentStretch = 0;
-                let dynamicHoleSize = staff.currentHoleDamage || base;
-                let jX = 0;
-                let jY = 0;
-                let suction = 0;
-                let frictionDrag = 0;
+function drawWigglyLine(startX, startY, endX, endY, segments, wiggliness, seed) {
+ctx.beginPath();
+ctx.moveTo(startX, startY);
+for(let i=1; i<=segments; i++) {
+let t = i/segments;
+let r1 = Math.sin(seed * i * 12.3);
+let r2 = Math.cos(seed * i * 45.6);
+let nx = startX + (endX-startX)*t + r1 * wiggliness;
+let ny = startY + (endY-startY)*t + r2 * wiggliness;
+ctx.lineTo(nx, ny);
+}
+ctx.stroke();
+}
 
-                let nowGlobal = Date.now();
-                if (typeof staff.lastRenderTime === 'undefined') staff.lastRenderTime = nowGlobal;
-                let dtGlobal = Math.min(100, nowGlobal - staff.lastRenderTime);
-                staff.lastRenderTime = nowGlobal;
+let base = staff.baseHoleSize || 6;
+const time = Date.now() / 150;
+let offset = 0;
+let currentStretch = 0;
+let dynamicHoleSize = staff.currentHoleDamage || base;
+let jX = 0;
+let jY = 0;
+let suction = 0;
+let frictionDrag = 0;
 
-                // Phase progression (Each phase lasts exactly 10 seconds, followed by 3s cumming phase)
-                const hasCustomer = !!staff.activeCustomer;
-                if (hasCustomer) {
-                    staff.isServing = true;
-                    
-                    const timeMs = staff.servingTimer;
-                    if (timeMs < 10000) {
-                        staff.currentPhase = 1;
-                        staff.isCumming = false;
-                    } else if (timeMs < 20000) {
-                        staff.currentPhase = 2;
-                        staff.isCumming = false;
-                    } else if (timeMs < 30000) {
-                        staff.currentPhase = 3;
-                        staff.isCumming = false;
-                    } else if (timeMs < 40000) {
-                        staff.currentPhase = 4;
-                        staff.isCumming = false;
-                    } else if (timeMs < 50000) {
-                        staff.currentPhase = 5;
-                        staff.isCumming = false;
-                    } else {
-                        staff.isCumming = true;
-                    }
-                } else {
-                    staff.isServing = false;
-                    staff.isCumming = false;
-                }
+let nowGlobal = Date.now();
+if (typeof staff.lastRenderTime === 'undefined') staff.lastRenderTime = nowGlobal;
+let dtGlobal = Math.min(100, nowGlobal - staff.lastRenderTime);
+staff.lastRenderTime = nowGlobal;
 
-                if (typeof staff.activeServiceTime === 'undefined') staff.activeServiceTime = 0;
-                if (typeof staff.currentGlobalY === 'undefined') staff.currentGlobalY = 0;
-                if (typeof staff.holeRedness === 'undefined') staff.holeRedness = 0;
-                let wobble = 0;
-                let wobbleX = 0;
+// Phase progression (Each phase lasts exactly 10 seconds, followed by 3s cumming phase)
+const hasCustomer = !!staff.activeCustomer;
+if (hasCustomer) {
+staff.isServing = true;
 
-                let currentCustomer = staff.activeCustomer;
-                let pm = currentCustomer?.traits?.penisMorph || {
+const timeMs = staff.servingTimer;
+if (timeMs < 10000) {
+staff.currentPhase = 1;
+staff.isCumming = false;
+} else if (timeMs < 20000) {
+staff.currentPhase = 2;
+staff.isCumming = false;
+} else if (timeMs < 30000) {
+staff.currentPhase = 3;
+staff.isCumming = false;
+} else if (timeMs < 40000) {
+staff.currentPhase = 4;
+staff.isCumming = false;
+} else if (timeMs < 50000) {
+staff.currentPhase = 5;
+staff.isCumming = false;
+} else {
+staff.isCumming = true;
+}
+} else {
+staff.isServing = false;
+staff.isCumming = false;
+}
+
+if (typeof staff.activeServiceTime === 'undefined') staff.activeServiceTime = 0;
+if (typeof staff.currentGlobalY === 'undefined') staff.currentGlobalY = 0;
+if (typeof staff.holeRedness === 'undefined') staff.holeRedness = 0;
+let wobble = 0;
+let wobbleX = 0;
+
+let currentCustomer = staff.activeCustomer;
+                let pm = (currentCustomer && currentCustomer.traits && currentCustomer.traits.penisMorph) || {
                     shaftWidth: 0, shaftCurve: 0, shaftLength: 0, glansWidth: 0, glansHeight: 0, testicleSize: 0, bodySlimness: 0,
                     veinIntensity: 0.5, vein1Offset: 0, vein2Offset: 0, vein3Offset: 0, hairDensity: 0.5, thrustStyle: 0, speedMultiplier: 1.0, isUncut: false
                 };
 
-                if (staff.isServing && !staff.isCumming) {
-                    staff.activeServiceTime += dtGlobal;
-                    let phase = staff.currentPhase || 3;
-                    
-                    let targetRedness = (phase - 1) / 4;
-                    staff.holeRedness += (targetRedness - staff.holeRedness) * 0.005;
+if (staff.isServing && !staff.isCumming) {
+staff.activeServiceTime += dtGlobal;
+let phase = staff.currentPhase || 3;
 
-                    let targetDamage = base + (targetRedness * 20);
-                    if (staff.currentHoleDamage < targetDamage) {
-                        staff.currentHoleDamage += (targetDamage - staff.currentHoleDamage) * 0.005;
-                    }
+let targetRedness = (phase - 1) / 4;
+staff.holeRedness += (targetRedness - staff.holeRedness) * 0.005;
 
-                    let targetCycleDuration = 2000;
-                    if (phase === 1) targetCycleDuration = 4000;
-                    if (phase === 2) targetCycleDuration = 1200;
-                    if (phase === 4) targetCycleDuration = 800;
-                    if (phase === 5) targetCycleDuration = 600;
+let targetDamage = base + (targetRedness * 20);
+if (staff.currentHoleDamage < targetDamage) {
+staff.currentHoleDamage += (targetDamage - staff.currentHoleDamage) * 0.005;
+}
 
-                    let targetMinOffset = -120;
-                    let targetMaxOffset = 100;
-                    if (phase === 1) {
-                        targetMinOffset = -50;
-                        targetMaxOffset = 50;
-                    } else if (phase === 2) {
-                        targetMinOffset = 30;
-                        targetMaxOffset = 100;
-                    }
+let targetCycleDuration = 2000;
+if (phase === 1) targetCycleDuration = 4000;
+if (phase === 2) targetCycleDuration = 1200;
+if (phase === 4) targetCycleDuration = 800;
+if (phase === 5) targetCycleDuration = 600;
 
-                    if (!staff.animState) {
-                        staff.animState = {
-                            minOffset: targetMinOffset,
-                            maxOffset: targetMaxOffset,
-                            cycleDuration: targetCycleDuration,
-                            phaseProgress: 0,
-                            lastTime: Date.now()
-                        };
-                    }
+let targetMinOffset = -120;
+let targetMaxOffset = 100;
+if (phase === 1) {
+targetMinOffset = -50;
+targetMaxOffset = 50;
+} else if (phase === 2) {
+targetMinOffset = 30;
+targetMaxOffset = 100;
+}
 
-                    let now = Date.now();
-                    let rawDt = now - staff.animState.lastTime;
-                    staff.animState.lastTime = now;
+if (!staff.animState) {
+staff.animState = {
+minOffset: targetMinOffset,
+maxOffset: targetMaxOffset,
+cycleDuration: targetCycleDuration,
+phaseProgress: 0,
+lastTime: Date.now()
+};
+}
 
-                    let lerpSpeed = 0.08 * (Math.min(rawDt, 50) / 16);
-                    staff.animState.minOffset += (targetMinOffset - staff.animState.minOffset) * lerpSpeed;
-                    staff.animState.maxOffset += (targetMaxOffset - staff.animState.maxOffset) * lerpSpeed;
-                    staff.animState.cycleDuration += (targetCycleDuration - staff.animState.cycleDuration) * lerpSpeed;
+let now = Date.now();
+let rawDt = now - staff.animState.lastTime;
+staff.animState.lastTime = now;
 
-                    let actualCycleDuration = (staff.animState.cycleDuration / (pm.speedMultiplier || 1.0));
-                    staff.animState.phaseProgress += rawDt / actualCycleDuration;
-                    if (staff.animState.phaseProgress >= 1) {
-                        staff.animState.phaseProgress %= 1;
-                    }
+let lerpSpeed = 0.08 * (Math.min(rawDt, 50) / 16);
+staff.animState.minOffset += (targetMinOffset - staff.animState.minOffset) * lerpSpeed;
+staff.animState.maxOffset += (targetMaxOffset - staff.animState.maxOffset) * lerpSpeed;
+staff.animState.cycleDuration += (targetCycleDuration - staff.animState.cycleDuration) * lerpSpeed;
 
-                    let cycle = staff.animState.phaseProgress;
-                    let totalRange = staff.animState.maxOffset - staff.animState.minOffset;
-                    let inEnd = 0.35;
+let actualCycleDuration = (staff.animState.cycleDuration / (pm.speedMultiplier || 1.0));
+staff.animState.phaseProgress += rawDt / actualCycleDuration;
+if (staff.animState.phaseProgress >= 1) {
+staff.animState.phaseProgress %= 1;
+}
 
-                    if (cycle < inEnd) {
-                        let t = cycle / inEnd;
-                        let ease = Math.sin(t * Math.PI / 2);
-                        offset = staff.animState.minOffset + (ease * totalRange);
-                    } else {
-                        let t = (cycle - inEnd) / (1.0 - inEnd);
-                        let ease = Math.cos(t * Math.PI / 2);
-                        offset = staff.animState.minOffset + (ease * totalRange);
-                    }
+let cycle = staff.animState.phaseProgress;
+let totalRange = staff.animState.maxOffset - staff.animState.minOffset;
+let inEnd = 0.35;
 
-                    // Wobbles
-                    if (phase !== 1 && cycle >= 0.3 && cycle < 0.8) {
-                        let wt = (cycle - 0.3) / 0.5;
-                        let freq = 8 * (staff.animState.cycleDuration / 2000);
-                        let dynamicIntensity = Math.max(0.1, totalRange / 220);
-                        let decay = Math.pow(1 - wt, 2);
-                        wobble = -Math.sin(wt * Math.PI * freq) * decay * (1.5 * dynamicIntensity) * ac.impactMultiplierY;
-                        wobbleX = Math.cos(wt * Math.PI * freq * 0.6) * decay * (1.5 * dynamicIntensity) * ac.impactMultiplierX;
-                    }
+if (cycle < inEnd) {
+let t = cycle / inEnd;
+let ease = Math.sin(t * Math.PI / 2);
+offset = staff.animState.minOffset + (ease * totalRange);
+} else {
+let t = (cycle - inEnd) / (1.0 - inEnd);
+let ease = Math.cos(t * Math.PI / 2);
+offset = staff.animState.minOffset + (ease * totalRange);
+}
 
-                    let targetStretch = (offset > 0) ? (offset / 35) : 0;
-                    if (typeof staff.currentGapeStretch === 'undefined') staff.currentGapeStretch = 0;
-                    
-                    if (targetStretch >= staff.currentGapeStretch) {
-                        staff.currentGapeStretch = targetStretch;
-                    } else {
-                        staff.currentGapeStretch -= 0.002 * dtGlobal;
-                        if (staff.currentGapeStretch < targetStretch) staff.currentGapeStretch = targetStretch;
-                    }
-                    
-                    currentStretch = staff.currentGapeStretch;
-                    dynamicHoleSize = staff.currentHoleDamage + (currentStretch * staff.currentHoleDamage * ac.holeStretchMultiplier);
-                    
-                    suction = Math.max(0, offset / 35);
-                    jX = wobbleX;
-                    jY = wobble;
-                } else {
-                    staff.currentGlobalY += (0 - staff.currentGlobalY) * 0.1;
-                    dynamicHoleSize = staff.currentHoleDamage;
-                    offset = 0;
-                    jX = 0;
-                    jY = 0;
-                }
+// Wobbles
+if (cycle >= 0.3 && cycle < 0.8) {
+let wt = (cycle - 0.3) / 0.5;
+let freq = 8 * (staff.animState.cycleDuration / 2000);
+let dynamicIntensity = Math.max(0.1, totalRange / 220);
+let decay = Math.pow(1 - wt, 2);
+wobble = -Math.sin(wt * Math.PI * freq) * decay * (1.5 * dynamicIntensity) * ac.impactMultiplierY;
+wobbleX = Math.cos(wt * Math.PI * freq * 0.6) * decay * (1.5 * dynamicIntensity) * ac.impactMultiplierX;
+}
 
-                // Draw curvier, premium body
-                ctx.save();
-                ctx.translate(0, staff.currentGlobalY);
+let targetStretch = (offset > 0) ? (offset / 35) : 0;
+if (typeof staff.currentGapeStretch === 'undefined') staff.currentGapeStretch = 0;
 
-                ctx.fillStyle = cSkin; ctx.lineWidth = 3; ctx.strokeStyle = cOutline;
-                ctx.beginPath();
-                ctx.moveTo(centerX - 90, 0);
-                ctx.bezierCurveTo(centerX - 40, 50, centerX - 160 - jX, 110, centerX - 150 - jX, centerY + 30);
-                ctx.bezierCurveTo(centerX - 140 - jX, 320, centerX - 130, h - 30, centerX - 120, h);
-                ctx.lineTo(centerX - 15, h);
-                ctx.bezierCurveTo(centerX - 15, 330, centerX - 5, 290, centerX, centerY + 100 + jY*0.5);
-                ctx.bezierCurveTo(centerX + 5, 290, centerX + 15, 330, centerX + 15, h);
-                ctx.lineTo(centerX + 120, h);
-                ctx.bezierCurveTo(centerX + 130, h - 30, centerX + 140 + jX, 320, centerX + 150 + jX, centerY + 30);
-                ctx.bezierCurveTo(centerX + 160 + jX, 110, centerX + 40, 50, centerX + 90, 0);
-                ctx.lineTo(centerX - 90, 0);
-                ctx.fill(); ctx.stroke();
+if (targetStretch >= staff.currentGapeStretch) {
+staff.currentGapeStretch = targetStretch;
+} else {
+staff.currentGapeStretch -= 0.002 * dtGlobal;
+if (staff.currentGapeStretch < targetStretch) staff.currentGapeStretch = targetStretch;
+}
 
-                // Gluteal folds
-                ctx.strokeStyle = cSkinShadow; ctx.lineWidth = 2.5;
-                ctx.beginPath();
-                ctx.moveTo(centerX - 130, centerY + 50);
-                ctx.quadraticCurveTo(centerX - 80, centerY + 110, centerX - 30, centerY + 70);
-                ctx.stroke();
-                ctx.beginPath();
-                ctx.moveTo(centerX + 130, centerY + 50);
-                ctx.quadraticCurveTo(centerX + 80, centerY + 110, centerX + 30, centerY + 70);
-                ctx.stroke();
+currentStretch = staff.currentGapeStretch;
+dynamicHoleSize = staff.currentHoleDamage + (currentStretch * staff.currentHoleDamage * ac.holeStretchMultiplier);
 
-                // Dimples
-                ctx.fillStyle = cSkinShadow;
-                ctx.beginPath(); ctx.ellipse(centerX - 40, centerY - 85, 4, 8, 0.2, 0, Math.PI*2); ctx.fill();
-                ctx.beginPath(); ctx.ellipse(centerX + 40, centerY - 85, 4, 8, -0.2, 0, Math.PI*2); ctx.fill();
+suction = Math.max(0, offset / 35);
+jX = wobbleX;
+jY = wobble;
+} else {
+staff.currentGlobalY += (0 - staff.currentGlobalY) * 0.1;
+dynamicHoleSize = staff.currentHoleDamage;
+offset = 0;
+jX = 0;
+jY = 0;
+}
 
-                let innerStretch = 1 + currentStretch * 0.4 - (frictionDrag * 0.25);
-                let outerStretch = 1 + currentStretch * 0.05 - (frictionDrag * 0.15);
-                let breath = Math.sin(time * 0.45) * 1.0;
-                let numFolds = 16;
+// Draw curvier, premium body
+ctx.save();
+ctx.translate(0, staff.currentGlobalY);
 
-                // --- WINK (KASILMA) EFEKTİ ---
-                if (typeof staff.winkTimer === 'undefined') staff.winkTimer = 0;
-                if (typeof staff.winkCooldown === 'undefined') staff.winkCooldown = 10000;
-                if (typeof staff.timeWithoutPenis === 'undefined') staff.timeWithoutPenis = 0;
-                
-                let isPenisOut = !currentCustomer || !staff.isServing || offset < 40;
-                
-                if (isPenisOut) {
-                    staff.timeWithoutPenis += dtGlobal || 16.66;
-                } else {
-                    staff.timeWithoutPenis = 0;
-                    staff.winkTimer = 0;
-                }
-                
-                if (staff.timeWithoutPenis >= 4000) {
-                    if (staff.winkCooldown > 0) {
-                        staff.winkCooldown -= dtGlobal || 16.66;
-                    } else {
-                        staff.winkTimer = 1000; 
-                        staff.winkCooldown = 10000; 
-                    }
-                }
-                
-                let winkPhase = 0; 
-                if (staff.winkTimer > 0) {
-                    staff.winkTimer -= dtGlobal || 16.66;
-                    winkPhase = Math.pow(Math.sin((Math.max(0, staff.winkTimer) / 1000) * Math.PI), 1.5); 
-                }
-                let horizontalTension = 1 + Math.max(0, suction * 0.4); 
-                let baseHoleX = Math.min((dynamicHoleSize * 0.5 + breath * 0.3) * innerStretch * horizontalTension, dynamicHoleSize * 0.55);
-                let baseHoleY = Math.min((dynamicHoleSize * 0.7 + breath * 0.3) * innerStretch, dynamicHoleSize * 0.77);
-                let currentBase = staff.baseHoleSize || 6;
-                let winkTargetX = currentBase * 0.5;
-                let winkTargetY = currentBase * 0.7;
-                let holeRadiusX = baseHoleX * (1 - winkPhase) + (winkTargetX * winkPhase);
-                let holeRadiusY = baseHoleY * (1 - winkPhase) + (winkTargetY * winkPhase);
-                let depth = 40 + offset; 
-                if (suction > 0 && depth > 0) {
-                    let effectiveSuction = Math.min(2.0, suction); 
-                    let baseRadius = 24 + ((pm.shaftWidth || 0) * 0.5); 
-                    
-                    let targetRadius = baseRadius;
-                    if (depth < 35) {
-                        targetRadius = baseRadius * Math.pow(depth / 35, 0.6);
-                    }
-                    
-                    let handoff = Math.max(0, 1 - (depth / 10));
-                    holeRadiusX = Math.max(holeRadiusX * handoff, targetRadius + 0.5);
-                    holeRadiusY = Math.max(holeRadiusY * handoff, (targetRadius * 0.5) + 0.5);
-                }
+ctx.fillStyle = cSkin; ctx.lineWidth = 3; ctx.strokeStyle = cOutline;
+ctx.beginPath();
+ctx.moveTo(centerX - 90, 0);
+ctx.bezierCurveTo(centerX - 40, 50, centerX - 160 - jX, 110, centerX - 150 - jX, centerY + 30);
+ctx.bezierCurveTo(centerX - 140 - jX, 320, centerX - 130, h - 30, centerX - 120, h);
+ctx.lineTo(centerX - 15, h);
+ctx.bezierCurveTo(centerX - 15, 330, centerX - 5, 290, centerX, centerY + 100 + jY*0.5);
+ctx.bezierCurveTo(centerX + 5, 290, centerX + 15, 330, centerX + 15, h);
+ctx.lineTo(centerX + 120, h);
+ctx.bezierCurveTo(centerX + 130, h - 30, centerX + 140 + jX, 320, centerX + 150 + jX, centerY + 30);
+ctx.bezierCurveTo(centerX + 160 + jX, 110, centerX + 40, 50, centerX + 90, 0);
+ctx.lineTo(centerX - 90, 0);
+ctx.fill(); ctx.stroke();
 
-                // --- VAGINAL OR ANAL OVERRIDES ---
-                const isVajinal = (slotIndex % 2 === 0);
-                
-                // Define the physical coordinates of the vagina (vulvaY)
-                let vulvaY = centerY + 80 + (isVajinal ? dynamicHoleSize * 0.8 : base * 0.8);
-                
-                // serviceCenterY is where penetration happens
-                let serviceCenterY = isVajinal ? vulvaY : centerY;
+// Gluteal folds
+ctx.strokeStyle = cSkinShadow; ctx.lineWidth = 2.5;
+ctx.beginPath();
+ctx.moveTo(centerX - 130, centerY + 50);
+ctx.quadraticCurveTo(centerX - 80, centerY + 110, centerX - 30, centerY + 70);
+ctx.stroke();
+ctx.beginPath();
+ctx.moveTo(centerX + 130, centerY + 50);
+ctx.quadraticCurveTo(centerX + 80, centerY + 110, centerX + 30, centerY + 70);
+ctx.stroke();
 
-                // Anus overrides (if vaginal service is active, anus remains closed/idle)
-                let anusHoleSize = isVajinal ? base : dynamicHoleSize;
-                let anusInnerStretch = isVajinal ? 1.0 : innerStretch;
-                let anusOuterStretch = isVajinal ? 1.0 : outerStretch;
-                let anusHoleRadiusX = isVajinal ? base * 0.5 : holeRadiusX;
-                let anusHoleRadiusY = isVajinal ? base * 0.7 : holeRadiusY;
-                let anusRedness = isVajinal ? 0.0 : (staff.holeRedness || 0);
+// Dimples
+ctx.fillStyle = cSkinShadow;
+ctx.beginPath(); ctx.ellipse(centerX - 40, centerY - 85, 4, 8, 0.2, 0, Math.PI*2); ctx.fill();
+ctx.beginPath(); ctx.ellipse(centerX + 40, centerY - 85, 4, 8, -0.2, 0, Math.PI*2); ctx.fill();
 
-                // Vulva width stretching factor
-                let vulvaWidthFactor = isVajinal ? (1 + currentStretch * 0.6) : 1.0;
+let innerStretch = 1 + currentStretch * 0.4 - (frictionDrag * 0.25);
+let outerStretch = 1 + currentStretch * 0.05 - (frictionDrag * 0.15);
+let breath = Math.sin(time * 0.45) * 1.0;
+let numFolds = 16;
 
-                // Elongated Vertical Crack Line
-                ctx.strokeStyle = cSkinShadow; ctx.lineWidth = 2.5;
-                ctx.beginPath();
-                ctx.moveTo(centerX, centerY - 150); 
-                ctx.quadraticCurveTo(centerX - 2, centerY - 10, centerX, vulvaY - 20);
-                ctx.stroke();
+// --- WINK (KASILMA) EFEKTİ ---
+if (typeof staff.winkTimer === 'undefined') staff.winkTimer = 0;
+if (typeof staff.winkCooldown === 'undefined') staff.winkCooldown = 10000;
+if (typeof staff.timeWithoutPenis === 'undefined') staff.timeWithoutPenis = 0;
 
-                // --- 1. VAGINA / VULVA RENDERING ---
-                // Vulva
-                let vulvaGradOuter = ctx.createRadialGradient(centerX, vulvaY + 5, 5, centerX, vulvaY + 5, 30);
-                vulvaGradOuter.addColorStop(0, '#c77d5b'); 
-                vulvaGradOuter.addColorStop(0.6, '#d49b77'); 
-                vulvaGradOuter.addColorStop(1, 'rgba(238, 187, 153, 0)'); 
-                ctx.fillStyle = vulvaGradOuter; 
-                ctx.beginPath();
-                ctx.moveTo(centerX, vulvaY - 30);
-                ctx.bezierCurveTo(centerX - 25 * vulvaWidthFactor, vulvaY - 10, centerX - 18 * vulvaWidthFactor, vulvaY + 30, centerX, vulvaY + 40);
-                ctx.bezierCurveTo(centerX + 18 * vulvaWidthFactor, vulvaY + 30, centerX + 25 * vulvaWidthFactor, vulvaY - 10, centerX, vulvaY - 30);
-                ctx.fill(); 
-                
-                ctx.fillStyle = cHole;
-                ctx.lineWidth = 2; ctx.strokeStyle = cOutline;
-                ctx.beginPath();
-                ctx.moveTo(centerX, vulvaY - 20);
-                ctx.bezierCurveTo(centerX - 10 * vulvaWidthFactor, vulvaY - 5, centerX - 8 * vulvaWidthFactor, vulvaY + 20, centerX, vulvaY + 30);
-                ctx.bezierCurveTo(centerX + 8 * vulvaWidthFactor, vulvaY + 20, centerX + 10 * vulvaWidthFactor, vulvaY - 5, centerX, vulvaY - 20);
-                ctx.fill(); ctx.stroke(); 
-                
-                if (isVajinal && holeRadiusX > 1.5) {
-                    // Draw the opened vagina inside the vulva
-                    ctx.fillStyle = cOutline;
-                    ctx.beginPath();
-                    ctx.ellipse(centerX, vulvaY + 5, holeRadiusX, holeRadiusY, 0, 0, Math.PI*2);
-                    ctx.fill();
-                } else {
-                    ctx.beginPath(); ctx.moveTo(centerX, vulvaY - 18); ctx.lineTo(centerX, vulvaY + 28); ctx.stroke();
-                }
+let isPenisOut = !currentCustomer || !staff.isServing || offset < 40;
 
-                // --- 2. ANUS / AREOLA RENDERING ---
-                let rMax = Math.max(45, anusHoleSize * 1.8) * anusOuterStretch;
-                let innerGradR = Math.max(0.1, anusHoleRadiusX * 0.8);
-                let holeGrad = ctx.createRadialGradient(centerX, centerY, innerGradR, centerX, centerY, rMax);
-                
-                let hr = anusRedness;
-                let c0_r = Math.round(180 + (80 - 180) * hr);
-                let c0_g = Math.round(110 + (10 - 110) * hr);
-                let c0_b = Math.round(100 + (10 - 100) * hr);
-                
-                let c1_r = Math.round(212 + (165 - 212) * hr);
-                let c1_g = Math.round(148 + (82 - 148) * hr);
-                let c1_b = Math.round(121 + (82 - 121) * hr);
-                
-                let cs_r = Math.round(190 + (143 - 190) * hr); 
-                let cs_g = Math.round(120 + (47 - 120) * hr);  
-                let cs_b = Math.round(100 + (47 - 100) * hr);  
-                let currentHoleShadow = `rgb(${cs_r}, ${cs_g}, ${cs_b})`;
-                holeGrad.addColorStop(0, `rgb(${c0_r}, ${c0_g}, ${c0_b})`); 
-                holeGrad.addColorStop(0.2, `rgb(${c1_r}, ${c1_g}, ${c1_b})`); 
-                holeGrad.addColorStop(0.6, `rgba(${c1_r}, ${c1_g}, ${c1_b}, 0.6)`); 
-                holeGrad.addColorStop(1, 'rgba(238, 187, 153, 0)'); 
-                
-                ctx.fillStyle = holeGrad;
-                ctx.beginPath();
-                for (let i = 0; i <= numFolds; i++) {
-                    let angle = (i / numFolds) * Math.PI * 2;
-                    let r = anusHoleSize * 1.5 + Math.sin(i*4)*anusHoleSize*0.25 + breath;
-                    let x = centerX + Math.cos(angle) * r * anusOuterStretch;
-                    let y = centerY + Math.sin(angle) * r * anusOuterStretch;
-                    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-                }
-                ctx.fill(); 
-                
-                // Wrinkles
-                let wOp = 0.1 + (anusRedness * 0.9); 
-                ctx.strokeStyle = `rgba(44, 31, 26, ${wOp})`; 
-                ctx.lineWidth = 1.5;
-                for(let i=0; i<12; i++) {
-                    let angle = (i/12)*Math.PI*2 + 0.1;
-                    ctx.beginPath();
-                    let r1 = anusHoleSize*0.8 * anusInnerStretch;
-                    let r2 = (anusHoleSize*1.5 + breath) * anusOuterStretch; 
-                    
-                    ctx.moveTo(centerX + Math.cos(angle)*r1, centerY + Math.sin(angle)*r1);
-                    ctx.lineTo(centerX + Math.cos(angle)*r2, centerY + Math.sin(angle)*r2);
-                    ctx.stroke();
-                }
-                if (anusHoleSize > 12) {
-                    ctx.fillStyle = currentHoleShadow;
-                    ctx.beginPath();
-                    ctx.moveTo(centerX - anusHoleSize*0.6*anusOuterStretch, centerY);
-                    ctx.quadraticCurveTo(centerX, centerY + anusHoleSize*1.8 + breath, centerX + anusHoleSize*0.6*anusOuterStretch, centerY);
-                    ctx.fill(); 
-                }
-                // Inner Anus Hole (Draws outline/depth)
-                ctx.fillStyle = cOutline;
-                ctx.beginPath();
-                ctx.ellipse(centerX, centerY, anusHoleRadiusX, anusHoleRadiusY, 0, 0, Math.PI*2);
-                ctx.fill();
+if (isPenisOut) {
+staff.timeWithoutPenis += dtGlobal || 16.66;
+} else {
+staff.timeWithoutPenis = 0;
+staff.winkTimer = 0;
+}
 
-                // Veins on the active target area
-                let veinOp = 0.35 * (staff.holeRedness || 0);
-                ctx.strokeStyle = `rgba(70, 90, 110, ${veinOp})`; ctx.lineWidth = 1.0;
-                let normalVeinR1X = (isVajinal ? dynamicHoleSize : base) * 0.5 * innerStretch + 1;
-                let normalVeinR1Y = (isVajinal ? dynamicHoleSize : base) * 0.7 * innerStretch + 1;
-                let normalVeinLength = Math.max(5, (isVajinal ? dynamicHoleSize : base) * 0.6); 
-                
-                for (let i = 0; i < 9; i++) {
-                    let angle = (i / 9) * Math.PI * 2 + 0.3;
-                    
-                    let r1X = (isVajinal ? holeRadiusX : (base * 0.5)) + 1; 
-                    let r1Y = (isVajinal ? holeRadiusY : (base * 0.7)) + 1;
-                    
-                    let r2X = normalVeinR1X + (normalVeinLength * 0.9);
-                    let r2Y = normalVeinR1Y + (normalVeinLength * 0.9);
-                    
-                    let vStartX = centerX + Math.cos(angle) * r1X;
-                    let vStartY = serviceCenterY + Math.sin(angle) * r1Y;
-                    let vEndX = centerX + Math.cos(angle) * r2X;
-                    let vEndY = serviceCenterY + Math.sin(angle) * r2Y;
-                    
-                    drawWigglyLine(vStartX, vStartY, vEndX, vEndY, 3, 2, i + 1.5);
-                    
-                    if (i % 2 === 0) {
-                        let midX = centerX + Math.cos(angle) * (r1X+r2X)*0.5;
-                        let midY = serviceCenterY + Math.sin(angle) * (r1Y+r2Y)*0.5;
-                        let branchRX = normalVeinR1X + normalVeinLength;
-                        let branchRY = normalVeinR1Y + normalVeinLength;
-                        let branchEndX = centerX + Math.cos(angle - 0.05) * branchRX;
-                        let branchEndY = serviceCenterY + Math.sin(angle - 0.05) * branchRY;
-                        drawWigglyLine(midX, midY, branchEndX, branchEndY, 2, 1.5, i + 7.2);
-                    }
-                }
+if (staff.timeWithoutPenis >= 4000) {
+if (staff.winkCooldown > 0) {
+staff.winkCooldown -= dtGlobal || 16.66;
+} else {
+staff.winkTimer = 1000; 
+staff.winkCooldown = 10000; 
+}
+}
 
-                // --- 4. CUSTOMER (PENİS ÇİZİMİ) ---
-                if (staff.isServing) {
-                    let custSkin = '#eab29a';
-                    let custGlans = '#d45d5d';
-                    if (currentCustomer && currentCustomer.type === 'black') {
-                        custSkin = '#6d4332';
-                        custGlans = '#5c2d2d';
-                    }
+let winkPhase = 0; 
+if (staff.winkTimer > 0) {
+staff.winkTimer -= dtGlobal || 16.66;
+winkPhase = Math.pow(Math.sin((Math.max(0, staff.winkTimer) / 1000) * Math.PI), 1.5); 
+}
+let horizontalTension = 1 + Math.max(0, suction * 0.4); 
+let baseHoleX = Math.min((dynamicHoleSize * 0.5 + breath * 0.3) * innerStretch * horizontalTension, dynamicHoleSize * 0.55);
+let baseHoleY = Math.min((dynamicHoleSize * 0.7 + breath * 0.3) * innerStretch, dynamicHoleSize * 0.77);
+let currentBase = staff.baseHoleSize || 6;
+let winkTargetX = currentBase * 0.5;
+let winkTargetY = currentBase * 0.7;
+let holeRadiusX = baseHoleX * (1 - winkPhase) + (winkTargetX * winkPhase);
+let holeRadiusY = baseHoleY * (1 - winkPhase) + (winkTargetY * winkPhase);
+let depth = 40 + offset; 
+if (suction > 0 && depth > 0) {
+let effectiveSuction = Math.min(2.0, suction); 
+let baseRadius = 24 + ((pm.shaftWidth || 0) * 0.5); 
 
-                    ctx.save();
-                    ctx.translate(centerX, serviceCenterY);
-                    ctx.rotate(Math.PI);
-                    ctx.translate(-centerX, -serviceCenterY);
+let targetRadius = baseRadius;
+if (depth < 35) {
+targetRadius = baseRadius * Math.pow(depth / 35, 0.6);
+}
 
-                    let pWidth = 48 + pm.shaftWidth;
-                    let pHeight = 180 + pm.shaftLength;
-                    let pX = centerX - pWidth/2;
-                    let pY = serviceCenterY - 160 + offset - pm.shaftLength;
+let handoff = Math.max(0, 1 - (depth / 10));
+holeRadiusX = Math.max(holeRadiusX * handoff, targetRadius + 0.5);
+holeRadiusY = Math.max(holeRadiusY * handoff, (targetRadius * 0.5) + 0.5);
+}
 
-                    // Testicles
-                    let ballInertia = frictionDrag * -4;
-                    let ballWobble = wobble * 4;
-                    let bYOffset = (pY - 10) + ballInertia + ballWobble;
-                    let bxL = centerX - 20 + (wobbleX * 4);
-                    let bxR = centerX + 20 + (wobbleX * 4);
-                    
-                    ctx.fillStyle = custSkin; ctx.lineWidth = 3; ctx.strokeStyle = cOutline;
-                    let tSize = pm.testicleSize;
-                    ctx.beginPath(); ctx.ellipse(bxL, bYOffset, 32 + tSize, 38 + tSize, -0.2, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-                    ctx.beginPath(); ctx.ellipse(bxR, bYOffset + 8, 30 + tSize, 40 + tSize, 0.2, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+// --- VAGINAL OR ANAL OVERRIDES ---
+const isVajinal = staff.activeCustomer ? (staff.activeCustomer.serviceType === 'vajinal') : (slotIndex % 2 === 0);
 
-                    // Mask inside penetration hole
-                    ctx.save();
-                    ctx.beginPath();
-                    ctx.rect(0, 0, w, serviceCenterY);
-                    ctx.ellipse(centerX, serviceCenterY, holeRadiusX + 0.5, holeRadiusY + 0.5, 0, Math.PI * 2, Math.PI);
-                    ctx.clip();
+// Define the physical coordinates of the vagina (vulvaY)
+let vulvaY = centerY + 80 + (isVajinal ? dynamicHoleSize * 0.8 : base * 0.8);
 
-                    // Shaft
-                    ctx.fillStyle = custSkin;
-                    ctx.beginPath();
-                    ctx.moveTo(pX, pY);
-                    let bY = pY + (pHeight - 35) * 0.4;
-                    let piY = pY + (pHeight - 35) * 0.95;
-                    ctx.bezierCurveTo(pX + pm.shaftCurve, bY, pX + pm.shaftCurve, piY, pX, piY);
-                    ctx.lineTo(pX, pY + pHeight - 35);
-                    ctx.lineTo(pX + pWidth, pY + pHeight - 35);
-                    ctx.lineTo(pX + pWidth, piY);
-                    ctx.bezierCurveTo(pX + pWidth + pm.shaftCurve, piY, pX + pWidth + pm.shaftCurve, bY, pX + pWidth, pY);
-                    ctx.fill(); ctx.stroke();
+// serviceCenterY is where penetration happens
+let serviceCenterY = isVajinal ? vulvaY : centerY;
 
-                    // Glans
-                    ctx.fillStyle = custGlans;
-                    let gW = pm.glansWidth || 0;
-                    let gH = pm.glansHeight || 0;
-                    ctx.beginPath();
-                    ctx.moveTo(pX, pY + pHeight - 35);
-                    ctx.bezierCurveTo(pX - gW, pY + pHeight - 25 - gH, pX + 5, pY + pHeight + gH, centerX, pY + pHeight + gH);
-                    ctx.bezierCurveTo(pX + pWidth - 5, pY + pHeight + gH, pX + pWidth + gW, pY + pHeight - 25 - gH, pX + pWidth, pY + pHeight - 35);
-                    ctx.fill(); ctx.stroke();
+// Anus overrides (if vaginal service is active, anus remains closed/idle)
+let anusHoleSize = isVajinal ? base : dynamicHoleSize;
+let anusInnerStretch = isVajinal ? 1.0 : innerStretch;
+let anusOuterStretch = isVajinal ? 1.0 : outerStretch;
+let anusHoleRadiusX = isVajinal ? base * 0.5 : holeRadiusX;
+let anusHoleRadiusY = isVajinal ? base * 0.7 : holeRadiusY;
+let anusRedness = isVajinal ? 0.0 : (staff.holeRedness || 0);
 
-                    // Pubic hair shadow and hair
-                    let fupaY = pY - 20;
-                    let shadowGrad = ctx.createRadialGradient(centerX, fupaY, 10, centerX, fupaY, 50);
-                    shadowGrad.addColorStop(0, 'rgba(0,0,0,0.3)');
-                    shadowGrad.addColorStop(1, 'rgba(0,0,0,0)');
-                    ctx.fillStyle = shadowGrad;
-                    ctx.beginPath(); ctx.ellipse(centerX, fupaY, 60, 40, 0, 0, Math.PI*2); ctx.fill();
+// Vulva width stretching factor
+let vulvaWidthFactor = isVajinal ? (1 + currentStretch * 0.6) : 1.0;
 
-                    // Pubic hair lines
-                    ctx.strokeStyle = cHair; ctx.lineWidth = 1.0;
-                    let hairCount = 50 + (pm.hairDensity || 0.5) * 150;
-                    ctx.beginPath();
-                    for(let h=0; h<hairCount; h++) {
-                        let rand1 = Math.sin(h * 12.9898) * 43758.5453 % 1;
-                        let rand2 = Math.sin(h * 78.233) * 43758.5453 % 1;
-                        let hrx = centerX - 40 + Math.abs(rand1) * 80;
-                        let hry = fupaY - 15 + Math.abs(rand2) * 30;
-                        ctx.moveTo(hrx, hry);
-                        ctx.quadraticCurveTo(hrx + rand1*8, hry - 6, hrx + rand2*10, hry + 8);
-                    }
-                    ctx.stroke();
+// Jiggle offset for inner anatomy synchronization
+let jHoleX = jX;
+let jHoleY = jY;
 
-                    ctx.restore(); // end mask clip
-                    ctx.restore(); // end rotate/translate
+// Elongated Vertical Crack Line
+ctx.strokeStyle = cSkinShadow; ctx.lineWidth = 2.5;
+ctx.beginPath();
+ctx.moveTo(centerX, centerY - 150); 
+ctx.quadraticCurveTo(centerX - 2, centerY - 10, centerX, vulvaY - 20);
+ctx.stroke();
 
-                    // Fluids drawing if cumming
-                    if (staff.isCumming) {
-                        ctx.fillStyle = cCum; ctx.strokeStyle = cOutline; ctx.lineWidth = 1.5;
-                        for (let i = 0; i < ac.cumDropCount; i++) {
-                            let ox = centerX + Math.sin(time*4 + i) * 6;
-                            let oy = serviceCenterY + 10 + ((time*150 + i*25) % 100);
-                            ctx.beginPath(); ctx.ellipse(ox, oy, 3, 4.5, 0, 0, Math.PI*2); ctx.fill(); ctx.stroke();
-                        }
-                    }
-                }
+// --- 1. VAGINA / VULVA RENDERING ---
+let vHoleX = centerX + jHoleX;
+let vHoleY = vulvaY + jHoleY;
 
-                ctx.restore(); // end globalY translate
-                ctx.restore(); // end scale translate
-            });
+// Vulva
+let vulvaGradOuter = ctx.createRadialGradient(vHoleX, vHoleY + 5, 5, vHoleX, vHoleY + 5, 30);
+vulvaGradOuter.addColorStop(0, '#c77d5b'); 
+vulvaGradOuter.addColorStop(0.6, '#d49b77'); 
+vulvaGradOuter.addColorStop(1, 'rgba(238, 187, 153, 0)'); 
+ctx.fillStyle = vulvaGradOuter; 
+ctx.beginPath();
+ctx.moveTo(vHoleX, vHoleY - 30);
+ctx.bezierCurveTo(vHoleX - 25 * vulvaWidthFactor, vHoleY - 10, vHoleX - 18 * vulvaWidthFactor, vHoleY + 30, vHoleX, vHoleY + 40);
+ctx.bezierCurveTo(vHoleX + 18 * vulvaWidthFactor, vHoleY + 30, vHoleX + 25 * vulvaWidthFactor, vHoleY - 10, vHoleX, vHoleY - 30);
+ctx.fill(); 
 
-            requestAnimationFrame(renderCanvases);
-        }
+ctx.fillStyle = cHole;
+ctx.lineWidth = 2; ctx.strokeStyle = cOutline;
+ctx.beginPath();
+ctx.moveTo(vHoleX, vHoleY - 20);
+ctx.bezierCurveTo(vHoleX - 10 * vulvaWidthFactor, vHoleY - 5, vHoleX - 8 * vulvaWidthFactor, vHoleY + 20, vHoleX, vHoleY + 30);
+ctx.bezierCurveTo(vHoleX + 8 * vulvaWidthFactor, vHoleY + 20, vHoleX + 10 * vulvaWidthFactor, vHoleY - 5, vHoleX, vHoleY - 20);
+ctx.fill(); ctx.stroke(); 
+
+if (isVajinal && holeRadiusX > 1.5) {
+// Draw the opened vagina inside the vulva
+ctx.fillStyle = cOutline;
+ctx.beginPath();
+ctx.ellipse(vHoleX, vHoleY + 5, holeRadiusX, holeRadiusY, 0, 0, Math.PI*2);
+ctx.fill();
+} else {
+ctx.beginPath(); ctx.moveTo(vHoleX, vHoleY - 18); ctx.lineTo(vHoleX, vHoleY + 28); ctx.stroke();
+}
+
+// --- 2. ANUS / AREOLA RENDERING ---
+let aHoleX = centerX + jHoleX;
+let aHoleY = centerY + jHoleY;
+
+let rMax = Math.max(45, anusHoleSize * 1.8) * anusOuterStretch;
+let innerGradR = Math.max(0.1, anusHoleRadiusX * 0.8);
+let holeGrad = ctx.createRadialGradient(aHoleX, aHoleY, innerGradR, aHoleX, aHoleY, rMax);
+
+let hr = anusRedness;
+let c0_r = Math.round(180 + (80 - 180) * hr);
+let c0_g = Math.round(110 + (10 - 110) * hr);
+let c0_b = Math.round(100 + (10 - 100) * hr);
+
+let c1_r = Math.round(212 + (165 - 212) * hr);
+let c1_g = Math.round(148 + (82 - 148) * hr);
+let c1_b = Math.round(121 + (82 - 121) * hr);
+
+let cs_r = Math.round(190 + (143 - 190) * hr); 
+let cs_g = Math.round(120 + (47 - 120) * hr);  
+let cs_b = Math.round(100 + (47 - 100) * hr);  
+let currentHoleShadow = `rgb(${cs_r}, ${cs_g}, ${cs_b})`;
+holeGrad.addColorStop(0, `rgb(${c0_r}, ${c0_g}, ${c0_b})`); 
+holeGrad.addColorStop(0.2, `rgb(${c1_r}, ${c1_g}, ${c1_b})`); 
+holeGrad.addColorStop(0.6, `rgba(${c1_r}, ${c1_g}, ${c1_b}, 0.6)`); 
+holeGrad.addColorStop(1, 'rgba(238, 187, 153, 0)'); 
+
+ctx.fillStyle = holeGrad;
+ctx.beginPath();
+for (let i = 0; i <= numFolds; i++) {
+let angle = (i / numFolds) * Math.PI * 2;
+let r = anusHoleSize * 1.5 + Math.sin(i*4)*anusHoleSize*0.25 + breath;
+let x = aHoleX + Math.cos(angle) * r * anusOuterStretch;
+let y = aHoleY + Math.sin(angle) * r * anusOuterStretch;
+if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+}
+ctx.fill(); 
+
+// Wrinkles
+let wOp = 0.1 + (anusRedness * 0.9); 
+ctx.strokeStyle = `rgba(44, 31, 26, ${wOp})`; 
+ctx.lineWidth = 1.5;
+for(let i=0; i<12; i++) {
+let angle = (i/12)*Math.PI*2 + 0.1;
+ctx.beginPath();
+let r1 = anusHoleSize*0.8 * anusInnerStretch;
+let r2 = (anusHoleSize*1.5 + breath) * anusOuterStretch; 
+
+ctx.moveTo(aHoleX + Math.cos(angle)*r1, aHoleY + Math.sin(angle)*r1);
+ctx.lineTo(aHoleX + Math.cos(angle)*r2, aHoleY + Math.sin(angle)*r2);
+ctx.stroke();
+}
+if (anusHoleSize > 12) {
+ctx.fillStyle = currentHoleShadow;
+ctx.beginPath();
+ctx.moveTo(aHoleX - anusHoleSize*0.6*anusOuterStretch, aHoleY);
+ctx.quadraticCurveTo(aHoleX, aHoleY + anusHoleSize*1.8 + breath, aHoleX + anusHoleSize*0.6*anusOuterStretch, aHoleY);
+ctx.fill(); 
+}
+// Inner Anus Hole (Draws outline/depth)
+ctx.fillStyle = cOutline;
+ctx.beginPath();
+ctx.ellipse(aHoleX, aHoleY, anusHoleRadiusX, anusHoleRadiusY, 0, 0, Math.PI*2);
+ctx.fill();
+
+// Veins on the active target area
+let veinOp = 0.35 * (staff.holeRedness || 0);
+ctx.strokeStyle = `rgba(70, 90, 110, ${veinOp})`; ctx.lineWidth = 1.0;
+let normalVeinR1X = (isVajinal ? dynamicHoleSize : base) * 0.5 * innerStretch + 1;
+let normalVeinR1Y = (isVajinal ? dynamicHoleSize : base) * 0.7 * innerStretch + 1;
+let normalVeinLength = Math.max(5, (isVajinal ? dynamicHoleSize : base) * 0.6); 
+
+let targetX = centerX + jHoleX;
+let targetY = serviceCenterY + jHoleY;
+
+for (let i = 0; i < 9; i++) {
+let angle = (i / 9) * Math.PI * 2 + 0.3;
+
+let r1X = (isVajinal ? holeRadiusX : (base * 0.5)) + 1; 
+let r1Y = (isVajinal ? holeRadiusY : (base * 0.7)) + 1;
+
+let r2X = normalVeinR1X + (normalVeinLength * 0.9);
+let r2Y = normalVeinR1Y + (normalVeinLength * 0.9);
+
+let vStartX = targetX + Math.cos(angle) * r1X;
+let vStartY = targetY + Math.sin(angle) * r1Y;
+let vEndX = targetX + Math.cos(angle) * r2X;
+let vEndY = targetY + Math.sin(angle) * r2Y;
+
+drawWigglyLine(vStartX, vStartY, vEndX, vEndY, 3, 2, i + 1.5);
+
+if (i % 2 === 0) {
+let midX = targetX + Math.cos(angle) * (r1X+r2X)*0.5;
+let midY = targetY + Math.sin(angle) * (r1Y+r2Y)*0.5;
+let branchRX = normalVeinR1X + normalVeinLength;
+let branchRY = normalVeinR1Y + normalVeinLength;
+let branchEndX = targetX + Math.cos(angle - 0.05) * branchRX;
+let branchEndY = targetY + Math.sin(angle - 0.05) * branchRY;
+drawWigglyLine(midX, midY, branchEndX, branchEndY, 2, 1.5, i + 7.2);
+}
+}
+
+// --- 4. CUSTOMER (PENİS ÇİZİMİ) ---
+if (staff.isServing) {
+let custSkin = '#eab29a';
+let custGlans = '#d45d5d';
+if (currentCustomer && currentCustomer.type === 'black') {
+custSkin = '#6d4332';
+custGlans = '#5c2d2d';
+}
+
+ctx.save();
+ctx.translate(targetX, targetY);
+ctx.rotate(Math.PI);
+ctx.translate(-targetX, -targetY);
+
+let pWidth = 48 + pm.shaftWidth;
+let pHeight = 180 + pm.shaftLength;
+let pX = targetX - pWidth/2;
+let pY = targetY - 160 + offset - pm.shaftLength;
+
+// Testicles
+let ballInertia = frictionDrag * -4;
+let ballWobble = wobble * 4;
+let bYOffset = (pY - 10) + ballInertia + ballWobble;
+let bxL = targetX - 20 + (wobbleX * 4);
+let bxR = targetX + 20 + (wobbleX * 4);
+
+ctx.fillStyle = custSkin; ctx.lineWidth = 3; ctx.strokeStyle = cOutline;
+let tSize = pm.testicleSize;
+ctx.beginPath(); ctx.ellipse(bxL, bYOffset, 32 + tSize, 38 + tSize, -0.2, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+ctx.beginPath(); ctx.ellipse(bxR, bYOffset + 8, 30 + tSize, 40 + tSize, 0.2, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+
+// Mask inside penetration hole
+ctx.save();
+ctx.beginPath();
+ctx.rect(0, 0, w, targetY);
+ctx.ellipse(targetX, targetY, holeRadiusX + 0.5, holeRadiusY + 0.5, 0, Math.PI * 2, Math.PI);
+ctx.clip();
+
+// Shaft
+ctx.fillStyle = custSkin;
+ctx.beginPath();
+ctx.moveTo(pX, pY);
+let bY = pY + (pHeight - 35) * 0.4;
+let piY = pY + (pHeight - 35) * 0.95;
+ctx.bezierCurveTo(pX + pm.shaftCurve, bY, pX + pm.shaftCurve, piY, pX, piY);
+ctx.lineTo(pX, pY + pHeight - 35);
+ctx.lineTo(pX + pWidth, pY + pHeight - 35);
+ctx.lineTo(pX + pWidth, piY);
+ctx.bezierCurveTo(pX + pWidth + pm.shaftCurve, piY, pX + pWidth + pm.shaftCurve, bY, pX + pWidth, pY);
+ctx.fill(); ctx.stroke();
+
+// Glans
+ctx.fillStyle = custGlans;
+let gW = pm.glansWidth || 0;
+let gH = pm.glansHeight || 0;
+ctx.beginPath();
+ctx.moveTo(pX, pY + pHeight - 35);
+ctx.bezierCurveTo(pX - gW, pY + pHeight - 25 - gH, pX + 5, pY + pHeight + gH, targetX, pY + pHeight + gH);
+ctx.bezierCurveTo(pX + pWidth - 5, pY + pHeight + gH, pX + pWidth + gW, pY + pHeight - 25 - gH, pX + pWidth, pY + pHeight - 35);
+ctx.fill(); ctx.stroke();
+
+// Pubic hair shadow and hair
+let fupaY = pY - 20;
+let shadowGrad = ctx.createRadialGradient(targetX, fupaY, 10, targetX, fupaY, 50);
+shadowGrad.addColorStop(0, 'rgba(0,0,0,0.3)');
+shadowGrad.addColorStop(1, 'rgba(0,0,0,0)');
+ctx.fillStyle = shadowGrad;
+ctx.beginPath(); ctx.ellipse(targetX, fupaY, 60, 40, 0, 0, Math.PI*2); ctx.fill();
+
+// Pubic hair lines
+ctx.strokeStyle = cHair; ctx.lineWidth = 1.0;
+let hairCount = 50 + (pm.hairDensity || 0.5) * 150;
+ctx.beginPath();
+for(let h=0; h<hairCount; h++) {
+let rand1 = Math.sin(h * 12.9898) * 43758.5453 % 1;
+let rand2 = Math.cos(h * 78.233) * 43758.5453 % 1;
+let hX = targetX + rand1 * 45;
+let hY = fupaY + rand2 * 18;
+ctx.moveTo(hX, hY);
+ctx.lineTo(hX + Math.sin(h)*4, hY + Math.cos(h)*4);
+}
+ctx.stroke();
+
+ctx.restore(); // end mask clip
+ctx.restore(); // end rotate/translate
+}
+
+// Fluids drawing if cumming
+if (staff.isCumming) {
+ctx.fillStyle = cCum; ctx.strokeStyle = cOutline; ctx.lineWidth = 1.5;
+for (let i = 0; i < ac.cumDropCount; i++) {
+let ox = centerX + Math.sin(time*4 + i) * 6;
+let oy = serviceCenterY + 10 + ((time*150 + i*25) % 100);
+ctx.beginPath(); ctx.ellipse(ox, oy, 3, 4.5, 0, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+}
+}
+
+ctx.restore(); // end globalY translate
+ctx.restore(); // end scale translate
+});
+
+requestAnimationFrame(renderCanvases);
+}
 
         // --- 9. INITIALIZATION & EVENT LOOPS ---
         let lastTime = Date.now();
